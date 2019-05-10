@@ -1,0 +1,72 @@
+*, *::after,  *::before {
+    box-sizing: border-box
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    line-height:1.8;
+}
+.top-navbar{
+    background-color: rgba(0, 0, 0, .87);
+    text-align: center;
+}
+.top-navbar a{
+    margin: 0 10;
+    text-decoration: none;
+    color: rgba(247, 173, 14)
+}
+.page-navbar{
+    position: static;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(247, 173, 14);
+    padding-left: 20;
+    text-align: center;
+}
+.page-navbar a{
+    padding: 0 10px;
+    display: inline-block;
+    text-decoration: none;
+    color: rgba(139, 133, 133, 0.973)
+}
+.page-navbar .nav-brand{
+    display: block;
+    font-size: 25;
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(48, 47, 47, 0.993)
+}
+.page-main-container{
+    padding: 0 15px;
+    min-width: 90%;
+    min-height: calc( 100vh - 190px );
+    background-image: url(../images/rsz_homehead.jpg);
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+.page-footer{
+    color: rgba(247, 173, 14);
+    bottom: 0;
+    position: absolute;
+    background-color: rgba(0, 0, 0, .87);
+    text-align: center;
+    overflow: hidden;
+    width: 100%
+}
+.page-body-signup-form-div{
+    background-color:   rgba(78, 77, 77, 0.875);
+    border-radius: 5px;
+    box-shadow:  rgba(59, 58, 58, 0.875)  rgba(78, 77, 77, 0.875);
+    text-align: center;
+    padding-bottom: .5px
+}
