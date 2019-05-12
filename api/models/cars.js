@@ -4,7 +4,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'new',
     status : 'available',
-    price : 16000000.00,
+    price : 160000.00,
     manufacturer : 'BMW',
     model : '2-0-1-9',
     bodyType : 'car'
@@ -47,8 +47,8 @@ const cars = [{
     owner : 1,
     createdOn : new Date(),
     state : 'used',
-    status : 'sold',
-    price : 250000,
+    status : 'available',
+    price : 250000.00,
     manufacturer : 'BMW',
     model : '1-9-9-8',
     bodyType : 'car'
