@@ -59,7 +59,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'used',
     status : 'available',
-    price : 475000000,
+    price : 475000000.00,
     manufacturer : 'BMW',
     model : '2-0-1-9',
     bodyType : 'trailer'
@@ -103,7 +103,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'new',
     status : 'sold',
-    price : 1600000,
+    price : 1600000.00,
     manufacturer : 'BENZ',
     model : '2-0-1-9',
     bodyType : 'car'
@@ -114,7 +114,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'new',
     status : 'sold',
-    price : 1600000,
+    price : 61600000.00,
     manufacturer : 'VOLKS WAGEN',
     model : '2-0-1-9',
     bodyType : 'car'
@@ -125,7 +125,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'new',
     status : 'sold',
-    price : 1600000,
+    price : 160300000.00,
     manufacturer : 'TOYOTA',
     model : '2-0-1-9',
     bodyType : 'car'
@@ -136,7 +136,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'used',
     status : 'sold',
-    price : 1600000,
+    price : 87600000.00,
     manufacturer : 'BENZ',
     model : '2-0-1-1',
     bodyType : 'car'
@@ -147,7 +147,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'new',
     status : 'sold',
-    price : 1600000,
+    price : 99600000.00,
     manufacturer : 'BMW',
     model : '2-0-1-9',
     bodyType : 'car'
@@ -158,7 +158,7 @@ const cars = [{
     createdOn : new Date(),
     state : 'used',
     status : 'sold',
-    price : 1600000,
+    price : 1600000.00,
     manufacturer : 'BENZ',
     model : '2-0-1-9',
     bodyType : 'car'
