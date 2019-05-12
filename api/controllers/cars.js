@@ -19,5 +19,5 @@ const cars = (request, response) => {
         status: 404,
         message: 'Search Not Found'
     });
-}
+};
 export default cars;
