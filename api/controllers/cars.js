@@ -102,5 +102,21 @@ class Cars {
             data: 'Not Found'
         });
     }
+    static postCarAd(request, response) {
+        const queryLength = parseInt(Object.keys(request.query).length, 10);
+        console.log(queryLength);
+        const { owner, email, createdOn, price, status, manufacturer, model, bodyType, carImage} = request.body;
+        const createdCarAd = {id:1, owner, email, createdOn, price, status, manufacturer, model, bodyType, carImage};
+        if (createdCarAd && queryLength === 0) {
+            response.status(201).json({
+                status: 201,
+                data: createdCarAd
+            });
+        }
+        response.status(404).json({
+            status: 404,
+            data: 'Not Found'
+        });
+    }
 }
 export default Cars;
