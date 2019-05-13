@@ -117,14 +117,33 @@ class Cars {
             data: 'Not Found'
         });
     }
-    static changeAdPrice(request, response) {
+    static changeAdPriceOrStatus(request, response) {
+        const regularExpression = /^(\d+\.?\d*)$/;
         const queryLength = parseInt(Object.keys(request.query).length, 10);
-        const { carId, price } = request.params;
+        const { carId, param } = request.params;
         const parsedId = parseInt(carId, 10);
-        const parsedPrice = parseFloat(price);
+        const parsedPrice = parseFloat(param);
+        const booleanValue = regularExpression.test(param);
+        if (booleanValue) {
         const adTobeModified = carsDB.filter((car) => car.id === parsedId);
         const modifiedAd = adTobeModified.map((object) => {
             object.price = parsedPrice;
+            return object;
+        });
+        if (modifiedAd && queryLength === 0) {
+            response.status(202).json({
+                status: 202,
+                data: modifiedAd
+            });
+        }
+        response.status(404).json({
+            status: 404,
+            data: 'Not Found'
+        });
+        }
+        const adTobeModified = carsDB.filter((car) => car.id === parsedId);
+        const modifiedAd = adTobeModified.map((object) => {
+            object.status = param;
             return object;
         });
         if (modifiedAd && queryLength === 0) {
