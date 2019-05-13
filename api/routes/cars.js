@@ -1,7 +1,7 @@
 import express from 'express';
+// import validator from '../../middlewares/getRouteHandler';
 import cars from '../controllers/cars';
-import validator from '../../middlewares/getRouteHandler';
-
 const router = express.Router();
-router.get('/', validator.getAllNewVehicles(), cars);
+router.get('/', cars.cars);
+router.get('/:carId', cars.specificCar);
 export default router;
