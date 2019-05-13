@@ -104,13 +104,33 @@ class Cars {
     }
     static postCarAd(request, response) {
         const queryLength = parseInt(Object.keys(request.query).length, 10);
-        console.log(queryLength);
         const { owner, email, createdOn, price, status, manufacturer, model, bodyType, carImage} = request.body;
         const createdCarAd = {id:1, owner, email, createdOn, price, status, manufacturer, model, bodyType, carImage};
         if (createdCarAd && queryLength === 0) {
             response.status(201).json({
                 status: 201,
                 data: createdCarAd
+            });
+        }
+        response.status(404).json({
+            status: 404,
+            data: 'Not Found'
+        });
+    }
+    static changeAdPrice(request, response) {
+        const queryLength = parseInt(Object.keys(request.query).length, 10);
+        const { carId, price } = request.params;
+        const parsedId = parseInt(carId, 10);
+        const parsedPrice = parseFloat(price);
+        const adTobeModified = carsDB.filter((car) => car.id === parsedId);
+        const modifiedAd = adTobeModified.map((object) => {
+            object.price = parsedPrice;
+            return object;
+        });
+        if (modifiedAd && queryLength === 0) {
+            response.status(202).json({
+                status: 202,
+                data: modifiedAd
             });
         }
         response.status(404).json({
