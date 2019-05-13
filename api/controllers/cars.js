@@ -87,5 +87,20 @@ class Cars {
             data: 'Not Found'
         });
     }
+    static deleteCarAd(request, response) {
+        const { carId } = request.params;
+        const parsedId = parseInt(carId, 10);
+        const cars = carsDB.filter((car) => car.id !== parsedId);
+        if (cars.length > 0 && carId <= carsDB.length) {
+            response.status(301).json({
+                status: 301,
+                data: `Vehicle with carID:${carId} was successfully deleted`
+            });
+        }
+        response.status(404).json({
+            status: 404,
+            data: 'Not Found'
+        });
+    }
 }
 export default Cars;
