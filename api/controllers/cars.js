@@ -90,8 +90,8 @@ class Cars {
     static deleteCarAd(request, response) {
         const { carId } = request.params;
         const parsedId = parseInt(carId, 10);
-        const cars = carsDB.filter((car) => car.id !== parsedId);
-        if (cars.length > 0 && carId <= carsDB.length) {
+        const car = carsDB.find((car) => car.id === parsedId);
+        if (car && carId <= carsDB.length) {
             response.status(301).json({
                 status: 301,
                 data: `Vehicle with carID:${carId} was successfully deleted`
@@ -125,10 +125,9 @@ class Cars {
         const parsedPrice = parseFloat(param);
         const booleanValue = regularExpression.test(param);
         if (booleanValue) {
-        const adTobeModified = carsDB.filter((car) => car.id === parsedId);
-        const modifiedAd = adTobeModified.map((object) => {
-            object.price = parsedPrice;
-            return object;
+        const adTobeModified = carsDB.find((car) => car.id === parsedId);
+        const modifiedAd = { ...adTobeModified, adTobeModified.price: parsedPrice}
+        return modifiedAd;
         });
         if (modifiedAd && queryLength === 0) {
             response.status(202).json({
@@ -141,11 +140,9 @@ class Cars {
             data: 'Not Found'
         });
         }
-        const adTobeModified = carsDB.filter((car) => car.id === parsedId);
-        const modifiedAd = adTobeModified.map((object) => {
-            object.status = param;
-            return object;
-        });
+        const adTobeModified = carsDB.find((car) => car.id === parsedId);
+        const modifiedAd = { ...adTobeModified, adTobeModified.status: param }
+        return modifiedAd;
         if (modifiedAd && queryLength === 0) {
             response.status(202).json({
                 status: 202,
