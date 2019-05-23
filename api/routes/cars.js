@@ -2,7 +2,7 @@ import express from 'express';
 // import validator from '../../middlewares/getRouteHandler';
 import Cars from '../controllers/cars';
 
-const {cars, specificCar, deleteCarAd, postCarAd, changeAdPriceOrStatus} = Cars;
+const { cars, postCarAd, specificCar, deleteCarAd, changeAdPriceOrStatus } = Cars;
 const router = express.Router();
 router.get('/', cars);
 router.post('/', postCarAd);
