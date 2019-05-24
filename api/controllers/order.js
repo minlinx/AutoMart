@@ -34,6 +34,13 @@ class Orders {
 		const arrayOfOrdersToUpdate = ordersDB.find(
 			order => order.id === parsedOrderId && order.status === 'pending'
 		);
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
 		if (arrayOfOrdersToUpdate) {
 			const data = { ...arrayOfOrdersToUpdate, newPriceOffered: parsedPrice };
 			response.status(301).json({
