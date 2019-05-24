@@ -26,7 +26,20 @@ class GetRouteValidator {
 	static createOrderValidator() {
 		return [
 			check('carId').not().isEmpty().exists().isInt().trim().escape(),
-			check('priceOffered').not().isEmpty().exists().isFloat().trim().escape()];
+			check('priceOffered').not().isEmpty().exists().isFloat().trim().escape()
+		];
+	}
+	static modifyCarAdValidator() {
+		return [
+			check('carId').not().isEmpty().exists().isInt().trim().escape(),
+			check('param').not().isEmpty().exists().isFloat().trim().escape()
+		];
+	}
+	static modifyOrderValidator() {
+		return [
+			check('orderId').not().isEmpty().exists().isInt().trim().escape(),
+			check('price').not().isEmpty().exists().isFloat().trim().escape()
+		];
 	}
 }
 export default GetRouteValidator;

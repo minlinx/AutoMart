@@ -153,7 +153,14 @@ class Cars {
 		const parsedPrice = parseFloat(param);
 		const adTobeModified = carsDB.find(car => car.id === parsedId);
 		const booleanValue = regularExpression.test(param);
-		if (booleanValue) {
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (errors.isEmpty() && booleanValue) {
 			const modifiedAd = { ...adTobeModified, price: parsedPrice };
 			if (modifiedAd && queryLength === 0) {
 				response.status(202).json({
