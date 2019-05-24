@@ -4,7 +4,7 @@
   "description": "automart is an online market place for automobiles of diverse makes, body types, models. with automart users can sell their cars(used and new) and buy from trusted dealers.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha server/test --require @babel/register",
     "start": "nodemon bin/dev"
   },
   "repository": {
@@ -37,8 +37,11 @@
     "@babel/preset-env": "^7.4.4",
     "@babel/register": "^7.4.4",
     "babel-core": "^6.26.3",
+    "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.2"
+    "eslint-plugin-import": "^2.17.2",
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
   }
 }
