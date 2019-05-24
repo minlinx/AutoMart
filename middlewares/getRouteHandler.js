@@ -32,7 +32,7 @@ class GetRouteValidator {
 	static modifyCarAdValidator() {
 		return [
 			check('carId').not().isEmpty().exists().isInt().trim().escape(),
-			check('param').not().isEmpty().exists().isFloat().trim().escape()
+			check('param').not().isEmpty().exists().isString().trim().escape()
 		];
 	}
 	static modifyOrderValidator() {
