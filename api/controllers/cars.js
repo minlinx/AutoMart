@@ -119,7 +119,7 @@ class Cars {
 			id: 1,
 			owner,
 			email,
-			createdOn,
+			createdOn: new Date(createdOn),
 			price,
 			status,
 			manufacturer,
@@ -127,7 +127,14 @@ class Cars {
 			bodyType,
 			carImage
 		};
-		if (createdCarAd && queryLength === 0) {
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (errors.isEmpty() && createdCarAd && queryLength === 0) {
 			response.status(201).json({
 				status: 201,
 				data: createdCarAd
