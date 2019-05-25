@@ -1,4 +1,4 @@
-#######AutoMart
+####### AutoMart
 
 
 ![Coveralls github branch](https://img.shields.io/coveralls/github/lemurheavy/minlinx/AutoMart/develop.svg)
