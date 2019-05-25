@@ -160,7 +160,7 @@ class Cars {
 				error: errors.array()
 			});
 		}
-		if (errors.isEmpty() && booleanValue) {
+		if (errors.isEmpty() && booleanValue && adTobeModified) {
 			const modifiedAd = { ...adTobeModified, price: parsedPrice };
 			if (modifiedAd && queryLength === 0) {
 				response.status(202).json({
