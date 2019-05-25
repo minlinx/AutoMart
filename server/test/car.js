@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import request from 'supertest';
 import app from '../app';
 
-describe('#GET /', () => {
+describe('#GET /Car', () => {
 	it('Should return a 200 status, if it is admin', done => {
 		request(app)
 			.get('/api/v1/car')
@@ -28,7 +28,7 @@ describe('#GET /', () => {
 			});
 	});
 });
-describe('#POST /', () => {
+describe('#POST /Car', () => {
 	it('Should return a 201 status code.', done => {
 		request(app)
 			.post('/api/v1/car')
@@ -66,7 +66,7 @@ describe('#POST /', () => {
 			});
 	});
 });
-describe('#DELETE /', () => {
+describe('#DELETE /Car', () => {
 	it('Should return a 301 status code.', done => {
 		request(app)
 			.delete('/api/v1/car/1')
@@ -84,7 +84,7 @@ describe('#DELETE /', () => {
 			});
 	});
 });
-describe('#PATCH /', () => {
+describe('#PATCH /Car', () => {
 	it('Should return a 202 status code.', done => {
 		request(app)
 			.patch('/api/v1/car/1/7000000.00')
