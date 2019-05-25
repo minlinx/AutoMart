@@ -24,14 +24,14 @@ class Orders {
 		}
 		response.status(404).json({
 			status: 404,
-			message: 'Not Found'
+			error: 'Not Found'
 		});
 	}
 	static updateOrder(request, response) {
 		const { orderId, price } = request.params;
 		const parsedPrice = parseFloat(price);
 		const parsedOrderId = parseInt(orderId);
-		const arrayOfOrdersToUpdate = ordersDB.find(
+		const OrderToUpdate = ordersDB.find(
 			order => order.id === parsedOrderId && order.status === 'pending'
 		);
 		const errors = validationResult(request);
@@ -41,8 +41,8 @@ class Orders {
 				error: errors.array()
 			});
 		}
-		if (arrayOfOrdersToUpdate) {
-			const data = { ...arrayOfOrdersToUpdate, newPriceOffered: parsedPrice };
+		if (errors.isEmpty() && OrderToUpdate) {
+			const data = { ...OrderToUpdate, newPriceOffered: parsedPrice };
 			response.status(301).json({
 				status: 301,
 				data
@@ -50,7 +50,7 @@ class Orders {
 		}
 		response.status(404).json({
 			status: 404,
-			message: 'Not Found'
+			error: 'Not Found'
 		});
 	}
 }
