@@ -4,7 +4,7 @@ const privateKey = 'autoMart@minlinx2019';
 ///////This code looks like this because of the challenge's response specification
 class Users {
 	static signUpAndSignIn(request, response) {
-        const token = request.headers.authorization.split(' ')[1];
+		const token = request.headers.authorization.split(' ')[1];
 		const { email, password, firstName, lastName, address } = request.body;
 		const { param } = request.params;
 		const strParam = param.toString();
@@ -28,7 +28,7 @@ class Users {
 				},
 				...usersDB
 			];
-            console.log(updatedUsersDb);
+			console.log(updatedUsersDb);
 			response.status(201).json({
 				status: 201,
 				data: {
