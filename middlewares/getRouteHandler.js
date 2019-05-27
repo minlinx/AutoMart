@@ -12,9 +12,9 @@ class GetRouteValidator {
 	}
 	static postCarAdValidator() {
 		return [
+			check('id').not().isEmpty().exists().isInt().trim().escape(),
 			check('owner').not().isEmpty().exists().isString().trim().escape(),
 			check('email').not().isEmpty().exists().isEmail().escape(),
-			check('createdOn').not().isEmpty().escape().withMessage('Put in todays date'),
 			check('price').not().isEmpty().exists().isFloat().trim().escape(),
 			check('status').not().isEmpty().exists().isString().trim().escape().withMessage('status should be AVAILABLE or SOLD'),
 			check('manufacturer').not().isEmpty().exists().isString().trim().escape(),
