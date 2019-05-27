@@ -94,7 +94,7 @@ class Cars {
 		if (car && carId <= carsDB.length) {
 			response.status(301).json({
 				status: 301,
-				data: `Vehicle with carID:${carId} was successfully deleted`
+				data: `Vehicle with carID:${ carId } was successfully deleted`
 			});
 		}
 		response.status(404).json({

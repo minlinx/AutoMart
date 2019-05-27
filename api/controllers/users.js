@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken';
 import usersDB from '../models/users';
-const privateKey = 'autoMart@minlinx2019';
+const privateKey = process.env.JWT_PRIVATE_KEY;
 ///////This code looks like this because of the challenge's response specification
 class Users {
 	static signUpAndSignIn(request, response) {
-		const token = request.headers.authorization.split(' ')[1];
 		const { email, password, firstName, lastName, address } = request.body;
 		const { param } = request.params;
 		const strParam = param.toString();
@@ -42,6 +41,7 @@ class Users {
 			});
 		}
 		if (strParam === 'signin') {
+			const token = request.headers.authorization.split(' ')[1];
 			return response.status(202).json({
 				status: 202,
 				data: {
