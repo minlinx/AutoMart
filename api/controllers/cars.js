@@ -253,7 +253,7 @@ class Cars {
 			if (data) {
 				response.status(200).json({
 					status: 200,
-					data: 'Car Ad successfully deleted'
+					data: `Car Ad: ${ carId } successfully deleted`
 				});
 			}
 			response.status(404).json({
