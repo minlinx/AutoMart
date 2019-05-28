@@ -223,7 +223,8 @@ class Cars {
 			state &&
 			status
 		) {
-			const data = { id, email, manufacturer, model, price, state, status };
+			const url = (request.file.url);
+			const data = { id, email, createdOn: Date(), manufacturer, model, price, state, status, image: url };
 			response.status(201).json({
 				status: 201,
 				data

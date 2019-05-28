@@ -1,5 +1,6 @@
 import express from 'express';
 import validator from '../../middlewares/getRouteHandler';
+import imageParser from '../../middlewares/uploadImage';
 import Cars from '../controllers/cars';
 
 const { postCarAdValidator, checkStatusAndState } = validator;
@@ -37,7 +38,7 @@ router.get(
 	getCarsWithStatusAndState
 );
 router.get('/:carId', specificCar);
-router.post('/', postCarAdValidator(), postCarAd);
+router.post('/', imageParser.single('vehicleImage'), postCarAdValidator(), postCarAd);
 router.delete('/:carId', deleteCarAd);
 router.patch('/:carId/:param', changeAdPriceOrStatus);
 export default router;
