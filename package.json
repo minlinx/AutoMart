@@ -2,10 +2,11 @@
   "name": "automart",
   "version": "1.0.0",
   "description": "automart is an online market place for automobiles of diverse makes, body types, models. with automart users can sell their cars(used and new) and buy from trusted dealers.",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "test": "nyc mocha server/test --require @babel/register --exit",
-    "start": "nodemon bin/dev"
+    "start": "nodemon server/app",
+    "build": "nodemon bin/dev",
+    "test": "nyc mocha server/test --require @babel/register --exit"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
   "homepage": "https://github.com/minlinx/AutoMart#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
