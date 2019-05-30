@@ -251,8 +251,8 @@ class Cars {
 		if (carId) {
 			const data = carsDB.find(vehicle => vehicle.id === parsedCarId);
 			if (data) {
-				response.status(200).json({
-					status: 200,
+				response.status(301).json({
+					status: 301,
 					data: `Car Ad: ${ carId } successfully deleted`
 				});
 			}
