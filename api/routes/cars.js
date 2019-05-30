@@ -10,7 +10,8 @@ const {
 	checkBodyType,
 	checkStatusAndState,
 	checkStatusMinPriceAndMaxPrice,
-	modifyCarAdValidator
+	checkCarADStatus,
+	checkCarADPrice
 } = validator;
 const {
 	getAllCars,
@@ -21,7 +22,8 @@ const {
 	specificCar,
 	postCarAd,
 	deleteCarAd,
-	changeAdPriceOrStatus
+	changeCarAdPrice,
+	changeCarAdStatus
 } = Cars;
 const router = express.Router();
 router.param('status', (request, response, next) => {
@@ -53,5 +55,6 @@ router.post(
 	postCarAd
 );
 router.delete('/:carId', checkCarId(), deleteCarAd);
-router.patch('/:carId/:param', modifyCarAdValidator(), changeAdPriceOrStatus);
+router.patch('/:carId/price', checkCarADPrice(), changeCarAdPrice);
+router.patch('/:carId/status', checkCarADStatus(),changeCarAdStatus);
 export default router;
