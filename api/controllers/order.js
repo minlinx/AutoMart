@@ -4,6 +4,7 @@ import ordersDB from '../models/order';
 
 class Orders {
 	static createOrder(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { carId, priceOffered } = request.body;
 		const parsedId = parseInt(carId);
@@ -15,7 +16,13 @@ class Orders {
 				error: errors.array()
 			});
 		}
-		if (errors.isEmpty() && oderedCar) {
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (oderedCar) {
 			const data = { ...oderedCar, priceOffered: parsedPrice };
 			response.status(201).json({
 				status: 201,
@@ -24,33 +31,40 @@ class Orders {
 		}
 		response.status(404).json({
 			status: 404,
-			error: 'Not Found'
+			message: 'Not Found'
 		});
 	}
 	static updateOrder(request, response) {
-		const { orderId, price } = request.params;
-		const parsedPrice = parseFloat(price);
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const errors = validationResult(request);
+		const { orderId, priceOffered } = request.body;
+		const parsedPrice = parseFloat(priceOffered);
 		const parsedOrderId = parseInt(orderId);
-		const OrderToUpdate = ordersDB.find(
+		const orderToBeModified = ordersDB.find(
 			order => order.id === parsedOrderId && order.status === 'pending'
 		);
-		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
 			});
 		}
-		if (errors.isEmpty() && OrderToUpdate) {
-			const data = { ...OrderToUpdate, newPriceOffered: parsedPrice };
-			response.status(301).json({
-				status: 301,
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (orderToBeModified) {
+			const data = { ...orderToBeModified, newPriceOffered: parsedPrice };
+			response.status(202).json({
+				status: 202,
 				data
 			});
 		}
 		response.status(404).json({
 			status: 404,
-			error: 'Not Found'
+			message: 'Not Found'
 		});
 	}
 }
