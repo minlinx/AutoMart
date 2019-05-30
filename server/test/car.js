@@ -3,7 +3,26 @@ import request from 'supertest';
 import { describe, it } from 'mocha';
 import app from '../app';
 
+
 describe('#GET /Car', () => {
+	it('Should return a 200 status', done => {
+		const status = 'available';
+		request(app)
+			.get('/api/v1/car/status')
+			.send(status)
+			.end((error, response) => {
+				assert.equal(response.statusCode, '422');
+				done();
+			});
+	});
+	it('Should return a 200 status', done => {
+		request(app)
+			.get('/api/v1/car/statusAndState')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '422');
+				done();
+			});
+	});
 	it('Should return a 200 status, if it is admin', done => {
 		request(app)
 			.get('/api/v1/car')
@@ -30,7 +49,7 @@ describe('#GET /Car', () => {
 	});
 });
 describe('#POST /Car', () => {
-	it('Should return a 201 status code.', done => {
+	it('Should return a 422 status code.', done => {
 		request(app)
 			.post('/api/v1/car')
 			.set({
@@ -45,7 +64,7 @@ describe('#POST /Car', () => {
 				carImage: 'car image'
 			})
 			.end((error, response) => {
-				assert.equal(response.statusCode, '201');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
@@ -86,43 +105,43 @@ describe('#DELETE /Car', () => {
 	});
 });
 describe('#PATCH /Car', () => {
-	it('Should return a 202 status code.', done => {
+	it('Should return a 422 status code.', done => {
 		request(app)
-			.patch('/api/v1/car/1/7000000.00')
+			.patch('/api/v1/car/1/price')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '202');
-				done();
-			});
-	});
-	it('Should return a 202 status code.', done => {
-		request(app)
-			.patch('/api/v1/car/1/available')
-			.end((error, response) => {
-				assert.equal(response.statusCode, '202');
-				done();
-			});
-	});
-	it('Should return a 202 status code.', done => {
-		request(app)
-			.patch('/api/v1/car/1/sold')
-			.end((error, response) => {
-				assert.equal(response.statusCode, '202');
-				done();
-			});
-	});
-	it('Should return a 400 status code.', done => {
-		request(app)
-			.patch('/api/v1/car/1/yytyytytyyty7776777')
-			.end((error, response) => {
-				assert.equal(response.statusCode, '400');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
 	it('Should return a 422 status code.', done => {
 		request(app)
-			.patch('/api/v1/car/yyy/yytyytytyyty7776777')
+			.patch('/api/v1/car/1/status')
 			.end((error, response) => {
 				assert.equal(response.statusCode, '422');
+				done();
+			});
+	});
+	it('Should return a 404 status code.', done => {
+		request(app)
+			.patch('/api/v1/car/1/sold')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '404');
+				done();
+			});
+	});
+	it('Should return a 404 status code.', done => {
+		request(app)
+			.patch('/api/v1/car/1/yytyytytyyty7776777')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '404');
+				done();
+			});
+	});
+	it('Should return a 404 status code.', done => {
+		request(app)
+			.patch('/api/v1/car/1/yytyytytyyty7776777')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '404');
 				done();
 			});
 	});
