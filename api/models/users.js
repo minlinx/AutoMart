@@ -10,7 +10,7 @@ const users = [
 	},
 	{
 		id: 2,
-		email: 'secondUser@automart.com',
+		email: 'minaproblemsolver@gmail.com',
 		firstName: 'john1',
 		lastName: 'doe1',
 		password: '123456',

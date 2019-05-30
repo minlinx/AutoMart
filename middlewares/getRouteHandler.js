@@ -73,5 +73,11 @@ class GetRouteValidator {
 			check('price').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
+	static signUpValidator() {
+		return [
+			check('email').not().isEmpty().exists().isEmail().escape(),
+			check('password').not().isEmpty().exists().isString().trim().escape()
+		];
+	}
 }
 export default GetRouteValidator;

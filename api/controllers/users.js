@@ -1,62 +1,50 @@
 import jwt from 'jsonwebtoken';
 import usersDB from '../models/users';
+import { validationResult } from 'express-validator/check';
 const privateKey = process.env.JWT_PRIVATE_KEY;
-///////This code looks like this because of the challenge's response specification
 class Users {
-	static signUpAndSignIn(request, response) {
-		const { email, password, firstName, lastName, address } = request.body;
-		const { param } = request.params;
-		const strParam = param.toString();
-		if (strParam === 'signup') {
+	static signUpFunction(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const { email, password } = request.body;
+		const hashedPassword = parseInt(password, 36);
+		const vehicleOwner = usersDB.find((user) => user.email === email);
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (errors.isEmpty() && vehicleOwner) {
+			const { firstName } = vehicleOwner;
+			const url = request.route.path.toString();
 			const token = jwt.sign(
 				{
 					email,
 					firstName
 				},
-				privateKey,
-				{ expiresIn: '6h' }
+				privateKey
 			);
-			const updatedUsersDb = [
-				{
-					id: usersDB.length + 1,
-					email,
-					password,
-					firstName,
-					lastName,
-					address
-				},
-				...usersDB
-			];
-			console.log(updatedUsersDb);
-			response.status(201).json({
-				status: 201,
-				data: {
-					token,
-					id: usersDB.length + 1,
-					firstName,
-					lastName,
-					email,
-					address
-				}
+			const newId = usersDB.length + 1;
+			const data = { token, hashedPassword, ...vehicleOwner };
+			if (url === '/signup') {
+				const data = { token, hashedPassword, ...vehicleOwner, id: newId };
+				response.status(201).json({
+					status: 201,
+					data
+				});
+			}
+			response.status(200).json({
+				status: 200,
+				data
 			});
 		}
-		if (strParam === 'signin') {
-			const token = request.headers.authorization.split(' ')[1];
-			return response.status(202).json({
-				status: 202,
-				data: {
-					token,
-					id: usersDB.length + 1,
-					firstName,
-					lastName,
-					address
-				}
-			});
-		}
-		response.status(400).json({
-			status: 400,
-			message: 'Authentication Failed'
-		});
 	}
 }
 export default Users;
