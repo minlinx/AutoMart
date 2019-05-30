@@ -55,10 +55,16 @@ class GetRouteValidator {
 			check('priceOffered').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
-	static modifyCarAdValidator() {
+	static checkCarADStatus() {
 		return [
 			check('carId').not().isEmpty().exists().isInt().trim().escape(),
-			check('param').not().isEmpty().exists().isString().trim().escape()
+			check('status').not().isEmpty().exists().isString().trim().escape()
+		];
+	}
+	static checkCarADPrice() {
+		return [
+			check('carId').not().isEmpty().exists().isInt().trim().escape(),
+			check('price').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
 	static modifyOrderValidator() {

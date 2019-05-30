@@ -262,15 +262,15 @@ class Cars {
 			});
 		}
 	}
-	static changeAdPriceOrStatus(request, response) {
-		const regularExpression = /^(\d+\.?\d*)$/;
-		const queryLength = parseInt(Object.keys(request.query).length, 10);
-		const { carId, param } = request.params;
-		const parsedId = parseInt(carId, 10);
-		const parsedPrice = parseFloat(param);
-		const adTobeModified = carsDB.find(car => car.id === parsedId);
-		const booleanValue = regularExpression.test(param);
+	static changeCarAdPrice(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
+		const { carId, price } = request.body;
+		const parsedPrice = parseFloat(price);
+		const parsedCarId = parseInt(carId);
+		const carAdToBeModified = carsDB.find(
+			vehicle => vehicle.id === parsedCarId
+		);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
@@ -283,30 +283,54 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		if (booleanValue && adTobeModified) {
-			const modifiedAd = { ...adTobeModified, price: parsedPrice };
-			if (modifiedAd && queryLength === 0) {
+		if (carAdToBeModified) {
+			const data = { ...carAdToBeModified, price: parsedPrice };
+			response.status(202).json({
+				status: 202,
+				data
+			});
+		}
+		response.status(404).json({
+			status: 404,
+			message: 'Not Found'
+		});
+	}
+	static changeCarAdStatus(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const errors = validationResult(request);
+		const { carId, status } = request.body;
+		const parsedCarId = parseInt(carId);
+		const carAdToBeModified = carsDB.find(
+			vehicle => vehicle.id === parsedCarId
+		);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (carAdToBeModified) {
+			if (status === 'sold') {
+				const data = { ...carAdToBeModified, status };
 				response.status(202).json({
 					status: 202,
-					data: modifiedAd
+					data
 				});
 			}
 			response.status(400).json({
 				status: 400,
-				error: 'Bad Request'
+				error: 'You can only mark car as SOLD'
 			});
 		}
-		if (param === 'sold') {
-			const modifiedAd = { ...adTobeModified, status: param };
-			response.status(202).json({
-				status: 202,
-				message: 'welcome',
-				data: modifiedAd
-			});
-		}
-		response.status(400).json({
-			status: 400,
-			error: 'Bad Request'
+		response.status(404).json({
+			status: 404,
+			message: 'Not Found'
 		});
 	}
 }
