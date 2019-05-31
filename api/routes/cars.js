@@ -26,18 +26,6 @@ const {
 	changeCarAdStatus
 } = Cars;
 const router = express.Router();
-router.param('status', (request, response, next) => {
-	next();
-});
-router.param('bodyType', (request, response, next) => {
-	next();
-});
-router.param('statusAndState', (request, response, next) => {
-	next();
-});
-router.param('priceRane', (request, response, next) => {
-	next();
-});
 router.get('/status', checkStatus(), getCarsWithStatus);
 router.get('/bodyType', checkBodyType(), getCarsWithBodyType);
 router.get(
