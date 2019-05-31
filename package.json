@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server/app",
     "build": "nodemon bin/dev",
-    "test": "nyc mocha server/test --require @babel/register --exit"
+    "test": "nyc mocha server/test --require @babel/register --exit",
+    "coverage": "nyc report --reporter=text-lcov|coveralls"
   },
   "repository": {
     "type": "git",
