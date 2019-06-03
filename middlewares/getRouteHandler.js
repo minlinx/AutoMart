@@ -9,7 +9,7 @@ class GetRouteValidator {
 	}
 	static checkBodyType() {
 		return [
-			check('bodyType', 'bodyty is required')
+			check('bodyType', 'bodyType is required')
 				.trim().not().isEmpty().isString().escape()
 		];
 	}
@@ -17,10 +17,10 @@ class GetRouteValidator {
 		return [
 			check('status', 'status is required')
 				.isLength({ min: 4 })
-				.trim().isEmpty().isString(),
+				.trim().not().isEmpty().isString(),
 			check('state', 'state is required')
-				.isLength({ min: 4 })
-				.trim().isEmpty().isString()
+				.isLength({ min: 3 })
+				.trim().not().isEmpty().isString()
 		];
 	}
 	static checkStatusMinPriceAndMaxPrice() {

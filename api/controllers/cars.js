@@ -63,7 +63,7 @@ class Cars {
 			});
 		}
 	}
-	static getCarsWithinAPriceRance(request, response) {
+	static getCarsWithinAPriceRange(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { status, minPrice, maxPrice } = request.body;
 		const errors = validationResult(request);
@@ -79,11 +79,10 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		if (status && minPrice && maxPrice) {
+		if (status === 'available' && minPrice && maxPrice) {
 			const data = carsDB.filter(
 				vehicle =>
-					vehicle.status === 'available' &&
-					(minPrice <= vehicle.price && maxPrice >= vehicle.price)
+					vehicle.status === 'available' && minPrice <= vehicle.price && maxPrice >= vehicle.price
 			);
 			if (data.length > 0) {
 				response.status(200).json({
@@ -96,6 +95,11 @@ class Cars {
 				error: 'Not Found'
 			});
 		}
+		const status1 = 'available';
+		response.status(422).json({
+			status: 422,
+			error: `Status Must be '${ status1 }'`
+		});
 	}
 	static getAllCars(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
