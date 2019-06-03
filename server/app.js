@@ -1,11 +1,13 @@
 import express from 'express';
 import expressValidator  from 'express-validator';
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 // import swaggerUi from 'swagger-ui-express';
 import carsRoute from '../api/routes/cars';
 import usersRoute from '../api/routes/users';
 import ordersRoute from '../api/routes/orders';
 import apiError from '../middlewares/apiError';
+dotenv.config();
 // import swaggerDocument from '../swagger/swagger.json';
 
 const { notFoundError, serverError} = apiError;
