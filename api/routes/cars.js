@@ -18,7 +18,7 @@ const {
 	getCarsWithStatus,
 	getCarsWithBodyType,
 	getCarsWithStatusAndState,
-	getCarsWithinAPriceRance,
+	getCarsWithinAPriceRange,
 	specificCar,
 	postCarAd,
 	deleteCarAd,
@@ -31,7 +31,7 @@ router.get('/bodyType', checkBodyType(), getCarsWithBodyType);
 router.get(
 	'/priceRange',
 	checkStatusMinPriceAndMaxPrice(),
-	getCarsWithinAPriceRance
+	getCarsWithinAPriceRange
 );
 router.get('/', getAllCars);
 router.get('/statusAndState', checkStatusAndState(), getCarsWithStatusAndState);
