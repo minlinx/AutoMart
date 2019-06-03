@@ -6,7 +6,7 @@
    "scripts": {
     "test": "nodemon bin/dev",
     "start": "nodemon bin/dev",
-    "clean": "del dist",
+    "clean": "rm -rf dist",
     "build": "npm run clean && babel api server middlewares swagger -s -d dist",
     "production": "npm run build && babel-node dist/app.js"
   },
