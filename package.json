@@ -2,12 +2,13 @@
   "name": "automart",
   "version": "1.0.0",
   "description": "automart is an online market place for automobiles of diverse makes, body types, models. with automart users can sell their cars(used and new) and buy from trusted dealers.",
-  "main": "app.js",
-  "scripts": {
-    "start": "nodemon server/app.js --exec babel-node",
-    "build": "nodemon server/app.js --exec babel-node",
-    "test": "nyc mocha server/test --require @babel/register --exit",
-    "coverage": "nyc report --reporter=text-lcov|coveralls"
+  "main": "server/app.js",
+   "scripts": {
+    "test": "nodemon bin/dev",
+    "start": "nodemon bin/dev",
+    "clean": "del dist",
+    "build": "npm run clean && babel api server middlewares swagger -s -d dist",
+    "production": "npm run build && babel-node dist/app.js"
   },
   "repository": {
     "type": "git",
