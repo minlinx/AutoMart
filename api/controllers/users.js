@@ -4,7 +4,6 @@ import { validationResult } from 'express-validator/check';
 const privateKey = process.env.JWT_PRIVATE_KEY;
 class Users {
 	static signUpFunction(request, response) {
-		const queryLength = parseInt(Object.keys(request.query).length);
 		const { email, password } = request.body;
 		const hashedPassword = parseInt(password, 36);
 		const vehicleOwner = usersDB.find((user) => user.email === email);
@@ -13,12 +12,6 @@ class Users {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
-			});
-		}
-		if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
 			});
 		}
 		if (errors.isEmpty() && vehicleOwner) {
@@ -31,15 +24,16 @@ class Users {
 				},
 				privateKey
 			);
-			const newId = usersDB.length + 1;
-			const data = { token, hashedPassword, ...vehicleOwner };
 			if (url === '/signup') {
+				const newId = usersDB.length + 1;
 				const data = { token, hashedPassword, ...vehicleOwner, id: newId };
 				response.status(201).json({
 					status: 201,
 					data
 				});
 			}
+			const verifiedToken = response.locals.token;
+			const data = { token: verifiedToken, ...vehicleOwner};
 			response.status(200).json({
 				status: 200,
 				data

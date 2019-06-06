@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Auto Mart",
     "contact": {
-      "email": "minaproblemsolver@gmail.com"
+      "email": "minaproblemsolver@gmail.com"      
     }
   },
   "basePath": "/api/v1",
@@ -24,7 +24,8 @@
     }
   ],
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "paths": {
     "/car": {
@@ -50,7 +51,7 @@
       }
     },
     "/car/status": {
-      "get": {
+      "post": {
         "tags": [
           "Cars"
         ],
@@ -65,9 +66,7 @@
             "name": "status",
             "in": "body",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/Cars"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -84,7 +83,7 @@
       }
     },
     "/car/bodyType": {
-      "get": {
+      "post": {
         "tags": [
           "Cars"
         ],
@@ -118,7 +117,7 @@
       }
     },
     "/car/priceRange": {
-      "get": {
+      "post": {
         "tags": [
           "Cars"
         ],
@@ -152,7 +151,7 @@
       }
     },
     "/car/statusAndState": {
-      "get": {
+      "post": {
         "tags": [
           "Cars"
         ],
@@ -235,7 +234,13 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Cars"
+              "id": "number",
+              "email": "string",
+              "manufacturer": "string",
+              "model": "string",
+              "price": "number",
+              "state": "string",
+              "status": "string"
             }
           }
         ],
@@ -275,6 +280,12 @@
       "properties": {
         "status": {
           "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "orderId": {
+          "type": "number"
         },
         "state": {
           "type": "string"
