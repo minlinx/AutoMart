@@ -1,37 +1,5 @@
 import { check } from 'express-validator/check';
 class GetRouteValidator {
-	static checkStatus() {
-		return [
-			check('status', 'status is required')
-				.isLength({ min: 4 })
-				.trim().not().isEmpty().isString().escape()
-		];
-	}
-	static checkBodyType() {
-		return [
-			check('bodyType', 'bodyType is required')
-				.trim().not().isEmpty().isString().escape()
-		];
-	}
-	static checkStatusAndState() {
-		return [
-			check('status', 'status is required')
-				.isLength({ min: 4 })
-				.trim().not().isEmpty().isString(),
-			check('state', 'state is required')
-				.isLength({ min: 3 })
-				.trim().not().isEmpty().isString()
-		];
-	}
-	static checkStatusMinPriceAndMaxPrice() {
-		return [
-			check('status', 'status is required')
-				.isLength({ min: 4 })
-				.trim().not().isEmpty().isString(),
-			check('minPrice').not().isEmpty().exists().isFloat().trim().escape(),
-			check('maxPrice').not().isEmpty().exists().isFloat().trim().escape()
-		];
-	}
 	static checkCarId() {
 		return [
 			check('carId').not().isEmpty().exists().isInt().trim().escape()

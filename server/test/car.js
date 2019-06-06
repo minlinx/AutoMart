@@ -47,6 +47,46 @@ describe('#GET /Car', () => {
 				done();
 			});
 	});
+	it('Should return a 200 status code.', done => {
+		request(app)
+			.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '200');
+				done();
+			});
+	});
+	it('Should return a 200 status code.', done => {
+		request(app)
+			.get('/api/v1/car?status=available&state=used')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '200');
+				done();
+			});
+	});
+	it('Should return a 422 status code.', done => {
+		request(app)
+			.get('/api/v1/car?status=availa777ble&state=used')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '422');
+				done();
+			});
+	});
+	it('Should return a 400 status code.', done => {
+		request(app)
+			.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available&state=used')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '400');
+				done();
+			});
+	});
+	it('Should return a 200 status code.', done => {
+		request(app)
+			.get('/api/v1/car?state=used')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '200');
+				done();
+			});
+	});
 });
 describe('#POST /Car', () => {
 	it('Should return a 422 status code.', done => {
