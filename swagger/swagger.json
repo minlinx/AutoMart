@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Auto Mart",
     "contact": {
-      "email": "minaproblemsolver@gmail.com"      
+      "email": "minaproblemsolver@gmail.com"
     }
   },
   "basePath": "/api/v1",
@@ -50,24 +50,16 @@
         }
       }
     },
-    "/car/status": {
-      "post": {
+    "/car?status=available&state=used": {
+      "get": {
         "tags": [
           "Cars"
         ],
         "summary": "View all Available or Sold Cars.",
         "description": "",
-        "operationId": "getCarsWithStatus",
+        "operationId": "getCarOrCars",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "status",
-            "in": "body",
-            "required": true,
-            "type": "string"
-          }
         ],
         "responses": {
           "200": {
@@ -82,26 +74,16 @@
         }
       }
     },
-    "/car/bodyType": {
-      "post": {
+    "/car?minPrice=160000.00&maxPrice=250000.00&status=available": {
+      "get": {
         "tags": [
           "Cars"
         ],
         "summary": "View all vehicles with a specific body type.",
         "description": "",
-        "operationId": "getCarsWithBodyType",
+        "operationId": "getCarOrCars",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "bodyType",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Cars"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -116,26 +98,16 @@
         }
       }
     },
-    "/car/priceRange": {
-      "post": {
+    "/car?state=new": {
+      "get": {
         "tags": [
           "Cars"
         ],
         "summary": "View all Available Cars within a price range.",
         "description": "",
-        "operationId": "getCarsWithinAPriceRange",
+        "operationId": "getCarOrCars",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "status",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Cars"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -150,26 +122,16 @@
         }
       }
     },
-    "/car/statusAndState": {
-      "post": {
+    "/car?state=used": {
+      "get": {
         "tags": [
           "Cars"
         ],
         "summary": "View all Available Cars depending on their state and status.",
         "description": "",
-        "operationId": "getCarsWithStatusAndState",
+        "operationId": "getCarOrCars",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "status",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Cars"
-            }
-          }
         ],
         "responses": {
           "200": {

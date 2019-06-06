@@ -6,9 +6,9 @@
   "scripts": {
     "test": "nyc mocha server/test -r @babel/register --exit",
     "start": "nodemon bin/dev",
-    "clean": "del -rf dist",
-    "build": "babel-node dist/app",
-    "build1": "npm run clean && @babel/register api server middlewares swagger -s -d dist && babel-node dist/app.js"
+    "clean": "rm -rf dist",
+    "build1": "babel-node dist/app",
+    "build": "npm run clean && @babel/register api server middlewares swagger -s -d dist && babel-node dist/app.js"
   },
   "repository": {
     "type": "git",
