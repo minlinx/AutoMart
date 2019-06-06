@@ -8,7 +8,7 @@
     "start": "nodemon bin/dev",
     "clean": "rm -rf dist",
     "build1": "babel-node dist/app",
-    "build": "npm run clean && @babel/register api server middlewares swagger -s -d dist && babel-node dist/app.js"
+    "build": "npm run clean && babel api server middlewares swagger -s -d dist && babel-node dist/app.js"
   },
   "repository": {
     "type": "git",
