@@ -4,114 +4,14 @@ import users from '../models/users';
 import { check } from 'express-validator/check';
 const admin = users.find(user => user.isAdmin === true);
 class Cars {
-	// static getCarsWithStatus(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const { status } = request.body;
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (status) {
-	// 		const data = carsDB.filter(vehicle => vehicle.status === status);
-	// 		if (data.length > 0) {
-	// 			response.status(200).json({
-	// 				status: 200,
-	// 				data
-	// 			});
-	// 		}
-	// 		response.status(404).json({
-	// 			status: 404,
-	// 			error: 'Not Found'
-	// 		});
-	// 	}
-	// }
-	// static getCarsWithBodyType(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const { bodyType } = request.body;
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (bodyType) {
-	// 		const data = carsDB.filter(vehicle => vehicle.bodyType === bodyType);
-	// 		if (data.length > 0) {
-	// 			response.status(200).json({
-	// 				status: 200,
-	// 				data
-	// 			});
-	// 		}
-	// 		response.status(404).json({
-	// 			status: 404,
-	// 			error: 'Not Found'
-	// 		});
-	// 	}
-	// }
-	// static getCarsWithinAPriceRange(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const { status, minPrice, maxPrice } = request.body;
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (status === 'available' && minPrice && maxPrice) {
-	// 		const data = carsDB.filter(
-	// 			vehicle =>
-	// 				vehicle.status === 'available' && minPrice <= vehicle.price && maxPrice >= vehicle.price
-	// 		);
-	// 		if (data.length > 0) {
-	// 			response.status(200).json({
-	// 				status: 200,
-	// 				data
-	// 			});
-	// 		}
-	// 		response.status(404).json({
-	// 			status: 400,
-	// 			error: 'Not Found'
-	// 		});
-	// 	}
-	// 	const status1 = 'available';
-	// 	response.status(422).json({
-	// 		status: 422,
-	// 		error: `Status Must be '${ status1 }'`
-	// 	});
-	// }
 	static getCarOrCars(request, response) {
-		let queryParams = request.query;
-		let arrayOfQueryParams = Object.keys(queryParams);
-		console.log(arrayOfQueryParams);
-		let queryLength = Object.keys(queryParams).length;
-		let { status, state, minPrice, maxPrice } = queryParams;
-		let statusIsDefined = arrayOfQueryParams.includes('status');
-		let stateIsDefined = arrayOfQueryParams.includes('state');
-		let statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
-		let priceRange = arrayOfQueryParams.includes('status', 'minPrice', 'maxPrice');
+		const queryParams = request.query;
+		const arrayOfQueryParams = Object.keys(queryParams);
+		const queryLength = Object.keys(queryParams).length;
+		const { status, state, minPrice, maxPrice } = queryParams;
+		const stateIsDefined = arrayOfQueryParams.includes('state');
+		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
+		const priceRange = arrayOfQueryParams.includes('status', 'minPrice', 'maxPrice');
 		if (queryLength === 0) {
 			if (admin) {
 				const data = carsDB;
@@ -134,7 +34,6 @@ class Cars {
 			check('minPrice').not().isEmpty().exists().isFloat().trim().escape();
 			check('maxPrice').not().isEmpty().exists().isFloat().trim().escape();
 			const errors = validationResult(request);
-			console.log(state, stateIsDefined, statusAndStatusAreDefined, statusIsDefined);
 			if(!errors.isEmpty()) {
 				response.status(422).json({
 					status: 422,
@@ -238,245 +137,182 @@ class Cars {
 			error: 'Check your params'
 		});
 	}
-	// static getAllCars(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (admin) {
-	// 		const data = carsDB;
-	// 		if (data.length > 0) {
-	// 			response.status(200).json({
-	// 				status: 200,
-	// 				data
-	// 			});
-	// 		}
-	// 		response.status(404).json({
-	// 			status: 400,
-	// 			error: 'Not Found'
-	// 		});
-	// 	}
-	// }
-	// static getCarsWithStatusAndState(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const { status, state } = request.body;
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (status && state) {
-	// 		const data = carsDB.filter(
-	// 			vehicle => vehicle.status === status && vehicle.state === state
-	// 		);
-	// 		if (data.length > 0) {
-	// 			response.status(200).json({
-	// 				status: 200,
-	// 				data
-	// 			});
-	// 		}
-	// 		response.status(404).json({
-	// 			status: 404,
-	// 			error: 'Not Found'
-	// 		});
-	// 	}
-	// }
-	// static specificCar(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const { carId } = request.params;
-	// 	const parsedCarId = parseInt(carId, 10);
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (carId) {
-	// 		const data = carsDB.find(vehicle => vehicle.id === parsedCarId);
-	// 		if (data) {
-	// 			response.status(200).json({
-	// 				status: 200,
-	// 				data
-	// 			});
-	// 		}
-	// 		response.status(404).json({
-	// 			status: 404,
-	// 			error: 'Not Found'
-	// 		});
-	// 	}
-	// }
-	// static postCarAd(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const {
-	// 		id,
-	// 		email,
-	// 		manufacturer,
-	// 		model,
-	// 		price,
-	// 		state,
-	// 		status
-	// 	} = request.body;
-	// 	console.log(request.body);
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (
-	// 		id &&
-	// 		email &&
-	// 		manufacturer &&
-	// 		model &&
-	// 		model &&
-	// 		price &&
-	// 		state &&
-	// 		status
-	// 	) {
-	// 		const url = (request.file.url);
-	// 		const data = { id, email, createdOn: Date(), manufacturer, model, price, state, status, image: url };
-	// 		response.status(201).json({
-	// 			status: 201,
-	// 			data
-	// 		});
-	// 	}
-	// }
-	// static deleteCarAd(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const { carId } = request.params;
-	// 	const parsedCarId = parseInt(carId, 10);
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (carId) {
-	// 		const data = carsDB.find(vehicle => vehicle.id === parsedCarId);
-	// 		console.log(data);
-	// 		if (data) {
-	// 			response.status(301).json({
-	// 				status: 301,
-	// 				data: `Car Ad: ${ carId } successfully deleted`
-	// 			});
-	// 		}
-	// 		response.status(404).json({
-	// 			status: 404,
-	// 			error: 'Not Found'
-	// 		});
-	// 	}
-	// }
-	// static changeCarAdPrice(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const errors = validationResult(request);
-	// 	const { price } = request.body;
-	// 	const { carId } = request.params;
-	// 	const parsedPrice = parseFloat(price);
-	// 	const parsedCarId = parseInt(carId);
-	// 	const carAdToBeModified = carsDB.find(
-	// 		vehicle => vehicle.id === parsedCarId
-	// 	);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (carAdToBeModified) {
-	// 		const data = { ...carAdToBeModified, price: parsedPrice };
-	// 		response.status(202).json({
-	// 			status: 202,
-	// 			data
-	// 		});
-	// 	}
-	// 	response.status(404).json({
-	// 		status: 404,
-	// 		message: 'Not Found'
-	// 	});
-	// }
-	// static changeCarAdStatus(request, response) {
-	// 	const queryLength = parseInt(Object.keys(request.query).length);
-	// 	const errors = validationResult(request);
-	// 	const { status } = request.body;
-	// 	const { carId } = request.params;
-	// 	const parsedCarId = parseInt(carId);
-	// 	const carAdToBeModified = carsDB.find(
-	// 		vehicle => vehicle.id === parsedCarId
-	// 	);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (queryLength > 0) {
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'No Query Params'
-	// 		});
-	// 	}
-	// 	if (carAdToBeModified) {
-	// 		if (status === 'sold') {
-	// 			const data = { ...carAdToBeModified, status };
-	// 			response.status(202).json({
-	// 				status: 202,
-	// 				data
-	// 			});
-	// 		}
-	// 		response.status(400).json({
-	// 			status: 400,
-	// 			error: 'You can only mark car as SOLD'
-	// 		});
-	// 	}
-	// 	response.status(404).json({
-	// 		status: 404,
-	// 		message: 'Not Found'
-	// 	});
-	// }
+		static specificCar(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const { carId } = request.params;
+		const parsedCarId = parseInt(carId, 10);
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (carId) {
+			const data = carsDB.find(vehicle => vehicle.id === parsedCarId);
+			if (data) {
+				response.status(200).json({
+					status: 200,
+					data
+				});
+			}
+			response.status(404).json({
+				status: 404,
+				error: 'Not Found'
+			});
+		}
+	}
+	static postCarAd(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const {
+			id,
+			email,
+			manufacturer,
+			model,
+			price,
+			state,
+			status
+		} = request.body;
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (
+			id &&
+			email &&
+			manufacturer &&
+			model &&
+			model &&
+			price &&
+			state &&
+			status
+		) {
+			const url = (request.file.url);
+			const data = { id, email, createdOn: Date(), manufacturer, model, price, state, status, image: url };
+			response.status(201).json({
+				status: 201,
+				data
+			});
+		}
+	}
+	static deleteCarAd(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const { carId } = request.params;
+		const parsedCarId = parseInt(carId, 10);
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (carId) {
+			const data = carsDB.find(vehicle => vehicle.id === parsedCarId);
+			if (data) {
+				response.status(301).json({
+					status: 301,
+					data: `Car Ad: ${ carId } successfully deleted`
+				});
+			}
+			response.status(404).json({
+				status: 404,
+				error: 'Not Found'
+			});
+		}
+	}
+	static changeCarAdPrice(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const errors = validationResult(request);
+		const { price } = request.body;
+		const { carId } = request.params;
+		const parsedPrice = parseFloat(price);
+		const parsedCarId = parseInt(carId);
+		const carAdToBeModified = carsDB.find(
+			vehicle => vehicle.id === parsedCarId
+		);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (carAdToBeModified) {
+			const data = { ...carAdToBeModified, price: parsedPrice };
+			response.status(202).json({
+				status: 202,
+				data
+			});
+		}
+		response.status(404).json({
+			status: 404,
+			message: 'Not Found'
+		});
+	}
+	static changeCarAdStatus(request, response) {
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const errors = validationResult(request);
+		const { status } = request.body;
+		const { carId } = request.params;
+		const parsedCarId = parseInt(carId);
+		const carAdToBeModified = carsDB.find(
+			vehicle => vehicle.id === parsedCarId
+		);
+		if (!errors.isEmpty()) {
+			response.status(422).json({
+				status: 422,
+				error: errors.array()
+			});
+		}
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (carAdToBeModified) {
+			if (status === 'sold') {
+				const data = { ...carAdToBeModified, status };
+				response.status(202).json({
+					status: 202,
+					data
+				});
+			}
+			response.status(400).json({
+				status: 400,
+				error: 'You can only mark car as SOLD'
+			});
+		}
+		response.status(404).json({
+			status: 404,
+			message: 'Not Found'
+		});
+	}
 }
 export default Cars;
