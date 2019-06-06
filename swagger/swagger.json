@@ -50,7 +50,7 @@
         }
       }
     },
-    "/car?status=available&state=used": {
+    "/car?status={ status }&state={ state }": {
       "get": {
         "tags": [
           "Cars"
@@ -61,6 +61,20 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Operation"
@@ -74,7 +88,7 @@
         }
       }
     },
-    "/car?minPrice=160000.00&maxPrice=250000.00&status=available": {
+    "/car?minPrice={  minPrice }&maxPrice={ maxPrice }&status={ status }": {
       "get": {
         "tags": [
           "Cars"
@@ -85,6 +99,26 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "minPrice",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Operation"
@@ -94,11 +128,14 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
     },
-    "/car?state=new": {
+    "/car?state={ state }": {
       "get": {
         "tags": [
           "Cars"
@@ -109,29 +146,13 @@
         "produces": [
           "application/json"
         ],
-        "responses": {
-          "200": {
-            "description": "Successful Operation"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          },
-          "404": {
-            "description": "Not found"
-          }
+        "parameters":[
+        {
+          "name": "state",
+          "in": "query",
+          "required": true,
+          "type": "string"
         }
-      }
-    },
-    "/car?state=used": {
-      "get": {
-        "tags": [
-          "Cars"
-        ],
-        "summary": "View all Available Cars depending on their state and status.",
-        "description": "",
-        "operationId": "getCarOrCars",
-        "produces": [
-          "application/json"
         ],
         "responses": {
           "200": {
@@ -192,18 +213,56 @@
         ],
         "parameters": [
           {
+            "name": "id",
+            "in": "body",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "carImage",
+            "in": "body",
+            "required": true,
+            "type":"file",
+            "format": "jpeg, png, jpg"
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "manufacturer",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "price",
             "in": "body",
             "required": true,
-            "schema": {
-              "id": "number",
-              "email": "string",
-              "manufacturer": "string",
-              "model": "string",
-              "price": "number",
-              "state": "string",
-              "status": "string"
-            }
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "state",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "body",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

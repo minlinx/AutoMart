@@ -6,9 +6,8 @@
   "scripts": {
     "test": "nyc mocha server/test -r @babel/register --exit",
     "start": "nodemon bin/dev",
-    "clean": "rm -rf dist",
-    "build1": "babel-node dist/app",
-    "build": "npm run clean && babel api server middlewares swagger -s -d dist && babel-node dist/app.js"
+    "clean": "del -rf dist",
+    "build": "npm run clean && babel api middlewares server swagger -s -d dist && babel-node dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,7 @@
   },
   "homepage": "https://github.com/minlinx/AutoMart#readme",
   "dependencies": {
+    "@babel/cli": "^7.4.4",
     "body-parser": "^1.19.0",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
