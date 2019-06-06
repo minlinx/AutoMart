@@ -1,6 +1,6 @@
 class apiEror {
 	static notFoundError(request, response, next) {
-		const error = new Error('Not Found');
+		const error = new Error('Not Found, check the URL you typed and try again');
 		error.status = 404 || 500;
 		next(error);
 	}
@@ -13,7 +13,7 @@ class apiEror {
 		}
 		response.status(500).json({
 			status: 500,
-			error: 'Try again later'
+			error: 'Oops!!! Server is down, Try again later'
 		});
 	}
 }

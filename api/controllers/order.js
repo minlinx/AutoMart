@@ -37,7 +37,8 @@ class Orders {
 	static updateOrder(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { orderId, priceOffered } = request.body;
+		const { priceOffered } = request.body;
+		const { orderId } = request.params;
 		const parsedPrice = parseFloat(priceOffered);
 		const parsedOrderId = parseInt(orderId);
 		const orderToBeModified = ordersDB.find(

@@ -47,6 +47,7 @@ class GetRouteValidator {
 			check('manufacturer').not().isEmpty().exists().isString().trim().escape(),
 			check('model').not().isEmpty().exists().isString().trim().escape(),
 			check('bodyType').not().isEmpty().exists().isString().trim().escape(),
+			check('carImage').not().isEmpty().exists().isMimeType()
 		];
 	}
 	static checkCarADStatus() {
