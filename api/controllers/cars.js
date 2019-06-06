@@ -5,13 +5,13 @@ import { check } from 'express-validator/check';
 const admin = users.find(user => user.isAdmin === true);
 class Cars {
 	static getCarOrCars(request, response) {
-		let queryParams = request.query;
-		let arrayOfQueryParams = Object.keys(queryParams);
-		let queryLength = Object.keys(queryParams).length;
-		let { status, state, minPrice, maxPrice } = queryParams;
-		let stateIsDefined = arrayOfQueryParams.includes('state');
-		let statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
-		let priceRange = arrayOfQueryParams.includes('status', 'minPrice', 'maxPrice');
+		const queryParams = request.query;
+		const arrayOfQueryParams = Object.keys(queryParams);
+		const queryLength = Object.keys(queryParams).length;
+		const { status, state, minPrice, maxPrice } = queryParams;
+		const stateIsDefined = arrayOfQueryParams.includes('state');
+		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
+		const priceRange = arrayOfQueryParams.includes('status', 'minPrice', 'maxPrice');
 		if (queryLength === 0) {
 			if (admin) {
 				const data = carsDB;
