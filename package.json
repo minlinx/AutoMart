@@ -5,8 +5,7 @@
   "main": "server/app.js",
   "scripts": {
     "test": "nyc mocha server/test -r @babel/register --exit",
-    "start": "nodemon bin/dev",
-    "build": "babel-node server/app"
+    "start": "babel-node server/app"
   },
   "repository": {
     "type": "git",
