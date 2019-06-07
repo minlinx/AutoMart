@@ -1,6 +1,7 @@
 import express from 'express';
 import expressValidator from 'express-validator';
 import bodyParser from 'body-parser';
+import path from 'path';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import carsRoute from '../api/routes/cars';
@@ -15,6 +16,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
+app.use('/static', express.static(path.join(__dirname, 'ui')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/auth', usersRoute);
 app.use('/api/v1/car', carsRoute);
