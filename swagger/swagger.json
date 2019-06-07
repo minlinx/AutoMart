@@ -50,16 +50,30 @@
         }
       }
     },
-    "/car?status=available&state=used": {
+    "/car?status={ status }&state={ state }": {
       "get": {
         "tags": [
           "Cars"
         ],
-        "summary": "View all Available or Sold Cars.",
+        "summary": "View all Available New and Used Cars.",
         "description": "",
         "operationId": "getCarOrCars",
         "produces": [
           "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
         ],
         "responses": {
           "200": {
@@ -74,16 +88,71 @@
         }
       }
     },
-    "/car?minPrice=160000.00&maxPrice=250000.00&status=available": {
+    "/car?minPrice={  minPrice }&maxPrice={ maxPrice }&status={ status }": {
       "get": {
         "tags": [
           "Cars"
         ],
-        "summary": "View all vehicles with a specific body type.",
+        "summary": "View all vehicles within a price range.",
         "description": "",
         "operationId": "getCarOrCars",
         "produces": [
           "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "minPrice",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/car?state={ state }": {
+      "get": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "View all Available New and used vehicles.",
+        "description": "",
+        "operationId": "getCarOrCars",
+        "produces": [
+          "application/json"
+        ],
+        "parameters":[
+        {
+          "name": "state",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
         ],
         "responses": {
           "200": {
@@ -98,55 +167,7 @@
         }
       }
     },
-    "/car?state=new": {
-      "get": {
-        "tags": [
-          "Cars"
-        ],
-        "summary": "View all Available Cars within a price range.",
-        "description": "",
-        "operationId": "getCarOrCars",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Operation"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          },
-          "404": {
-            "description": "Not found"
-          }
-        }
-      }
-    },
-    "/car?state=used": {
-      "get": {
-        "tags": [
-          "Cars"
-        ],
-        "summary": "View all Available Cars depending on their state and status.",
-        "description": "",
-        "operationId": "getCarOrCars",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Operation"
-          },
-          "422": {
-            "description": "Unprocessable entity"
-          },
-          "404": {
-            "description": "Not found"
-          }
-        }
-      }
-    },
-    "/car/{carId}": {
+    "/car/{ carId }": {
       "get": {
         "tags": [
           "Cars"
@@ -179,36 +200,266 @@
         }
       }
     },
-    "/car/": {
-      "post": {
+    "/car/{ carId }": {
+      "delete": {
         "tags": [
           "Cars"
         ],
-        "summary": "Post a car sale advertisement.",
+        "summary": "View a specific car.",
         "description": "",
-        "operationId": "postCarAd",
+        "operationId": "specificCar",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "price",
-            "in": "body",
+            "name": "carId",
+            "in": "path",
             "required": true,
-            "schema": {
-              "id": "number",
-              "email": "string",
-              "manufacturer": "string",
-              "model": "string",
-              "price": "number",
-              "state": "string",
-              "status": "string"
-            }
+            "type": "number",
+            "format": "int64"
           }
         ],
         "responses": {
-          "201": {
-            "description": "Car sale advertisement successfully created"
+          "301": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/car/{ carId }/price": {
+      "patch": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Modify a car Ad's price.",
+        "description": "",
+        "operationId": "specificCar",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "price",
+            "in": "body",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/order": {
+      "post": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Change a car Ad's status.",
+        "description": "",
+        "operationId": "specificCar",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "body",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "priceOffered",
+            "in": "body",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/order/{ orderId }/price": {
+      "patch": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Change a car Ad's status.",
+        "description": "",
+        "operationId": "specificCar",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "priceOffered",
+            "in": "body",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Change a car Ad's status.",
+        "description": "",
+        "operationId": "specificCar",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Change a car Ad's status.",
+        "description": "",
+        "operationId": "specificCar",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/car/{ carId }/status": {
+      "patch": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Change a car Ad's status.",
+        "description": "",
+        "operationId": "specificCar",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "carId",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "status",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Operation"
           },
           "422": {
             "description": "Unprocessable entity"
@@ -221,7 +472,7 @@
     }
   },
   "definitions": {
-    "user": {
+    "Users": {
       "type": "object",
       "properties": {
         "email": {
@@ -272,6 +523,25 @@
         },
         "bodyType": {
           "type": "string"
+        }
+      }
+    },
+    "Orders": {
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "carId": {
+          "type": "number"
+        },
+        "buyer": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "priceOffered": {
+          "type": "number"
         }
       }
     },
