@@ -7,7 +7,7 @@ describe('#POST /Order', () => {
 	it('Should return a 404 status code.', done => {
 		request(app)
 			.post('/api/v1/order/255')
-			.set({ carId: '7', priceOffered: '700000000.00' })
+			.send({ carId: '7', priceOffered: '700000000.00' })
 			.end((error, response) => {
 				assert.equal(response.statusCode, '404');
 				done();
@@ -16,7 +16,7 @@ describe('#POST /Order', () => {
 	it('Should return a 422 status code', done => {
 		request(app)
 			.post('/api/v1/order')
-			.set({			})
+			.send({			})
 			.end((error, response) => {
 				assert.equal(response.statusCode, '422');
 				done();
