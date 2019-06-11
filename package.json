@@ -4,14 +4,9 @@
   "description": "automart is an online market place for automobiles of diverse makes, body types, models. with automart users can sell their cars(used and new) and buy from trusted dealers.",
   "main": "server/app.js",
   "scripts": {
-<<<<<<< HEAD
     "test": "mocha server/test -r @babel/register --exit",
     "start": "nodemon bin/dev",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
-=======
-    "test": "nyc mocha server/test -r @babel/register --exit",
-    "start": "nodemon bin/dev"
->>>>>>> 6926c9872a12cc13f446915ed3f07a7cecf5f8ab
   },
   "repository": {
     "type": "git",
