@@ -6,11 +6,11 @@ const storage = cloudinaryStorage({
 	cloudinary: cloudinary,
 	folder: 'min-automart-images',
 	allowedFormats: ['jpg', 'png', 'jpeg', 'gif'],
-	filename: function(req, file, cb) {
+	filename: function(request, file, cb) {
 		cb(undefined, Date.now() + file.originalname);
 	}
 });
-const fileFilter = function(req, file, cb) {
+const fileFilter = function(request, file, cb) {
 	if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
 		return cb(new Error('Only image files are allowed!'), false);
 	}
@@ -21,5 +21,5 @@ cloudinary.config({
 	api_key: process.env.CLOUD_KEY,
 	api_secret: process.env.CLOUD_SECRET
 });
-var parser = multer({ storage, fileFilter });
+const parser = multer({ storage, fileFilter });
 export default parser;
