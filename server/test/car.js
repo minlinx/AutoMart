@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import request from 'supertest';
 import { describe, it } from 'mocha';
 import app from '../app';
-
+import Cars from '../../api/controllers/cars'
 
 describe('#GET /Car', () => {
 	it('Should return a 200 status', done => {
@@ -63,6 +63,22 @@ describe('#GET /Car', () => {
 				done();
 			});
 	});
+	it('Should return a 200 status code.', done => {
+		request(app)
+			.get('/api/v1/car?status=available&state=new')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '200');
+				done();
+			});
+	});
+	it('Should return a 200 status code.', done => {
+		request(app)
+			.get('/api/v1/car?status=available&manufacturer=BENZ')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '200');
+				done();
+			});
+	});
 	it('Should return a 422 status code.', done => {
 		request(app)
 			.get('/api/v1/car?status=availa777ble&state=used')
@@ -87,12 +103,20 @@ describe('#GET /Car', () => {
 				done();
 			});
 	});
+	it('Should return a 422 status code.', done => {
+		request(app)
+			.get('/api/v1/car?state=usedrrr')
+			.end((error, response) => {
+				assert.equal(response.statusCode, '422');
+				done();
+			});
+	});
 });
 describe('#POST /Car', () => {
 	it('Should return a 422 status code.', done => {
 		request(app)
 			.post('/api/v1/car')
-			.set({
+			.send({
 				owner: 'Mba Ifeanyi',
 				email: 'minaproblemsolver@gmail.com',
 				createdOn: '18-05-2015',
@@ -111,7 +135,7 @@ describe('#POST /Car', () => {
 	it('Should return a 422 status code.', done => {
 		request(app)
 			.post('/api/v1/car')
-			.set({
+			.send({
 				owner: 'Mba Ifeanyi',
 				email: 'minaproblemsolver@gmail.com',
 				status: 'available',
@@ -185,4 +209,14 @@ describe('#PATCH /Car', () => {
 				done();
 			});
 	});
+});
+describe('Cars Property', () => {
+	it('should contain', () => {
+		assert.property(Cars, 'getCarOrCars');
+		assert.property(Cars, 'deleteCarAd');
+		assert.property(Cars, 'changeCarAdPrice');
+		assert.property(Cars, 'changeCarAdStatus');
+		assert.property(Cars, 'postCarAd');
+		assert.property(Cars, 'specificCar');
+	})
 });

@@ -8,8 +8,12 @@ class Cars {
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
-		const { status, state, minPrice, maxPrice } = queryParams;
+		const { status, state, minPrice, maxPrice, bodyType, manufacturer } = queryParams;
+		const parsedMinPrice = parseFloat(minPrice);
+		const parsedMaxPrice = parseFloat(maxPrice);
 		const stateIsDefined = arrayOfQueryParams.includes('state');
+		const manufacturerIsDefined = arrayOfQueryParams.includes('manufacturer');
+		const bodyTypeIsDefined = arrayOfQueryParams.includes('bodyType');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'minPrice', 'maxPrice');
 		if (queryLength === 0) {
@@ -41,7 +45,8 @@ class Cars {
 				});
 			}
 			if(status === 'available') {
-				const data = carsDB.filter((vehicle) => vehicle.price >= minPrice && vehicle.price <= maxPrice);
+				const data = carsDB.filter((vehicle) => vehicle.price >= parsedMinPrice && vehicle.price <= parsedMaxPrice);
+				console.log(data);
 				if (data.length > 0) {
 					response.status(200).json({
 						status: 200,
@@ -132,12 +137,67 @@ class Cars {
 				error: 'status should be available'
 			});
 		}
+		if (manufacturerIsDefined && queryLength === 2) {
+			check('manufacturer').not().isEmpty()
+			.isLength({ min: 4 })
+			.trim().isString();
+			check('status')
+			.isLength({ min: 4 })
+			.trim().not().isEmpty().isString();
+			const errors = validationResult(request);
+			if(!errors.isEmpty()) {
+				response.status(422).json({
+					status: 422,
+					error: errors.array()
+				});
+			}
+			if (status === 'available') {
+				const data = carsDB.filter((vehicle) => vehicle.manufacturer === manufacturer && vehicle.status === status);
+				if (data.length > 0) {
+					response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				response.status(404).json({
+					status: 404,
+					error: 'Not Found'
+				});
+			}
+			response.status(422).json({
+				status: 422,
+				error: 'status should be available'
+			});
+		}
+		if (bodyTypeIsDefined && queryLength === 1) {
+			check('bodyType')
+			.isLength({ min: 3 })
+			.trim().not().isEmpty().isString();
+			const errors = validationResult(request);
+			if(!errors.isEmpty()) {
+				response.status(422).json({
+					status: 422,
+					error: errors.array()
+				});
+			}
+			const data = carsDB.filter((vehicle) => vehicle.bodyType === bodyType);
+			if (data.length > 0) {
+				response.status(200).json({
+					status: 200,
+					data
+				});
+			}
+			response.status(404).json({
+				status: 404,
+				error: 'Not Found'
+			});
+		}
 		response.status(400).json({
 			status: 400,
 			error: 'Check your params'
 		});
 	}
-		static specificCar(request, response) {
+	static specificCar(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { carId } = request.params;
 		const parsedCarId = parseInt(carId, 10);
