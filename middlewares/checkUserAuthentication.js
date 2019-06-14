@@ -13,14 +13,16 @@ function checkUserAuthentication(request, response, next) {
 		if (bearerToken) {
 			const token = bearerToken.split(' ')[1];
 			const decodedToken = jwt.verify(token, privateKey);
-			console.log(decodedToken);
+			console.log('from here', decodedToken);
 			response.locals.token = token;
 			next();
 		}
-		response.status(422).json({
-			status: 422,
-			error: 'No Token Provided'
-		});
+		else {
+			response.status(422).json({
+				status: 422,
+				error: 'No Token Provided'
+			});
+		}
 	} catch (param) {
 		response.status(401).json({
 			status: 401,
