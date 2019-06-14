@@ -33,18 +33,18 @@ class Cars {
 		}
 		if (priceRange && queryLength === 3) {
 			check('status')
-			.isLength({ min: 4 })
-			.trim().not().isEmpty().isString();
+				.isLength({ min: 4 })
+				.trim().not().isEmpty().isString();
 			check('minPrice').not().isEmpty().exists().isFloat().trim().escape();
 			check('maxPrice').not().isEmpty().exists().isFloat().trim().escape();
 			const errors = validationResult(request);
-			if(!errors.isEmpty()) {
+			if (!errors.isEmpty()) {
 				response.status(422).json({
 					status: 422,
 					error: errors.array()
 				});
 			}
-			if(status === 'available') {
+			if (status === 'available') {
 				const data = carsDB.filter((vehicle) => vehicle.price >= parsedMinPrice && vehicle.price <= parsedMaxPrice);
 				console.log(data);
 				if (data.length > 0) {
@@ -65,10 +65,10 @@ class Cars {
 		}
 		if (stateIsDefined && queryLength === 1) {
 			check('state')
-			.isLength({ min: 3 })
-			.trim().not().isEmpty().isString();
+				.isLength({ min: 3 })
+				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
-			if(!errors.isEmpty()) {
+			if (!errors.isEmpty()) {
 				response.status(422).json({
 					status: 422,
 					error: errors.array()
@@ -107,13 +107,13 @@ class Cars {
 		}
 		if (statusAndStateAreDefined && queryLength === 2) {
 			check('status')
-			.isLength({ min: 4 })
-			.trim().not().isEmpty().isString();
+				.isLength({ min: 4 })
+				.trim().not().isEmpty().isString();
 			check('state')
-			.isLength({ min: 3 })
-			.trim().not().isEmpty().isString();
+				.isLength({ min: 3 })
+				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
-			if(!errors.isEmpty()) {
+			if (!errors.isEmpty()) {
 				response.status(422).json({
 					status: 422,
 					error: errors.array()
@@ -139,13 +139,13 @@ class Cars {
 		}
 		if (manufacturerIsDefined && queryLength === 2) {
 			check('manufacturer').not().isEmpty()
-			.isLength({ min: 4 })
-			.trim().isString();
+				.isLength({ min: 4 })
+				.trim().isString();
 			check('status')
-			.isLength({ min: 4 })
-			.trim().not().isEmpty().isString();
+				.isLength({ min: 4 })
+				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
-			if(!errors.isEmpty()) {
+			if (!errors.isEmpty()) {
 				response.status(422).json({
 					status: 422,
 					error: errors.array()
@@ -171,10 +171,10 @@ class Cars {
 		}
 		if (bodyTypeIsDefined && queryLength === 1) {
 			check('bodyType')
-			.isLength({ min: 3 })
-			.trim().not().isEmpty().isString();
+				.isLength({ min: 3 })
+				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
-			if(!errors.isEmpty()) {
+			if (!errors.isEmpty()) {
 				response.status(422).json({
 					status: 422,
 					error: errors.array()
@@ -292,7 +292,7 @@ class Cars {
 			if (data) {
 				response.status(301).json({
 					status: 301,
-					data: `Car Ad: ${ carId } successfully deleted`
+					data: `Car Ad: ${carId} successfully deleted`
 				});
 			}
 			response.status(404).json({
