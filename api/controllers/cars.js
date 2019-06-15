@@ -1,8 +1,9 @@
 import { validationResult } from 'express-validator/check';
+import pool from '../../dbConifg';
 import carsDB from '../models/cars';
-import users from '../models/users';
+// import users from '../models/users';
 import { check } from 'express-validator/check';
-const admin = users.find(user => user.isAdmin === true);
+// const admin = users.find(user => user.isAdmin === true);
 class Cars {
 	static getCarOrCars(request, response) {
 		const queryParams = request.query;
@@ -17,19 +18,70 @@ class Cars {
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'minPrice', 'maxPrice');
 		if (queryLength === 0) {
-			if (admin) {
-				const data = carsDB;
-				if (data.length > 0) {
-					response.status(200).json({
-						status: 200,
-						data
-					});
-				}
-				response.status(404).json({
-					status: 400,
-					error: 'Not Found'
+			// if (admin) {
+			// 	const data = carsDB;
+			// 	if (data.length > 0) {
+			// 		response.status(200).json({
+			// 			status: 200,
+			// 			data
+			// 		});
+			// 	}
+			// 	response.status(404).json({
+			// 		status: 400,
+			// 		error: 'Not Found'
+			// 	});
+			// }
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const sql = 'SELECT * FROM users WHERE is_admin=$1';
+					const param = [true];
+					return pool.query(sql, param);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(result => {
+					if (result) {
+						const sql = 'SELECT * FROM cars';
+						return pool.query(sql);
+					}
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then((result) => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							error: 'Database is empty'
+						});
+					}
+					else {
+						const data = [...result.rows];
+						return response.status(200).json({
+							status: 200,
+							data
+						});
+					}
 				});
-			}
 		}
 		if (priceRange && queryLength === 3) {
 			check('status')
@@ -192,10 +244,12 @@ class Cars {
 				error: 'Not Found'
 			});
 		}
-		response.status(400).json({
-			status: 400,
-			error: 'Check your params'
-		});
+		// else {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'Check your params'
+		// 	});
+		// }
 	}
 	static specificCar(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
