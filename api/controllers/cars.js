@@ -365,24 +365,50 @@ class Cars {
 				error: errors.array()
 			});
 		}
-		if (queryLength > 0) {
+		else if (queryLength > 0) {
 			response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
-		if (carId) {
-			const data = carsDB.find(vehicle => vehicle.id === parsedCarId);
-			if (data) {
-				response.status(200).json({
-					status: 200,
-					data
+		else if (errors.isEmpty()) {
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const sql = 'SELECT * FROM cars WHERE id=$1';
+					const param = [parsedCarId];
+					return pool.query(sql, param);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then(result => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							message: 'Not Found',
+						});
+					}
+					else {
+						const data = [...result.rows];
+						return response.status(200).json({
+							status: 200,
+							data
+						});
+					}
 				});
-			}
-			response.status(404).json({
-				status: 404,
-				error: 'Not Found'
-			});
 		}
 	}
 	static postCarAd(request, response) {
