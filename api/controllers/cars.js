@@ -8,8 +8,8 @@ class Cars {
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
 		const { status, state, minPrice, maxPrice, bodyType, manufacturer } = queryParams;
-		const parsedMinPrice = parseFloat(minPrice);
-		const parsedMaxPrice = parseFloat(maxPrice);
+		// const parsedMinPrice = parseFloat(minPrice);
+		// const parsedMaxPrice = parseFloat(maxPrice);
 		const stateIsDefined = arrayOfQueryParams.includes('state');
 		const manufacturerIsDefined = arrayOfQueryParams.includes('manufacturer');
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('bodyType');
@@ -81,24 +81,63 @@ class Cars {
 					error: errors.array()
 				});
 			}
-			if (status === 'available') {
-				const data = carsDB.filter((vehicle) => vehicle.price >= parsedMinPrice && vehicle.price <= parsedMaxPrice);
-				console.log(data);
-				if (data.length > 0) {
-					response.status(200).json({
-						status: 200,
-						data
+			else if (errors.isEmpty()) {
+				pool.connect()
+					.catch(error => {
+						if (error) {
+							return response.status(500).json({
+								status: 500,
+								error: 'server is down'
+							});
+						}
+					})
+					.then(() => {
+						const sql = 'SELECT * FROM cars WHERE status=$1 AND price>=$2 AND price<=$3';
+						const param = [status, minPrice, maxPrice];
+						return pool.query(sql, param);
+					})
+					.catch(error => {
+						if (error) {
+							return response.status(400).json({
+								status: 400,
+								error: 'Check your inputs'
+							});
+						}
+					})
+					.then(result => {
+						if (!result.rowCount > 0) {
+							return response.status(404).json({
+								status: 404,
+								message: 'Not Found',
+							});
+						}
+						else {
+							const data = [...result.rows];
+							return response.status(200).json({
+								status: 200,
+								data
+							});
+						}
 					});
-				}
-				response.status(404).json({
-					status: 404,
-					error: 'Not Found'
-				});
 			}
-			response.status(422).json({
-				status: 422,
-				error: 'status should be available'
-			});
+			// if (status === 'available') {
+			// 	const data = carsDB.filter((vehicle) => vehicle.price >= parsedMinPrice && vehicle.price <= parsedMaxPrice);
+			// 	console.log(data);
+			// 	if (data.length > 0) {
+			// 		response.status(200).json({
+			// 			status: 200,
+			// 			data
+			// 		});
+			// 	}
+			// 	response.status(404).json({
+			// 		status: 404,
+			// 		error: 'Not Found'
+			// 	});
+			// }
+			// response.status(422).json({
+			// 	status: 422,
+			// 	error: 'status should be available'
+			// });
 		}
 		else if (stateIsDefined && queryLength === 1) {
 			check('state')
