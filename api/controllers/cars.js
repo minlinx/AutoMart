@@ -256,25 +256,47 @@ class Cars {
 					error: errors.array()
 				});
 			}
-			if (status === 'available') {
-				const data = carsDB.filter((vehicle) => vehicle.manufacturer === manufacturer && vehicle.status === status);
-				if (data.length > 0) {
-					response.status(200).json({
-						status: 200,
-						data
+			else if (errors.isEmpty()) {
+				pool.connect()
+					.catch(error => {
+						if (error) {
+							return response.status(500).json({
+								status: 500,
+								error: 'server is down'
+							});
+						}
+					})
+					.then(() => {
+						const sql = 'SELECT * FROM cars WHERE manufacturer=$1  AND status=$2 AND status=$3';
+						const param = [manufacturer, status, 'available'];
+						return pool.query(sql, param);
+					})
+					.catch(error => {
+						if (error) {
+							return response.status(400).json({
+								status: 400,
+								error: 'Check your inputs'
+							});
+						}
+					})
+					.then(result => {
+						if (!result.rowCount > 0) {
+							return response.status(404).json({
+								status: 404,
+								message: 'Not Found',
+							});
+						}
+						else {
+							const data = [...result.rows];
+							return response.status(200).json({
+								status: 200,
+								data
+							});
+						}
 					});
-				}
-				response.status(404).json({
-					status: 404,
-					error: 'Not Found'
-				});
 			}
-			response.status(422).json({
-				status: 422,
-				error: 'status should be available'
-			});
 		}
-		else if (bodyTypeIsDefined && queryLength === 1) {
+		else if (bodyTypeIsDefined && queryLength === 2) {
 			check('bodyType')
 				.isLength({ min: 3 })
 				.trim().not().isEmpty().isString();
@@ -285,17 +307,45 @@ class Cars {
 					error: errors.array()
 				});
 			}
-			const data = carsDB.filter((vehicle) => vehicle.bodyType === bodyType);
-			if (data.length > 0) {
-				response.status(200).json({
-					status: 200,
-					data
-				});
+			else if (errors.isEmpty()) {
+				pool.connect()
+					.catch(error => {
+						if (error) {
+							return response.status(500).json({
+								status: 500,
+								error: 'server is down'
+							});
+						}
+					})
+					.then(() => {
+						const sql = 'SELECT * FROM cars WHERE body_type=$1  AND status=$2 AND status=$3';
+						const param = [bodyType, status, 'available'];
+						return pool.query(sql, param);
+					})
+					.catch(error => {
+						if (error) {
+							return response.status(400).json({
+								status: 400,
+								error: 'Check your inputs'
+							});
+						}
+					})
+					.then(result => {
+						if (!result.rowCount > 0) {
+							return response.status(404).json({
+								status: 404,
+								message: 'Not Found',
+							});
+						}
+						else {
+							const data = [...result.rows];
+							return response.status(200).json({
+								status: 200,
+								data
+							});
+						}
+					});
 			}
-			response.status(404).json({
-				status: 404,
-				error: 'Not Found'
-			});
 		}
 		else {
 			response.status(400).json({
