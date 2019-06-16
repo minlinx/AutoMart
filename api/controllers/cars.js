@@ -118,24 +118,6 @@ class Cars {
 						}
 					});
 			}
-			// if (status === 'available') {
-			// 	const data = carsDB.filter((vehicle) => vehicle.price >= parsedMinPrice && vehicle.price <= parsedMaxPrice);
-			// 	console.log(data);
-			// 	if (data.length > 0) {
-			// 		response.status(200).json({
-			// 			status: 200,
-			// 			data
-			// 		});
-			// 	}
-			// 	response.status(404).json({
-			// 		status: 404,
-			// 		error: 'Not Found'
-			// 	});
-			// }
-			// response.status(422).json({
-			// 	status: 422,
-			// 	error: 'status should be available'
-			// });
 		}
 		else if (stateIsDefined && queryLength === 1) {
 			check('state')
