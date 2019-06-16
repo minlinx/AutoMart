@@ -7,7 +7,7 @@ const storage = cloudinaryStorage({
 	folder: 'min-automart-images',
 	allowedFormats: ['jpg', 'png', 'jpeg', 'gif'],
 	filename: function(request, file, cb) {
-		cb(undefined, Date.now() + file.originalname);
+		cb(null, Date.now() + file.originalname);
 	}
 });
 const fileFilter = function(request, file, cb) {
