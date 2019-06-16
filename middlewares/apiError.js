@@ -11,10 +11,13 @@ class apiEror {
 				error: error.message
 			});
 		}
-		response.status(500).json({
-			status: 500,
-			error: 'Oops!!! Server is down, Try again later'
-		});
+		else {
+			// response.status(500).json({
+			// 	status: 500,
+			// 	error: 'Oops!!! Server is down, Try again later'
+			// });
+			console.log(error);
+		}
 	}
 }
 export default apiEror;

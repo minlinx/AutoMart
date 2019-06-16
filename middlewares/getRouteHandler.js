@@ -8,14 +8,14 @@ class GetRouteValidator {
 	static postCarAdValidator() {
 		return [
 			check('id').not().isEmpty().exists().isInt().trim().escape(),
-			check('owner').not().isEmpty().exists().isString().trim().escape(),
+			check('owner').not().isEmpty().exists().isInt().trim(),
 			check('email').not().isEmpty().exists().isEmail().escape(),
 			check('price').not().isEmpty().exists().isFloat().trim().escape(),
 			check('status').not().isEmpty().exists().isString().trim().escape().withMessage('status should be AVAILABLE or SOLD'),
+			check('state').not().isEmpty().exists().isString().trim().escape().withMessage('state should be new 0r used'),
 			check('manufacturer').not().isEmpty().exists().isString().trim().escape(),
 			check('model').not().isEmpty().exists().isString().trim().escape(),
 			check('bodyType').not().isEmpty().exists().isString().trim().escape(),
-			check('carImage').not().isEmpty().exists().isMimeType()
 		];
 	}
 	static checkCarADStatus() {

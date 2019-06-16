@@ -415,9 +415,11 @@ class Cars {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
 			id,
+			owner,
 			email,
 			manufacturer,
 			model,
+			bodyType,
 			price,
 			state,
 			status
@@ -429,28 +431,62 @@ class Cars {
 				error: errors.array()
 			});
 		}
-		if (queryLength > 0) {
+		else if (queryLength > 0) {
 			response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
-		if (
+		else if (
 			id &&
 			email &&
+			owner &&
 			manufacturer &&
 			model &&
-			model &&
+			bodyType &&
 			price &&
 			state &&
-			status
+			status &&
+			errors.isEmpty()
 		) {
-			const url = (request.file.url);
-			const data = { id, email, createdOn: Date(), manufacturer, model, price, state, status, image: url };
-			response.status(201).json({
-				status: 201,
-				data
-			});
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const createdOn = '15-6-2019';
+					const url = (request.file.url);
+					const sql = 'INSERT INTO cars (id, owner, created_on, state, status, price, manufacturer, model, body_type, car_image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10)';
+					const params = [id, owner, createdOn, state, status, price, manufacturer, model, bodyType, url];
+					return pool.query(sql, params);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then(result => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							message: 'Not Found',
+						});
+					}
+					else {
+						return response.status(201).json({
+							status: 201,
+							message: 'Car AD successfully created'
+						});
+					}
+				});
 		}
 	}
 	static deleteCarAd(request, response) {
