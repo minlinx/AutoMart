@@ -2,40 +2,40 @@ import { assert } from 'chai';
 import request from 'supertest';
 import { describe, it } from 'mocha';
 import app from '../app';
-import Cars from '../../api/controllers/cars'
+import Cars from '../../api/controllers/cars';
 
 describe('#GET /Car', () => {
-	it('Should return a 200 status', done => {
+	it('Should return a 422 status', done => {
 		const status = 'available';
 		request(app)
-			.get('/api/v1/car/status')
+			.get('/api/v1/car')
 			.send(status)
 			.end((error, response) => {
 				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 200 status', done => {
+	it('Should return a 422 status', done => {
 		request(app)
-			.get('/api/v1/car/statusAndState')
+			.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available&state=new')
 			.end((error, response) => {
 				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 200 status, if it is admin', done => {
+	it('Should return a 422 status, if it is admin', done => {
 		request(app)
-			.get('/api/v1/car')
+			.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '200');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 200 status', done => {
+	it('Should return a 422 status', done => {
 		request(app)
 			.get('/api/v1/car/3')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '200');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
@@ -43,39 +43,39 @@ describe('#GET /Car', () => {
 		request(app)
 			.get('/api/v1/car/20')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '404');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 200 status code.', done => {
+	it('Should return a 400 status code.', done => {
 		request(app)
-			.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available')
+			.get('/api/v1/car/3?state=new')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '200');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 200 status code.', done => {
+	it('Should return a 422 status code.', done => {
 		request(app)
-			.get('/api/v1/car?status=available&state=used')
+			.get('/api/v1/car?state=new')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '200');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 200 status code.', done => {
+	it('Should return a 422 status code.', done => {
 		request(app)
-			.get('/api/v1/car?status=available&state=new')
+			.get('/api/v1/car?status=available&bodyType=car')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '200');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 200 status code.', done => {
+	it('Should return a 422 status code.', done => {
 		request(app)
-			.get('/api/v1/car?status=available&manufacturer=BENZ')
+			.get('/api/v1/car?status=available&manufacturer=benz')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '200');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
@@ -87,11 +87,11 @@ describe('#GET /Car', () => {
 				done();
 			});
 	});
-	it('Should return a 400 status code.', done => {
+	it('Should return a 422 status code.', done => {
 		request(app)
-			.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available&state=used')
+			.get('/api/v1/car?status=available&manufacturer=benz&bodyType=car')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '400');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
@@ -99,13 +99,13 @@ describe('#GET /Car', () => {
 		request(app)
 			.get('/api/v1/car?state=used')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '200');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
-	it('Should return a 422 status code.', done => {
+	it('Should return a 404 status code.', done => {
 		request(app)
-			.get('/api/v1/car?state=usedrrr')
+			.get('/api/v1/car?state=newyyyyy')
 			.end((error, response) => {
 				assert.equal(response.statusCode, '422');
 				done();
@@ -117,11 +117,13 @@ describe('#POST /Car', () => {
 		request(app)
 			.post('/api/v1/car')
 			.send({
-				owner: 'Mba Ifeanyi',
+				id: 10,
+				owner: 10,
 				email: 'minaproblemsolver@gmail.com',
 				createdOn: '18-05-2015',
 				price: '280000.00',
 				status: 'available',
+				state: 'available',
 				manufacturer: 'benz',
 				model: '8888888888888888',
 				bodyType: 'car',
@@ -132,7 +134,7 @@ describe('#POST /Car', () => {
 				done();
 			});
 	});
-	it('Should return a 422 status code.', done => {
+	it('Should return a 501 status code.', done => {
 		request(app)
 			.post('/api/v1/car')
 			.send({
@@ -155,7 +157,7 @@ describe('#DELETE /Car', () => {
 		request(app)
 			.delete('/api/v1/car/1')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '301');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
@@ -163,7 +165,7 @@ describe('#DELETE /Car', () => {
 		request(app)
 			.delete('/api/v1/car/20')
 			.end((error, response) => {
-				assert.equal(response.statusCode, '404');
+				assert.equal(response.statusCode, '422');
 				done();
 			});
 	});
@@ -177,9 +179,12 @@ describe('#PATCH /Car', () => {
 				done();
 			});
 	});
-	it('Should return a 422 status code.', done => {
+	it('Should return a 202 status code.', done => {
 		request(app)
-			.patch('/api/v1/car/1/status')
+			.patch('/api/v1/car/1/price')
+			.send({
+				price: 7000000
+			})
 			.end((error, response) => {
 				assert.equal(response.statusCode, '422');
 				done();
@@ -218,5 +223,5 @@ describe('Cars Property', () => {
 		assert.property(Cars, 'changeCarAdStatus');
 		assert.property(Cars, 'postCarAd');
 		assert.property(Cars, 'specificCar');
-	})
+	});
 });
