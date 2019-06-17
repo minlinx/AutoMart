@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator/check';
+import pool from '../../dbConifg';
 import carsDB from '../models/cars';
-import ordersDB from '../models/order';
 
 class Orders {
 	static createOrder(request, response) {
@@ -41,32 +41,64 @@ class Orders {
 		const { orderId } = request.params;
 		const parsedPrice = parseFloat(priceOffered);
 		const parsedOrderId = parseInt(orderId);
-		const orderToBeModified = ordersDB.find(
-			order => order.id === parsedOrderId && order.status === 'pending'
-		);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
 			});
 		}
-		if (queryLength > 0) {
+		else if (queryLength > 0) {
 			response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
-		if (orderToBeModified) {
-			const data = { ...orderToBeModified, newPriceOffered: parsedPrice };
-			response.status(202).json({
-				status: 202,
-				data
+		else if (
+			errors.isEmpty()
+		) {
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const sql = 'UPDATE orders SET amount=$1 WHERE (id=$2 AND status=$3)';
+					const params = [parsedPrice, parsedOrderId, 'pending'];
+					return pool.query(sql, params);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then(result => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							message: 'Not Found',
+						});
+					}
+					else {
+						return response.status(202).json({
+							status: 202,
+							message: 'Request accepted!'
+						});
+					}
+				});
+		}
+		else {
+			response.status(400).json({
+				status: 400,
+				error: 'You can only mark car AD as sold'
 			});
 		}
-		response.status(404).json({
-			status: 404,
-			message: 'Not Found'
-		});
 	}
 }
 export default Orders;

@@ -1,6 +1,5 @@
 import { validationResult } from 'express-validator/check';
 import pool from '../../dbConifg';
-import carsDB from '../models/cars';
 import { check } from 'express-validator/check';
 class Cars {
 	static getCarOrCars(request, response) {
