@@ -4,12 +4,6 @@ function checkUserAuthentication(request, response, next) {
 	const queryLength = parseInt(Object.keys(request.query).length);
 	const bearerToken = request.headers.authorization;
 	try {
-		if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
 		if (bearerToken) {
 			const token = bearerToken.split(' ')[1];
 			const decodedToken = jwt.verify(token, privateKey);
