@@ -1,6 +1,5 @@
 import { validationResult } from 'express-validator/check';
 import pool from '../../dbConifg';
-import carsDB from '../models/cars';
 
 class Orders {
 	static createOrder(request, response) {
@@ -9,30 +8,58 @@ class Orders {
 		const { carId, priceOffered } = request.body;
 		const parsedId = parseInt(carId);
 		const parsedPrice = parseFloat(priceOffered);
-		const oderedCar = carsDB.find(car => car.id === parsedId);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
 			});
 		}
-		if (queryLength > 0) {
+		else if (queryLength > 0) {
 			response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
-		if (oderedCar) {
-			const data = { ...oderedCar, priceOffered: parsedPrice };
-			response.status(201).json({
-				status: 201,
-				data
-			});
+		else if (
+			errors.isEmpty()
+		) {
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const sql = 'INSERT INTO orders (id, buyer, car_id, amount, status) (SELECT 5, 5, id, $2, $3 FROM cars WHERE id=$1)';
+					const params = [parsedId, parsedPrice, 'pending'];
+					return pool.query(sql, params);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then(result => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							message: 'Not Found',
+						});
+					}
+					else {
+						return response.status(202).json({
+							status: 202,
+							message: 'Request accepted!'
+						});
+					}
+				});
 		}
-		response.status(404).json({
-			status: 404,
-			message: 'Not Found'
-		});
 	}
 	static updateOrder(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
