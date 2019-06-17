@@ -1,78 +1,70 @@
 import jwt from 'jsonwebtoken';
 import pool from '../../dbConifg';
-// import usersDB from '../models/users';
 import { validationResult } from 'express-validator/check';
 const privateKey = process.env.JWT_PRIVATE_KEY;
 class Users {
-	// static signUpFunction(request, response) {
-	// 	const { email, password } = request.body;
-	// 	const hashedPassword = parseInt(password, 36);
-	// 	const vehicleOwner = usersDB.find((user) => user.email === email);
-	// 	const errors = validationResult(request);
-	// 	if (!errors.isEmpty()) {
-	// 		response.status(422).json({
-	// 			status: 422,
-	// 			error: errors.array()
-	// 		});
-	// 	}
-	// 	if (errors.isEmpty() && vehicleOwner) {
-	// 		const { firstName } = vehicleOwner;
-	// 		const url = request.route.path.toString();
-	// 		const token = jwt.sign(
-	// 			{
-	// 				email,
-	// 				firstName
-	// 			},
-	// 			privateKey
-	// 		);
-	// 		if (url === '/signup') {
-	// 			const newId = usersDB.length + 1;
-	// 			const data = { token, hashedPassword, ...vehicleOwner, id: newId };
-	// 			response.status(201).json({
-	// 				status: 201,
-	// 				data
-	// 			});
-	// 		}
-	// 		const verifiedToken = response.locals.token;
-	// 		const data = { token: verifiedToken, ...vehicleOwner };
-	// 		response.status(200).json({
-	// 			status: 200,
-	// 			data
-	// 		});
-	// 	}
-	// }
 	static signUpFunction(request, response) {
+		const queryParams = request.query;
+		const queryLength = Object.keys(queryParams).length;
 		const { email, password } = request.body;
 		const errors = validationResult(request);
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
-				error: errors.array(),
-				message: 'programming requires consistency Everytime'
+				error: errors.array()
 			});
 		}
-		if (errors.isEmpty()) {
+		else if (errors.isEmpty()) {
 			pool.connect()
-				.catch(error => console.error(error))
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
 				.then(() => {
 					const sql = 'SELECT * FROM users WHERE email=$1';
 					const param = [email];
 					return pool.query(sql, param);
 				})
-				.catch(error => console.error(error))
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
 				.then(result => {
 					if (result.rowCount > 0) {
-						console.log(password);
 						return response.status(400).json({
 							status: 400,
 							message: 'Sign in instead',
 						});
 					}
-					const sql = 'INSERT INTO users (email, password)  VALUES($1, $2)';
-					const params = [email, password];
-					return pool.query(sql, params);
+					else {
+						const sql = 'INSERT INTO users (email, password)  VALUES($1, $2)';
+						const params = [email, password];
+						return pool.query(sql, params);
+					}
 				})
-				.catch((error) => console.log(error))
+				.catch(error => {
+					if (error) {
+						console.log(error)
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
 				.then((result) => {
 					if (result.rowCount > 0) {
 						const token = jwt.sign(
@@ -87,29 +79,49 @@ class Users {
 							data
 						});
 					}
-					response.send('somethhing');
-					pool.end();
 				});
 		}
 	}
 	static signInFunction(request, response) {
+		const queryParams = request.query;
+		const queryLength = Object.keys(queryParams).length;
 		const { email, password } = request.body;
 		const errors = validationResult(request);
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
 			});
 		}
-		if(errors.isEmpty()) {
+		else if (errors.isEmpty()) {
 			pool.connect()
-				.catch(error => console.error('err1', password, error))
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
 				.then(() => {
-					const sql = 'SELECT * FROM users WHERE email=$1';
-					const param = [email];
+					const sql = 'SELECT * FROM users WHERE email=$1 AND password=$2';
+					const param = [email, password];
 					return pool.query(sql, param);
 				})
-				.catch((error) => console.log('err2', error))
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Email/Password Did Not match'
+						});
+					}
+				})
 				.then((result) => {
 					if (!result.rowCount > 0) {
 						response.status(400).json({
@@ -117,13 +129,15 @@ class Users {
 							error: 'Sign Up Instead'
 						});
 					}
-					const token = response.locals.token;
-					const data = { token, email };
-					response.status(200).json({
-						status: 200,
-						data
-					});
-				}).catch((error) => console.log(error));
+					else {
+						const token = response.locals.token;
+						const data = { token, email };
+						response.status(200).json({
+							status: 200,
+							data
+						});
+					}
+				});
 		}
 	}
 }
