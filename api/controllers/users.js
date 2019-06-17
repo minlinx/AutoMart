@@ -126,7 +126,7 @@ class Users {
 					if (!result.rowCount > 0) {
 						response.status(400).json({
 							status: 400,
-							error: 'Sign Up Instead'
+							error: 'Email/Password Did Not match'
 						});
 					}
 					else {
