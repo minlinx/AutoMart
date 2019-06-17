@@ -78,7 +78,7 @@ describe('Test Route with Token', function () {
 	const data = {
 		email: 'minaproblemsolver@gmail.com',
 		password: '123456'
-	}
+	};
 	let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pbmFwcm9ibGVtc29sdmVyQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6ImpvaG4xIiwiaWF0IjoxNTYwMjU3MzE2fQ.Q2fYbS10M2IV0pJVSIpgEN3VpNz_T5qw_FmTsuXFbEk';
 	it('one Post to signup', (done) => {
 		request(app)
@@ -86,11 +86,11 @@ describe('Test Route with Token', function () {
 			.set('Accept', 'x-www-form-urlencoded/json')
 			.send(data)
 			.end((error, response) => {
-				const result = JSON.parse(response.text)
-				console.log(result)
-				done(error)
-			})
-	})
+				const serverResponse = JSON.parse(response.text);
+				console.log(serverResponse);
+				done(error);
+			});
+	});
 	it('should not be able to consume the route /api/v1/auth/signin since no token was sent', function (done) {
 		request(app)
 			.post('/api/v1/auth/signin')
