@@ -595,38 +595,64 @@ class Cars {
 		const { status } = request.body;
 		const { carId } = request.params;
 		const parsedCarId = parseInt(carId);
-		const carAdToBeModified = carsDB.find(
-			vehicle => vehicle.id === parsedCarId
-		);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
 			});
 		}
-		if (queryLength > 0) {
+		else if (queryLength > 0) {
 			response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
-		if (carAdToBeModified) {
-			if (status === 'sold') {
-				const data = { ...carAdToBeModified, status };
-				response.status(202).json({
-					status: 202,
-					data
+		else if (
+			errors.isEmpty() && status === 'sold'
+		) {
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const sql = 'UPDATE cars SET status=$1 WHERE id=$2';
+					const param = [status, parsedCarId];
+					return pool.query(sql, param);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then(result => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							message: 'Not Found',
+						});
+					}
+					else {
+						return response.status(202).json({
+							status: 202,
+							message: 'Request accepted!'
+						});
+					}
 				});
-			}
+		}
+		else {
 			response.status(400).json({
 				status: 400,
-				error: 'You can only mark car as SOLD'
+				error: 'You can only mark car AD as sold'
 			});
 		}
-		response.status(404).json({
-			status: 404,
-			message: 'Not Found'
-		});
 	}
 }
 export default Cars;
