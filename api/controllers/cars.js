@@ -521,7 +521,7 @@ class Cars {
 						});
 					}
 					else {
-						return response.status(201).json({
+						return response.status(301).json({
 							status: 301,
 							message: `Car AD ${ carId } successfully deleted`
 						});
@@ -536,32 +536,58 @@ class Cars {
 		const { carId } = request.params;
 		const parsedPrice = parseFloat(price);
 		const parsedCarId = parseInt(carId);
-		const carAdToBeModified = carsDB.find(
-			vehicle => vehicle.id === parsedCarId
-		);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
 			});
 		}
-		if (queryLength > 0) {
+		else if (queryLength > 0) {
 			response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
-		if (carAdToBeModified) {
-			const data = { ...carAdToBeModified, price: parsedPrice };
-			response.status(202).json({
-				status: 202,
-				data
-			});
+		else if (
+			errors.isEmpty()
+		) {
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const sql = 'UPDATE cars SET price=$1 WHERE id=$2';
+					const param = [parsedPrice, parsedCarId];
+					return pool.query(sql, param);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then(result => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							message: 'Not Found',
+						});
+					}
+					else {
+						return response.status(202).json({
+							status: 202,
+							message: 'Request accepted!'
+						});
+					}
+				});
 		}
-		response.status(404).json({
-			status: 404,
-			message: 'Not Found'
-		});
 	}
 	static changeCarAdStatus(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
