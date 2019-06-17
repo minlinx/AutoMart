@@ -482,24 +482,51 @@ class Cars {
 				error: errors.array()
 			});
 		}
-		if (queryLength > 0) {
+		else if (queryLength > 0) {
 			response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
-		if (carId) {
-			const data = carsDB.find(vehicle => vehicle.id === parsedCarId);
-			if (data) {
-				response.status(301).json({
-					status: 301,
-					data: `Car Ad: ${carId} successfully deleted`
+		else if (
+			errors.isEmpty()
+		) {
+			pool.connect()
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
+				.then(() => {
+					const sql = 'DELETE FROM cars WHERE id=$1';
+					const param = [parsedCarId];
+					return pool.query(sql, param);
+				})
+				.catch(error => {
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then(result => {
+					if (!result.rowCount > 0) {
+						return response.status(404).json({
+							status: 404,
+							message: 'Not Found',
+						});
+					}
+					else {
+						return response.status(201).json({
+							status: 301,
+							message: `Car AD ${ carId } successfully deleted`
+						});
+					}
 				});
-			}
-			response.status(404).json({
-				status: 404,
-				error: 'Not Found'
-			});
 		}
 	}
 	static changeCarAdPrice(request, response) {
