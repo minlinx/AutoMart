@@ -71,7 +71,9 @@ class Users {
 							{
 								email
 							},
-							privateKey
+							privateKey, {
+								expiresIn: '24h'
+							}
 						);
 						const data = { token, email };
 						response.status(201).json({

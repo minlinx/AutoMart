@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 const privateKey = process.env.JWT_PRIVATE_KEY;
 function checkUserAuthentication(request, response, next) {
-	const queryLength = parseInt(Object.keys(request.query).length);
 	const bearerToken = request.headers.authorization;
 	try {
 		if (bearerToken) {
