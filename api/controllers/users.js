@@ -14,7 +14,7 @@ class Users {
 				error: 'No Query Params'
 			});
 		}
-		if (!errors.isEmpty()) {
+		else if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
 				error: errors.array()
