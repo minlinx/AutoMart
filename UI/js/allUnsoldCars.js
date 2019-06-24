@@ -5,7 +5,7 @@ const createDivElementWithClassName = (className) => {
 };
 const getAllUnsoldCars = async () => {
 	try {
-		const response = await fetch('https://min-automart.herokuapp.com/');
+		const response = await fetch('/api/v1/car?status=available&state=new');
 		if (response.ok) {
 			const serverResponseData = await response.json();
 			const { data } = serverResponseData;
