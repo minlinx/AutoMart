@@ -39,15 +39,15 @@ const getAllUnsoldCars = async () => {
 				divCarAdBrand.firstChild.style.display = 'block';
 				let div1 = document.querySelector('.all-unsold-cars-main-view');
 				div1.appendChild(divCarAd);
-				console.log(divCarAdState);
-				console.log(divCarAdPrice);
-				console.log(divCarAdBrand);
-				console.log(divCarAdImage);
-				console.log(car);
+				console.log(JSON.parse(divCarAdState));
+				console.log(JSON.parse(divCarAdPrice));
+				console.log(JSON.parse(divCarAdBrand));
+				console.log(JSON.parse(divCarAdImage));
+				console.log(JSON.parse(car));
 			});
 		}
 	} catch (error) {
-		console.log(error);
+		console.log(JSON.parse(error));
 	}
 };
 
