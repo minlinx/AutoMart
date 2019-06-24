@@ -16,6 +16,7 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
+						console.log(error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -28,6 +29,7 @@ class Cars {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -42,6 +44,7 @@ class Cars {
 					}
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -64,6 +67,7 @@ class Cars {
 						});
 					}
 				});
+			pool.end();
 		}
 		else if (priceRange && queryLength === 3) {
 			check('status')

@@ -21,7 +21,7 @@ const {
 const router = express.Router();
 router.get(
 	'/',
-	checkAuthentication,
+	// checkAuthentication,
 	getCarOrCars
 );
 router.get('/:carId', checkAuthentication, checkCarId(), specificCar);
