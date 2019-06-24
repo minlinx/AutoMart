@@ -3,14 +3,22 @@ const createDivElementWithClassName = (className) => {
 	div.setAttribute('class', className);
 	return div;
 };
+const myInit = {
+	method: 'GET',
+	mode: 'cors',
+	cache: 'default',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+};
 const getAllUnsoldCars = async () => {
 	try {
-		const response = await fetch('/api/v1/car?status=available&state=new');
+		const response = await fetch('/api/v1/car?status=available&state=new', myInit);
 		if (response.ok) {
 			const serverResponseData = await response.json();
 			const { data } = serverResponseData;
 			data.forEach(car => {
-				const { car_image, manufacturer, price, state} = car;
+				const { car_image, manufacturer, price, state } = car;
 				const img = document.createElement('img');
 				const span = document.createElement('span');
 				const strong = document.createElement('strong');
@@ -39,15 +47,21 @@ const getAllUnsoldCars = async () => {
 				divCarAdBrand.firstChild.style.display = 'block';
 				let div1 = document.querySelector('.all-unsold-cars-main-view');
 				div1.appendChild(divCarAd);
-				console.log(JSON.parse(divCarAdState));
-				console.log(JSON.parse(divCarAdPrice));
-				console.log(JSON.parse(divCarAdBrand));
-				console.log(JSON.parse(divCarAdImage));
-				console.log(JSON.parse(car));
+				console.log(divCarAdState);
+				console.log(divCarAdPrice);
+				console.log(divCarAdBrand);
+				console.log(divCarAdImage);
+				console.log(car);
 			});
 		}
 	} catch (error) {
-		console.log(JSON.parse(error));
+		const response1 = await fetch('/api/v1/car');
+		if (response1.ok) {
+			const serverResponseData1 = await response1.json();
+			const { data } = serverResponseData1;
+			console.log(data);
+		}
+		console.log(error);
 	}
 };
 
