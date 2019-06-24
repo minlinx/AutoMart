@@ -67,7 +67,6 @@ class Cars {
 						});
 					}
 				});
-			pool.end();
 		}
 		else if (priceRange && queryLength === 3) {
 			check('status')
@@ -193,7 +192,7 @@ class Cars {
 						if (error) {
 							return response.status(500).json({
 								status: 500,
-								error: 'server is down'
+								error: '***server is down***'
 							});
 						}
 					})
@@ -445,7 +444,7 @@ class Cars {
 				})
 				.then(() => {
 					const createdOn = '15-6-2019';
-					const url = (request.file.url);
+					const url = (request.file.secure_url);
 					const sql = 'INSERT INTO cars (id, owner, created_on, state, status, price, manufacturer, model, body_type, car_image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10)';
 					const params = [id, owner, createdOn, state, status, price, manufacturer, model, bodyType, url];
 					return pool.query(sql, params);
