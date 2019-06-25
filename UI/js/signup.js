@@ -13,6 +13,8 @@ const signUp = async (event) => {
 		const response = await fetch('/api/v1/auth/signup', myInit);
 		if (response.ok) {
 			let serverResponseData = await response.json();
+			const signUpFormInputs = signUpForm.querySelectorAll('input');
+			signUpFormInputs.forEach((inputElement) => inputElement.value = '');
 			console.log(serverResponseData);
 		}
 		else {
