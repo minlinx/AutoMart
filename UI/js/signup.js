@@ -6,10 +6,7 @@ const signUp = async (event) => {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'default',
-		// body: JSON.stringify({ email: email.value, password: password.value })
-		// body:new URLSearchParams(JSON.stringify({ email: email.value, password: password.value }))
 		body: data
-		// body: data
 	};
 	event.preventDefault();
 	try {
