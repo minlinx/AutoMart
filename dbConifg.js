@@ -11,7 +11,7 @@
 import { Pool } from 'pg';
 
 const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
+	connectionString: process.env.DEV_DATABASE_URL,
 	ssl: true,
 });
 export default pool;
@@ -50,4 +50,4 @@ export default pool;
 // };
 // const pool = new Client(getConf());
 
-export default pool;
+// export default pool;
