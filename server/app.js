@@ -1,7 +1,6 @@
 import express from 'express';
 import expressValidator from 'express-validator';
 import bodyParser from 'body-parser';
-// import path from 'path';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import carsRoute from '../api/routes/cars';

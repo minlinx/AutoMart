@@ -7,46 +7,47 @@
 // });
 // export default pool;
 
+/////////////////////////////////////////////////////////////////////
+import { Client } from 'pg';
 
-// import { Client } from 'pg';
+const client = new Client({
+	connectionString: process.env.DATABASE_URL,
+	ssl: true,
+});
+export default client;
 
-// const client = new Client({
-// 	connectionString: process.env.DATABASE_URL,
-// 	ssl: true,
-// });
-// export default client;
+////////////////////////////////////////////////////////////////////
+// import { Pool } from 'pg';
+// import dotenv from 'dotenv';
 
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
+// dotenv.config();
 
-dotenv.config();
+// const defaultConfig = {
+// 	connectionString: process.env.DEV_DATABASE_URL,
+// 	ssl: true
+// };
 
-const defaultConfig = {
-	connectionString: process.env.DEV_DATABASE_URL,
-	ssl: true
-};
+// const productionConfig = {
+// 	connectionString: process.env.PROD_DATABASE_URL,
+// 	ssl: true
+// };
 
-const productionConfig = {
-	connectionString: process.env.PROD_DATABASE_URL,
-	ssl: true
-};
+// const testConfig = {
+// 	connectionString: process.env.TEST_DATABASE_URL,
+// 	ssl: true
+// };
+// const getConf = () => {
+// 	switch (process.env.NODE_ENV) {
+// 	case 'test':
+// 		return testConfig;
 
-const testConfig = {
-	connectionString: process.env.TEST_DATABASE_URL,
-	ssl: true
-};
-const getConf = () => {
-	switch (process.env.NODE_ENV) {
-	case 'test':
-		return testConfig;
+// 	case 'production':
+// 		return productionConfig;
 
-	case 'production':
-		return productionConfig;
+// 	default:
+// 		return defaultConfig;
+// 	}
+// };
+// const pool = new Pool(getConf());
 
-	default:
-		return defaultConfig;
-	}
-};
-const pool = new Pool(getConf());
-
-export default pool;
+// export default pool;
