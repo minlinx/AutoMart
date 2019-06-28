@@ -40,8 +40,9 @@ const getConf = () => {
 	switch (process.env.NODE_ENV) {
 	case 'test':
 		return testConfig;
-
 	case 'production':
+		return productionConfig;
+	case 'development':
 		return productionConfig;
 
 	default:
