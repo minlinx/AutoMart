@@ -17,7 +17,7 @@
 // export default client;
 
 ////////////////////////////////////////////////////////////////////
-import { Pool } from 'pg';
+import { Client } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -48,6 +48,6 @@ const getConf = () => {
 		return defaultConfig;
 	}
 };
-const pool = new Pool(getConf());
+const pool = new Client(getConf());
 
 export default pool;
