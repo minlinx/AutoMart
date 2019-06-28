@@ -22,10 +22,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const defaultConfig = {
-	connectionString: process.env.DEV_DATABASE_URL,
-	ssl: true
-};
+// const defaultConfig = {
+// 	connectionString: process.env.DEV_DATABASE_URL,
+// 	ssl: true
+// };
 
 const productionConfig = {
 	connectionString: process.env.PROD_DATABASE_URL,
@@ -44,9 +44,8 @@ const getConf = () => {
 		return productionConfig;
 	case 'development':
 		return productionConfig;
-
 	default:
-		return defaultConfig;
+		return productionConfig;
 	}
 };
 const pool = new Client(getConf());
