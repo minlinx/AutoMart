@@ -189,6 +189,7 @@ class Cars {
 			else if (errors.isEmpty()) {
 				pool.connect()
 					.catch(error => {
+						console.log(error);
 						if (error) {
 							return response.status(500).json({
 								status: 500,
