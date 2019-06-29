@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import pool from '../../dbConifg';
 import { validationResult } from 'express-validator/check';
-const privateKey = process.env.JWT_PRIVATE_KEY;
+const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 class Users {
 	static signUpFunction(request, response) {
 		const queryParams = request.query;
