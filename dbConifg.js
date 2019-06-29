@@ -8,13 +8,13 @@
 // export default pool;
 
 /////////////////////////// Using Client ////////////////////////////////////////////
-import { Client } from 'pg';
+// import { Client } from 'pg';
 
-const pool = new Client({
-	connectionString: process.env.PROD_DATABASE_URL,
-	ssl: false,
-});
-export default pool;
+// const pool = new Client({
+// 	connectionString: process.env.PROD_DATABASE_URL,
+// 	ssl: false,
+// });
+// export default pool;
 
 /////////////////////////////  Usikng  Clientg ///////////////////////////////////////
 // import { Client } from 'pg';
@@ -63,3 +63,18 @@ export default pool;
 // const pool = new Client(getConnectionString());
 
 // export default pool;
+////////////////////////////////////////////////////////////////////////////
+import { Client } from 'pg';
+if (process.env.DATABASE_URL) {
+	pg.defaults.ssl = true;
+}
+
+// include an OR statement if you switch between a local dev db and
+// a remote heroku environment
+
+let connString = process.env.DATABASE_URL;
+
+const pool = new Client({
+	connectionString : connString
+});
+export default pool;
