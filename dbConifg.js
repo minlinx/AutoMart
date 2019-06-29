@@ -12,7 +12,7 @@ import { Client } from 'pg';
 
 const pool = new Client({
 	connectionString: process.env.PROD_DATABASE_URL,
-	ssl: true,
+	ssl: false,
 });
 export default pool;
 
