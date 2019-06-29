@@ -8,9 +8,9 @@
 // export default pool;
 
 /////////////////////////////////////////////////////////////////////
-import { Pool } from 'pg';
+import { Client } from 'pg';
 
-const pool = new Pool({
+const pool = new Client({
 	connectionString: process.env.DEV_DATABASE_URL,
 	ssl: true,
 });
