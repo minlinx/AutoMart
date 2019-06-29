@@ -36,18 +36,30 @@ const testConfig = {
 	connectionString: process.env.TEST_DATABASE_URL,
 	ssl: true
 };
-const getConf = () => {
-	switch (process.env.NODE_ENV) {
-	case 'test':
+const getConnectionString = () => {
+	// switch (process.env.NODE_ENV) {
+	// case 'test':
+	// 	return testConfig;
+	// case 'production':
+	// 	return productionConfig;
+	// case 'development':
+	// 	return productionConfig;
+	// default:
+	// 	return productionConfig;
+	// }
+	if (process.env.NODE_ENV === 'test') {
 		return testConfig;
-	case 'production':
-		return productionConfig;
-	case 'development':
-		return productionConfig;
-	default:
+	}
+	else if (process.env.NODE_ENV === 'development') {
 		return productionConfig;
 	}
+	else if (process.env.NODE_ENV === 'production') {
+		return productionConfig;
+	}
+	else {
+		console.log(process.env.NODE_ENV);
+	}
 };
-const pool = new Client(getConf());
+const pool = new Client(getConnectionString());
 
 export default pool;
