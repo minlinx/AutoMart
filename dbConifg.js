@@ -71,10 +71,10 @@ if (process.env.DATABASE_URL) {
 
 // include an OR statement if you switch between a local dev db and
 // a remote heroku environment
-import { Client } from 'pg';
+import { Pool } from 'pg';
 let connString = process.env.DATABASE_URL;
 
-const pool = new Client({
+const pool = new Pool({
 	connectionString : connString
 });
 export default pool;
