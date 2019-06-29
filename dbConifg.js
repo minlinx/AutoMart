@@ -21,7 +21,7 @@ import pg from 'pg';
 if (process.env.DATABASE_URL) {
 	pg.defaults.ssl = true;
 }
-import { Client } from 'pg';
+import { Pool } from 'pg';
 
 // const defaultConfig = {
 // 	connectionString: process.env.DEV_DATABASE_URL,
@@ -61,7 +61,7 @@ const getConnectionString = () => {
 		console.log(process.env.NODE_ENV);
 	}
 };
-const pool = new Client(getConnectionString());
+const pool = new Pool(getConnectionString());
 
 export default pool;
 ////////////////////////////////////////////////////////////////////////////
