@@ -55,12 +55,6 @@ const getAllUnsoldCars = async () => {
 			});
 		}
 	} catch (error) {
-		const response1 = await fetch('/api/v1/car');
-		if (response1.ok) {
-			const serverResponseData1 = await response1.json();
-			const { data } = serverResponseData1;
-			console.log(data);
-		}
 		console.log(error);
 	}
 };
