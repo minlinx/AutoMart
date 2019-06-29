@@ -64,14 +64,14 @@
 
 // export default pool;
 ////////////////////////////////////////////////////////////////////////////
-import { Client } from 'pg';
+import pg from 'pg';
 if (process.env.DATABASE_URL) {
 	pg.defaults.ssl = true;
 }
 
 // include an OR statement if you switch between a local dev db and
 // a remote heroku environment
-
+import { Client } from 'pg';
 let connString = process.env.DATABASE_URL;
 
 const pool = new Client({
