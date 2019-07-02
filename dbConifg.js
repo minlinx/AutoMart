@@ -1,4 +1,5 @@
-import { pg, Pool } from 'pg';
+import { Pool } from 'pg';
+import pg from 'pg';
 if (process.env.DATABASE_URL) {
 	pg.defaults.ssl = true;
 }
