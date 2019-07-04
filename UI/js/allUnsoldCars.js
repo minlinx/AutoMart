@@ -13,14 +13,15 @@ const myInit = {
 };
 const getAllUnsoldCars = async () => {
 	try {
-		const response = await fetch('/api/v1/car?status=available&state=new', myInit);
+		// const response = await fetch('/api/v1/car?status=available&state=new', myInit);
+		const response = await fetch('http://localhost:3000/api/v1/car?status=available&state=new', myInit);
 		if (response.ok) {
 			const serverResponseData = await response.json();
 			const { data } = serverResponseData;
 			data.forEach(car => {
 				const { car_image, manufacturer, price, state } = car;
 				const img = document.createElement('img');
-				const link = document.createElement('a');
+				// const link = document.createElement('a');
 				const span = document.createElement('span');
 				const strong = document.createElement('strong');
 				let divallUnsoldCarsMainView = createDivElementWithClassName('all-unsold-cars-main-view');
@@ -40,7 +41,7 @@ const getAllUnsoldCars = async () => {
 				divCarAdDescription.appendChild(divCarAdBrand);
 				divCarAd.appendChild(divCarAdImage);
 				divCarAd.appendChild(divCarAdDescription);
-				link.appendChild(divCarAd);
+				// link.appendChild(divCarAd);
 				divallUnsoldCarsMainView.appendChild(divCarAd);
 				divCarAdImage.firstChild.setAttribute('src', car_image);
 				divCarAdState.innerHTML = state;
