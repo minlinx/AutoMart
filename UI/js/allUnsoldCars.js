@@ -13,8 +13,8 @@ const myInit = {
 };
 const getAllUnsoldCars = async () => {
 	try {
-		// const response = await fetch('/api/v1/car?status=available&state=new', myInit);
-		const response = await fetch('http://localhost:3000/api/v1/car?status=available&state=new', myInit);
+		const response = await fetch('/api/v1/car?status=available&state=new', myInit);
+		// const response = await fetch('http://localhost:3000/api/v1/car?status=available&state=new', myInit);
 		if (response.ok) {
 			const serverResponseData = await response.json();
 			const { data } = serverResponseData;

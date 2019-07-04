@@ -13,8 +13,8 @@ const myInit = {
 };
 const getCarsWithinFirstPriceRange = async () => {
 	try {
-		// const response = await fetch('/api/v1/car?minPrice=160000&maxPrice=700000&status=available', myInit);
-		const response = await fetch('http://localhost:3000/api/v1/car?minPrice=160000&maxPrice=700000&status=available', myInit);
+		const response = await fetch('/api/v1/car?minPrice=160000&maxPrice=700000&status=available', myInit);
+		// const response = await fetch('http://localhost:3000/api/v1/car?minPrice=160000&maxPrice=700000&status=available', myInit);
 		if (response.ok) {
 			const serverResponseData = await response.json();
 			const { data } = serverResponseData;
