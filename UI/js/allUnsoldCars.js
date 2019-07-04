@@ -20,6 +20,7 @@ const getAllUnsoldCars = async () => {
 			data.forEach(car => {
 				const { car_image, manufacturer, price, state } = car;
 				const img = document.createElement('img');
+				const link = document.createElement('a');
 				const span = document.createElement('span');
 				const strong = document.createElement('strong');
 				let divallUnsoldCarsMainView = createDivElementWithClassName('all-unsold-cars-main-view');
@@ -39,6 +40,7 @@ const getAllUnsoldCars = async () => {
 				divCarAdDescription.appendChild(divCarAdBrand);
 				divCarAd.appendChild(divCarAdImage);
 				divCarAd.appendChild(divCarAdDescription);
+				link.appendChild(divCarAd);
 				divallUnsoldCarsMainView.appendChild(divCarAd);
 				divCarAdImage.firstChild.setAttribute('src', car_image);
 				divCarAdState.innerHTML = state;

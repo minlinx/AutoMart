@@ -46,6 +46,10 @@ body {
   color:  inherit;
   text-align: center
 }
+.all-unsold-cars-header .home-navbar-link {
+  color: #EEE;
+  text-decoration: none
+}
 .page-navbar {
     position: static;
     top: 0;
