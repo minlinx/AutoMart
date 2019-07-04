@@ -13,14 +13,15 @@ const myInit = {
 };
 const getCarsWithinThirdPriceRange = async () => {
 	try {
-		const response = await fetch('/api/v1/car?minPrice=100000000&maxPrice=700000000000000&status=available', myInit);
+		// const response = await fetch('/api/v1/car?minPrice=100000000&maxPrice=700000000000000&status=available', myInit);
+		const response = await fetch('http://localhost:3000/api/v1/car?minPrice=100000000&maxPrice=700000000000000&status=available', myInit);
 		if (response.ok) {
 			const serverResponseData = await response.json();
 			const { data } = serverResponseData;
 			data.forEach(car => {
 				const { car_image, manufacturer, price, state } = car;
 				const img = document.createElement('img');
-				const link = document.createElement('a');
+				// const link = document.createElement('a');
 				const span = document.createElement('span');
 				const strong = document.createElement('strong');
 				let divallUnsoldCarsMainView = createDivElementWithClassName('all-unsold-cars-main-view');
@@ -40,7 +41,7 @@ const getCarsWithinThirdPriceRange = async () => {
 				divCarAdDescription.appendChild(divCarAdBrand);
 				divCarAd.appendChild(divCarAdImage);
 				divCarAd.appendChild(divCarAdDescription);
-				link.appendChild(divCarAd);
+				// link.appendChild(divCarAd);
 				divallUnsoldCarsMainView.appendChild(divCarAd);
 				divCarAdImage.firstChild.setAttribute('src', car_image);
 				divCarAdState.innerHTML = state;
@@ -48,7 +49,7 @@ const getCarsWithinThirdPriceRange = async () => {
 				divCarAdBrand.firstChild.innerHTML = manufacturer;
 				divCarAdBrand.firstChild.style.display = 'block';
 				let div1 = document.querySelector('.all-unsold-cars-main-view');
-				div1.appendChild(link);
+				div1.appendChild(divCarAd);
 				console.log(divCarAdState);
 				console.log(divCarAdPrice);
 				console.log(divCarAdBrand);
