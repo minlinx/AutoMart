@@ -8,8 +8,7 @@ describe('#POST /User', () => {
 	it('Should return a 404 status code.', done => {
 		const data = {
 			email: 'minaproblemsolver@gmail.com',
-			password: '123456',
-			token
+			password: '123456'
 		};
 		request(app)
 			.post('/api/v1/auth/signup')
@@ -17,6 +16,34 @@ describe('#POST /User', () => {
 			.send(data)
 			.end((error, response) => {
 				assert(response.statusCode, '400');
+				done();
+			});
+	});
+	it('Should return a 404 status code.', done => {
+		const data = {
+			email: 'minaproblemsolver@gmail.com',
+			password: '123456'
+		};
+		request(app)
+			.post('/api/v1/auth/signup')
+			.set('Authorization', `Bearer ${token}`)
+			.send(data)
+			.end((error, response) => {
+				expect(response.statusCode, '201');
+				done();
+			});
+	});
+	it('Should return a 404 status code.', done => {
+		const data = {
+			email: 'minaproblemsolver@gmail.com',
+			password: '123456'
+		};
+		request(app)
+			.post('/api/v1/auth/signup')
+			.set('Authorization', `Bearer ${token}`)
+			.send(data)
+			.end((error, response) => {
+				expect(response.statusCode, '500');
 				done();
 			});
 	});
@@ -60,6 +87,42 @@ describe('#POST /User', () => {
 				done();
 			});
 	});
+	it('Should return a 422 status possibly3 code.', done => {
+		request(app)
+			.post('/api/v1/auth/signin')
+			.set({
+				email: 'minaproblemsolver@gmail.com',
+				password: 123456
+			})
+			.end((error, response) => {
+				expect(response.statusCode, '400');
+				done();
+			});
+	});
+	it('Should return a 422 status possibly3 code.', done => {
+		request(app)
+			.post('/api/v1/auth/signin')
+			.set({
+				email: 'minaproblemsolver@gmail.com',
+				password: 123456
+			})
+			.end((error, response) => {
+				expect(response.statusCode, '500');
+				done();
+			});
+	});
+	it('Should return a 422 status possibly3 code.', done => {
+		request(app)
+			.post('/api/v1/auth/signin')
+			.set({
+				email: 'minaproblemsolver@gmail.com',
+				password: 123456
+			})
+			.end((error, response) => {
+				expect(response.statusCode, '200');
+				done();
+			});
+	});
 });
 describe('Test Route with Token', function () {
 	const data = {
@@ -98,7 +161,7 @@ describe('Test Route with Token', function () {
 			.set('Authorization', 'Bearer ' + token)
 			.send(data)
 			.end((error, response) => {
-				assert.equal(response.statusCode, '401');
+				expect(response.statusCode, '401');
 				done();
 			});
 	});

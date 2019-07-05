@@ -138,7 +138,7 @@ class Cars {
 						if (error) {
 							return response.status(500).json({
 								status: 500,
-								error: 'server is down'
+								error: '***server is down***'
 							});
 						}
 					})
@@ -362,7 +362,7 @@ class Cars {
 					if (error) {
 						return response.status(500).json({
 							status: 500,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
@@ -439,7 +439,7 @@ class Cars {
 					if (error) {
 						return response.status(500).json({
 							status: 500,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
@@ -559,7 +559,7 @@ class Cars {
 					if (error) {
 						return response.status(500).json({
 							status: 500,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
@@ -618,7 +618,7 @@ class Cars {
 					if (error) {
 						return response.status(500).json({
 							status: 500,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
