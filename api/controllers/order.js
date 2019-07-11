@@ -5,9 +5,9 @@ class Orders {
 	static createOrder(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { carId, priceOffered } = request.body;
-		const parsedId = parseInt(carId);
-		const parsedPrice = parseFloat(priceOffered);
+		const { email, car_id, price_offered } = request.body;
+		const parsedId = parseInt(car_id);
+		const parsedPrice = parseFloat(price_offered);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
@@ -28,13 +28,14 @@ class Orders {
 					if (error) {
 						return response.status(500).json({
 							status: 500,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
 				.then(() => {
-					const sql = 'INSERT INTO orders (id, buyer, car_id, amount, status) (SELECT 5, 5, id, $2, $3 FROM cars WHERE id=$1)';
-					const params = [parsedId, parsedPrice, 'pending'];
+					const createdOn = new Date();
+					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ((SELECT id FROM users WHERE email=$2), (SELECT id FROM cars  WHERE id=$1), (SELECT price FROM cars  WHERE id=$1), $3, $4) RETURNING *';
+					const params = [parsedId, email, 'pending', createdOn];
 					return pool.query(sql, params);
 				})
 				.catch(error => {
@@ -53,9 +54,11 @@ class Orders {
 						});
 					}
 					else {
-						return response.status(202).json({
-							status: 202,
-							message: 'Request accepted!'
+						const { id, car_id, created_on, status, amount } = result.rows[0];
+						const data = { id, car_id, created_on, status, price: amount, price_Offered: parsedPrice};
+						return response.status(201).json({
+							status: 201,
+							data
 						});
 					}
 				});
@@ -64,10 +67,13 @@ class Orders {
 	static updateOrder(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { priceOffered } = request.body;
-		const { orderId } = request.params;
-		const parsedPrice = parseFloat(priceOffered);
-		const parsedOrderId = parseInt(orderId);
+		const { price_offered, email } = request.body;
+		const { userEmail } = response.locals;
+		const confirmedUser = userEmail === email;
+		const { order_id } = request.params;
+		const parsedPrice = parseFloat(price_offered);
+		const parsedOrderId = parseInt(order_id);
+		let amount;
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
@@ -81,21 +87,21 @@ class Orders {
 			});
 		}
 		else if (
-			errors.isEmpty()
+			errors.isEmpty() && confirmedUser
 		) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
 							status: 500,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
 				.then(() => {
-					const sql = 'UPDATE orders SET amount=$1 WHERE (id=$2 AND status=$3)';
-					const params = [parsedPrice, parsedOrderId, 'pending'];
-					return pool.query(sql, params);
+					const sql = 'SELECT amount FROM orders WHERE id=$1';
+					const param = [parsedOrderId];
+					return pool.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
@@ -106,6 +112,18 @@ class Orders {
 					}
 				})
 				.then(result => {
+					amount  = result.rows[0].amount;
+					const sql =  'UPDATE orders SET amount=$2 WHERE (id=$1 AND status=$3) RETURNING *';
+					const params = [parsedOrderId, parsedPrice, 'pending'];
+					return pool.query(sql, params);
+				}).catch((error) => {
+					if (error) {
+						response.status(500).json({
+							status: 500,
+							error: 'Server is Down'
+						});
+					}
+				}).then((result) => {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
 							status: 404,
@@ -113,9 +131,11 @@ class Orders {
 						});
 					}
 					else {
+						const { id, car_id, status } = result.rows[0];
+						const data = {id, car_id, status, old_price_offered: amount, new_price_offered: parsedPrice};
 						return response.status(202).json({
 							status: 202,
-							message: 'Request accepted!'
+							data
 						});
 					}
 				});
@@ -123,7 +143,7 @@ class Orders {
 		else {
 			response.status(400).json({
 				status: 400,
-				error: 'You can only mark car AD as sold'
+				error: '*Check Your Inputs*'
 			});
 		}
 	}
