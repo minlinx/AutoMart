@@ -6,9 +6,19 @@ function checkUserAuthentication(request, response, next) {
 		if (bearerToken) {
 			const token = bearerToken.split(' ')[1];
 			const decodedToken = jwt.verify(token, privateKey);
-			console.log('from here', decodedToken);
-			response.locals.token = token;
-			next();
+			const { email } = decodedToken;
+			const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
+			const isAdmin = regex.test(email);
+			if (isAdmin) {
+				response.locals.adminToken = token;
+				response.locals.userEmail = email;
+				next();
+			}
+			else {
+				response.locals.userToken = token;
+				response.locals.userEmail = email;
+				next();
+			}
 		}
 		else {
 			response.status(422).json({

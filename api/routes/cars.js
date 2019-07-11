@@ -21,18 +21,18 @@ const {
 const router = express.Router();
 router.get(
 	'/',
-	// checkAuthentication,
+	checkAuthentication,
 	getCarOrCars
 );
-router.get('/:carId', checkAuthentication, checkCarId(), specificCar);
+router.get('/:car_id', checkAuthentication, checkCarId(), specificCar);
 router.post(
 	'/',
 	checkAuthentication,
-	imageParser.single('carImage'),
+	imageParser.single('car_image'),
 	postCarAdValidator(),
 	postCarAd
 );
-router.delete('/:carId', checkAuthentication, checkCarId(), deleteCarAd);
-router.patch('/:carId/price', checkAuthentication, checkCarADPrice(), changeCarAdPrice);
-router.patch('/:carId/status', checkAuthentication, checkCarADStatus(), changeCarAdStatus);
+router.delete('/:car_id', checkAuthentication, checkCarId(), deleteCarAd);
+router.patch('/:car_id/price', checkAuthentication, checkCarADPrice(), changeCarAdPrice);
+router.patch('/:car_id/status', checkAuthentication, checkCarADStatus(), changeCarAdStatus);
 export default router;

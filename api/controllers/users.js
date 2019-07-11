@@ -1,12 +1,15 @@
 import jwt from 'jsonwebtoken';
 import pool from '../../dbConifg';
 import { validationResult } from 'express-validator/check';
+import bcryptHash from '../../middlewares/bcryptHash';
 const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 class Users {
 	static signUpFunction(request, response) {
 		const queryParams = request.query;
 		const queryLength = Object.keys(queryParams).length;
-		const { email, password } = request.body;
+		const { email, password, first_name, last_name, address } = request.body;
+		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
+		const isAdmin = regex.test(email);
 		const errors = validationResult(request);
 		if (queryLength > 0) {
 			response.status(400).json({
@@ -51,14 +54,14 @@ class Users {
 						});
 					}
 					else {
-						const sql = 'INSERT INTO users (email, password)  VALUES($1, $2)';
-						const params = [email, password];
+						const hashedPassword = bcryptHash.hashPassword(password);
+						const sql = 'INSERT INTO users (email, password, first_name, last_name, address, is_admin)  VALUES($1, $2, $3, $4, $5, $6) RETURNING email, first_name, last_name, address';
+						const params = [email, hashedPassword, first_name, last_name, address, isAdmin];
 						return pool.query(sql, params);
 					}
 				})
 				.catch(error => {
 					if (error) {
-						console.log(error)
 						return response.status(500).json({
 							status: 500,
 							error: 'server is down'
@@ -69,13 +72,13 @@ class Users {
 					if (result.rowCount > 0) {
 						const token = jwt.sign(
 							{
-								email
+								email, first_name
 							},
 							privateKey, {
 								expiresIn: '24h'
 							}
 						);
-						const data = { token, email };
+						const data = {...result.rows[0], token, email };
 						response.status(201).json({
 							status: 201,
 							data
@@ -107,20 +110,20 @@ class Users {
 					if (error) {
 						return response.status(500).json({
 							status: 500,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
 				.then(() => {
-					const sql = 'SELECT * FROM users WHERE email=$1 AND password=$2';
-					const param = [email, password];
+					const sql = 'SELECT * FROM users WHERE email=$1';
+					const param = [email];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
 						return response.status(400).json({
 							status: 400,
-							error: 'Email/Password Did Not match'
+							error: 'Check Your Inputs'
 						});
 					}
 				})
@@ -128,15 +131,22 @@ class Users {
 					if (!result.rowCount > 0) {
 						response.status(400).json({
 							status: 400,
-							error: 'Email/Password Did Not match'
+							error: 'Sign up Instead'
 						});
 					}
-					else {
-						const token = response.locals.token;
-						const data = { token, email };
+					else if (bcryptHash.correctPassword(password, result.rows[0].password)) {
+						const token = response.locals.userToken || response.locals.adminToken;
+						const { email, first_name, last_name, address, id} = { ...result.rows[0] };
+						const data = { token, id, first_name, last_name, email, address };
 						response.status(200).json({
 							status: 200,
 							data
+						});
+					}
+					else {
+						response.status(403).json({
+							status: 403,
+							error: 'Forbidden'
 						});
 					}
 				});
