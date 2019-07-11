@@ -2,7 +2,7 @@ language: node_js
 os:
   - windows
 node_js:
-  - 'stable'
+  - '8.9.0'
 before_script:
   - npm install
 script:
