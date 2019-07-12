@@ -3,18 +3,19 @@ import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static getCarOrCars(request, response) {
-		const { adminToken } = response.locals;
+		// const { adminToken } = response.locals;
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
 		const { status, state, min_price, max_price, body_type, manufacturer } = queryParams;
+		const { token } = request.body;
 		const stateIsDefined = arrayOfQueryParams.includes('state');
 		const statusIsDefined = arrayOfQueryParams.includes('status');
 		const manufacturerIsDefined = arrayOfQueryParams.includes('manufacturer', 'status');
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (queryLength === 0 && adminToken) {
+		if (token) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -156,7 +157,7 @@ class Cars {
 					});
 			}
 		}
-		else if (statusIsDefined && queryLength === 1 && adminToken) {
+		else if (statusIsDefined && queryLength === 1) {
 			check('status')
 				.isLength({ min: 3 })
 				.trim().not().isEmpty().isString();
@@ -374,6 +375,7 @@ class Cars {
 		}
 	}
 	static specificCar(request, response) {
+		const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -390,7 +392,7 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		else if (errors.isEmpty()) {
+		else if (errors.isEmpty() && token) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -421,7 +423,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows];
+						const data = [...result.rows, token];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -431,9 +433,12 @@ class Cars {
 		}
 	}
 	static postCarAd(request, response) {
+		const { email } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
-			email,
+			token,
+			status,
+			// email,
 			manufacturer,
 			model,
 			body_type,
@@ -460,6 +465,8 @@ class Cars {
 			body_type &&
 			price &&
 			state &&
+			status &&
+			token &&
 			errors.isEmpty()
 		) {
 			pool.connect()
@@ -475,7 +482,7 @@ class Cars {
 					const createdOn = new Date();
 					const url = (request.file.secure_url);
 					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, car_image) VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-					const params = [email, createdOn, state, 'available', price, manufacturer, model, body_type, url];
+					const params = [email, createdOn, state, status, price, manufacturer, model, body_type, url];
 					return pool.query(sql, params);
 				})
 				.catch(error => {
@@ -495,7 +502,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = { ...result.rows[0] };
+						const data = { ...result.rows[0], token };
 						return response.status(201).json({
 							status: 201,
 							data
@@ -505,7 +512,8 @@ class Cars {
 		}
 	}
 	static deleteCarAd(request, response) {
-		const { adminToken } = response.locals;
+		// const { adminToken } = response.locals;
+		const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -523,7 +531,7 @@ class Cars {
 			});
 		}
 		else if (
-			errors.isEmpty() && adminToken
+			errors.isEmpty() && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -557,7 +565,8 @@ class Cars {
 					else {
 						return response.status(301).json({
 							status: 301,
-							message: `Car AD ${car_id} successfully deleted`
+							message: `Car AD ${car_id} successfully deleted`,
+							token
 						});
 					}
 				});
@@ -570,11 +579,12 @@ class Cars {
 		}
 	}
 	static changeCarAdPrice(request, response) {
+		const { email } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { price, email } = request.body;
-		const { userEmail } = response.locals;
-		const confirmedUser = userEmail === email;
+		const { price, token } = request.body;
+		// const { userEmail } = response.locals;
+		// const confirmedUser = userEmail === email;
 		const { car_id } = request.params;
 		const parsedPrice = parseFloat(price);
 		const parsedCarId = parseInt(car_id);
@@ -591,7 +601,7 @@ class Cars {
 			});
 		}
 		else if (
-			errors.isEmpty() && confirmedUser
+			errors.isEmpty() && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -623,7 +633,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = { ...result.rows[0] };
+						const data = { ...result.rows[0], token };
 						return response.status(202).json({
 							status: 202,
 							data
@@ -641,9 +651,9 @@ class Cars {
 	static changeCarAdStatus(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { status, email } = request.body;
-		const { userEmail } = response.locals;
-		const confirmedUser = userEmail === email;
+		const { token } = request.body;
+		const { email } = response.locals;
+		// const confirmedUser = userEmail === email;
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);
 		if (!errors.isEmpty()) {
@@ -659,7 +669,7 @@ class Cars {
 			});
 		}
 		else if (
-			errors.isEmpty() && confirmedUser && status === 'sold'
+			errors.isEmpty() && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -691,7 +701,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = { ...result.rows[0] };
+						const data = { ...result.rows[0], token };
 						return response.status(202).json({
 							status: 202,
 							data
