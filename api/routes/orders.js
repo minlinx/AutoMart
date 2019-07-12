@@ -7,5 +7,5 @@ const { createOrderValidator, updateOrderValidator } = validator;
 const { createOrder, updateOrder } = Orders;
 const router = express.Router();
 router.post('/', checkAuthentication, createOrderValidator(), createOrder);
-router.patch('/:order-id/price', checkAuthentication, updateOrderValidator(), updateOrder);
+router.patch('/16/price', checkAuthentication, updateOrderValidator(), updateOrder);
 export default router;

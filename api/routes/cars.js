@@ -24,7 +24,7 @@ router.get(
 	checkAuthentication,
 	getCarOrCars
 );
-router.get('/:car-id', checkAuthentication, checkCarId(), specificCar);
+router.get('/4', checkAuthentication, checkCarId(), specificCar);
 router.post(
 	'/',
 	checkAuthentication,
@@ -32,7 +32,7 @@ router.post(
 	postCarAdValidator(),
 	postCarAd
 );
-router.delete('/:car-id', checkAuthentication, checkCarId(), deleteCarAd);
-router.patch('/:car-id/price', checkAuthentication, checkCarADPrice(), changeCarAdPrice);
-router.patch('/:car-id/status', checkAuthentication, checkCarADStatus(), changeCarAdStatus);
+router.delete('/4', checkAuthentication, checkCarId(), deleteCarAd);
+router.patch('/4/price', checkAuthentication, checkCarADPrice(), changeCarAdPrice);
+router.patch('/4/status', checkAuthentication, checkCarADStatus(), changeCarAdStatus);
 export default router;
