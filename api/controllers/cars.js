@@ -479,6 +479,7 @@ class Cars {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -602,8 +603,8 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 RETURNING *';
-					const param = [parsedPrice, parsedCarId];
+					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE email=$3) RETURNING *';
+					const param = [parsedPrice, parsedCarId, email];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
@@ -670,8 +671,8 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 RETURNING *';
-					const param = [status, parsedCarId];
+					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE email=$3) RETURNING *';
+					const param = [status, parsedCarId, email];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
