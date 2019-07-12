@@ -3,11 +3,12 @@ import pool from '../../dbConifg';
 
 class Orders {
 	static createOrder(request, response) {
+		const { email } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { email, car_id, price_offered } = request.body;
+		const { token, car_id, amount } = request.body;
 		const parsedId = parseInt(car_id);
-		const parsedPrice = parseFloat(price_offered);
+		const parsedPrice = parseFloat(amount);
 		if (!errors.isEmpty()) {
 			response.status(422).json({
 				status: 422,
@@ -21,7 +22,7 @@ class Orders {
 			});
 		}
 		else if (
-			errors.isEmpty()
+			errors.isEmpty() && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -67,9 +68,9 @@ class Orders {
 	static updateOrder(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { price_offered, email } = request.body;
-		const { userEmail } = response.locals;
-		const confirmedUser = userEmail === email;
+		const { price_offered, token } = request.body;
+		const { email } = response.locals;
+		// const confirmedUser = userEmail === email;
 		const { order_id } = request.params;
 		const parsedPrice = parseFloat(price_offered);
 		const parsedOrderId = parseInt(order_id);
@@ -87,7 +88,7 @@ class Orders {
 			});
 		}
 		else if (
-			errors.isEmpty() && confirmedUser
+			errors.isEmpty() && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -143,7 +144,7 @@ class Orders {
 					}
 					else {
 						const { id, car_id, status } = result.rows[0];
-						const data = { id, car_id, status, old_price_offered: amount, new_price_offered: parsedPrice };
+						const data = { id, car_id, status, old_price_offered: amount, new_price_offered: parsedPrice, token };
 						return response.status(202).json({
 							status: 202,
 							data

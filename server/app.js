@@ -23,9 +23,9 @@ app.use(function (request, response, next) {
 	next();
 });
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api/v1/auth', usersRoute);
-app.use('/api/v1/car', carsRoute);
-app.use('/api/v1/order', ordersRoute);
+app.use('/auth', usersRoute);
+app.use('/car', carsRoute);
+app.use('/order', ordersRoute);
 app.use(notFoundError, serverError);
 app.listen(port, () => console.log(`Should Be Listening On Port ${port}...`));
 export default app;
