@@ -8,11 +8,12 @@
       "email": "minaproblemsolver@gmail.com"
     }
   },
+  "host": "minlinxautomart.herokuapp.com",
   "basePath": "/api/v1",
   "tags": [
     {
       "name": "Cars",
-      "description": "All Carsb Resources."
+      "description": "All Cars Resources."
     },
     {
       "name": "Orders",
@@ -28,24 +29,56 @@
     "https"
   ],
   "paths": {
-    "/car": {
+    "/car?status={ status }&manufacturer={ manufacturer }": {
       "get": {
         "tags": [
           "Cars"
         ],
-        "summary": "View all cars.",
-        "description": "User(Admin) can view all car ADs.",
-        "operationId": "getAllCars",
-        "consumes": [
-          "application/json",
-          "application/x-www-form-urlencoded"
-        ],
+        "summary": "View all Available New and Used Cars by manufacturer's name.",
+        "description": "",
+        "operationId": "getCarOrCars",
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "manufacturer",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Sucessful Operation"
+          },
+          "500": {
+            "description": "Server is Down"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unprocessable Entity"
           }
         }
       }
@@ -55,13 +88,20 @@
         "tags": [
           "Cars"
         ],
-        "summary": "View all Available New and Used Cars.",
+        "summary": "View all Available New and all Available Used Cars.",
         "description": "",
         "operationId": "getCarOrCars",
         "produces": [
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
           {
             "name": "status",
             "in": "query",
@@ -77,23 +117,32 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Operation"
+            "description": "Sucessful Operation"
           },
-          "422": {
-            "description": "Unprocessable entity"
+          "500": {
+            "description": "Server is Down"
+          },
+          "400": {
+            "description": "Bad request"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unprocessable Entity"
           }
         }
       }
     },
-    "/car?minPrice={  minPrice }&maxPrice={ maxPrice }&status={ status }": {
+    "/car?min_price={  min_price }&max_price={ max_price }&status={ status }": {
       "get": {
         "tags": [
           "Cars"
         ],
-        "summary": "View all vehicles within a price range.",
+        "summary": "View all cars within a price range.",
         "description": "",
         "operationId": "getCarOrCars",
         "produces": [
@@ -101,19 +150,26 @@
         ],
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
             "name": "status",
             "in": "query",
             "required": true,
             "type": "string"
           },
           {
-            "name": "minPrice",
+            "name": "min_price",
             "in": "query",
             "required": true,
             "type": "number"
           },
           {
-            "name": "maxPrice",
+            "name": "max_price",
             "in": "query",
             "required": true,
             "type": "number"
@@ -121,16 +177,118 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Operation"
+            "description": "Sucessful Operation"
           },
-          "422": {
-            "description": "Unprocessable entity"
-          },
-          "404": {
-            "description": "Not found"
+          "500": {
+            "description": "Server is Down"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/car?status={ status }": {
+      "get": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "User(admin) views all available and sold cars.",
+        "description": "",
+        "operationId": "getCarOrCars",
+        "produces": [
+          "application/json"
+        ],
+        "parameters":[
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+        {
+          "name": "status",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful Operation"
+          },
+          "500": {
+            "description": "Server is Down"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/car?body_type={ body_type }": {
+      "get": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "View all Available New and used cars by body type.",
+        "description": "",
+        "operationId": "getCarOrCars",
+        "produces": [
+          "application/json"
+        ],
+        "parameters":[
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+        {
+          "name": "body_type",
+          "in": "query",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful Operation"
+          },
+          "500": {
+            "description": "Server is Down"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unprocessable Entity"
           }
         }
       }
@@ -140,13 +298,20 @@
         "tags": [
           "Cars"
         ],
-        "summary": "View all Available New and used vehicles.",
+        "summary": "View all Available New cars and all Available used cars.",
         "description": "",
         "operationId": "getCarOrCars",
         "produces": [
           "application/json"
         ],
         "parameters":[
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
         {
           "name": "state",
           "in": "query",
@@ -156,18 +321,27 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Operation"
+            "description": "Sucessful Operation"
           },
-          "422": {
-            "description": "Unprocessable entity"
+          "500": {
+            "description": "Server is Down"
+          },
+          "400": {
+            "description": "Bad request"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unprocessable Entity"
           }
         }
       }
     },
-    "/car/{ carId }": {
+    "/car/{ car_id }": {
       "get": {
         "tags": [
           "Cars"
@@ -180,44 +354,74 @@
         ],
         "parameters": [
           {
-            "name": "carId",
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
+            "name": "car_id",
             "in": "path",
             "required": true,
             "type": "number",
             "format": "int64"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Operation"
+            "description": "Sucessful Operation"
           },
-          "422": {
-            "description": "Unprocessable entity"
+          "500": {
+            "description": "Server is Down"
+          },
+          "400": {
+            "description": "Bad request"
           },
           "404": {
-            "description": "Not found"
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "401": {
+            "description": "Unprocessable Entity"
           }
         }
       }
     },
-    "/car/{ carId }": {
+    "/car/{car_id}": {
       "delete": {
         "tags": [
           "Cars"
         ],
-        "summary": "View a specific car.",
+        "summary": "User(admin) can delete any car ad.",
         "description": "",
-        "operationId": "specificCar",
+        "operationId": "deleteCarAd",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "carId",
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
+            "name": "car_id",
             "in": "path",
             "required": true,
             "type": "number",
-            "format": "int64"
+            "format": "int32"
           }
         ],
         "responses": {
@@ -229,35 +433,48 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server is Down"
           }
         }
       }
     },
-    "/car/{ carId }/price": {
+    "/car/{car_id}/price": {
       "patch": {
         "tags": [
           "Cars"
         ],
         "summary": "Modify a car Ad's price.",
         "description": "",
-        "operationId": "specificCar",
+        "operationId": "changeCarAdPrice",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "carId",
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
+            "name": "car_id",
             "in": "path",
             "required": true,
             "type": "number",
             "format": "int64"
           },
           {
-            "name": "price",
+            "name": "body",
             "in": "body",
-            "required": true,
-            "type": "number",
-            "format": "int64"
+            "schema": {
+              "$ref": "#/definitions/changeCarAdPrice"
+            }
           }
         ],
         "responses": {
@@ -269,6 +486,152 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server is Down"
+          }
+        }
+      }
+    },
+    "/car/{car_id}/status": {
+      "patch": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Change a car Ad's status.",
+        "description": "",
+        "operationId": "changeCarAdStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
+            "name": "car_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/changeCarAdStatus"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server is Down"
+          }
+        }
+      }
+    },
+    "/car": {
+      "post": {
+        "tags": [
+          "Cars"
+        ],
+        "summary": "Post a car advertisement.",
+        "description": "",
+        "operationId": "postCarAd",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
+            "name": "car_image",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description":"Car Image"
+          },
+          {
+            "name": "manufacturer",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "format":"email",
+            "required": true,
+            "description":"User's Email"
+          },
+          {
+            "name": "model",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "body_type",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "state",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Operation"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server is Down"
           }
         }
       }
@@ -276,32 +639,32 @@
     "/order": {
       "post": {
         "tags": [
-          "Cars"
+          "Orders"
         ],
-        "summary": "Change a car Ad's status.",
+        "summary": "Make a car order.",
         "description": "",
-        "operationId": "specificCar",
+        "operationId": "createOrder",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "carId",
-            "in": "body",
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
             "required": true,
-            "type": "number",
-            "format": "int64"
+            "description":"'bearer'<space><token>"
           },
           {
-            "name": "priceOffered",
+            "name": "body",
             "in": "body",
-            "required": true,
-            "type": "number",
-            "format": "int64"
+            "schema":{
+              "$ref":"#/definitions/makeOrder"
+            }
           }
         ],
         "responses": {
-          "202": {
+          "201": {
             "description": "Successful Operation"
           },
           "422": {
@@ -309,35 +672,48 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server is Down"
           }
         }
       }
     },
-    "/order/{ orderId }/price": {
+    "/order/{order_id}/price": {
       "patch": {
         "tags": [
-          "Cars"
+          "Orders"
         ],
-        "summary": "Change a car Ad's status.",
+        "summary": "Change your car order's price",
         "description": "",
-        "operationId": "specificCar",
+        "operationId": "updateOrder",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "orderId",
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description":"'bearer'<space><token>"
+          },
+          {
+            "name": "order_id",
             "in": "path",
             "required": true,
             "type": "number",
             "format": "int64"
           },
           {
-            "name": "priceOffered",
+            "name": "body",
             "in": "body",
-            "required": true,
-            "type": "number",
-            "format": "int64"
+            "schema": {
+              "$ref": "#/definitions/updateOrderPrice"
+            }
           }
         ],
         "responses": {
@@ -349,6 +725,12 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server is Down"
           }
         }
       }
@@ -356,31 +738,25 @@
     "/auth/signup": {
       "post": {
         "tags": [
-          "Cars"
+          "Users"
         ],
-        "summary": "Change a car Ad's status.",
+        "summary": "Sign up.",
         "description": "",
-        "operationId": "specificCar",
+        "operationId": "signUpFunction",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "email",
+            "name": "body",
             "in": "body",
-            "required": true,
-            "type": "string",
-            "format": "email"
-          },
-          {
-            "name": "password",
-            "in": "body",
-            "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/Sign up"
+            }
           }
         ],
         "responses": {
-          "202": {
+          "201": {
             "description": "Successful Operation"
           },
           "422": {
@@ -388,6 +764,9 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "500": {
+            "description": "Server is Down"
           }
         }
       }
@@ -395,31 +774,32 @@
     "/auth/signin": {
       "post": {
         "tags": [
-          "Cars"
+          "Users"
         ],
-        "summary": "Change a car Ad's status.",
+        "summary": "Sign in.",
         "description": "",
-        "operationId": "specificCar",
+        "operationId": "signInFunction",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "email",
-            "in": "body",
-            "required": true,
+            "name": "authorization",
+            "in": "header",
             "type": "string",
-            "format": "email"
+            "required": true,
+            "description":"'bearer'<space><token>"
           },
           {
-            "name": "password",
+            "name": "body",
             "in": "body",
-            "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/Sign in"
+            }
           }
         ],
         "responses": {
-          "202": {
+          "200": {
             "description": "Successful Operation"
           },
           "422": {
@@ -427,52 +807,22 @@
           },
           "404": {
             "description": "Not found"
-          }
-        }
-      }
-    },
-    "/car/{ carId }/status": {
-      "patch": {
-        "tags": [
-          "Cars"
-        ],
-        "summary": "Change a car Ad's status.",
-        "description": "",
-        "operationId": "specificCar",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "carId",
-            "in": "path",
-            "required": true,
-            "type": "number",
-            "format": "int64"
           },
-          {
-            "name": "status",
-            "in": "body",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Successful Operation"
+          "401": {
+            "description": "Unauhtorized"
           },
-          "422": {
-            "description": "Unprocessable entity"
-          },
-          "404": {
-            "description": "Not found"
+          "500": {
+            "description": "Server is Down"
           }
         }
       }
     }
   },
+  "security": {
+    "basicAuth":[]
+  },
   "definitions": {
-    "Users": {
+    "Sign in": {
       "type": "object",
       "properties": {
         "email": {
@@ -489,58 +839,104 @@
         "password"
       ]
     },
-    "Cars": {
+    "Sign up": {
+      "type": "object",
       "properties": {
-        "status": {
-          "type": "string"
+        "email": {
+          "type": "string",
+          "description": "email of the user"
         },
-        "owner": {
-          "type": "string"
+        "password": {
+          "type": "string",
+          "description": "password of the user"
         },
-        "orderId": {
-          "type": "number"
+        "first_name": {
+          "type": "string",
+          "description": "first_name of the user"
         },
-        "state": {
-          "type": "string"
+        "last_name": {
+          "type": "string",
+          "description": "last_name of the user"
+        },
+        "address": {
+          "type": "string",
+          "description": "address of the user"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "changeCarAdPrice": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "format":"email"
         },
         "price": {
           "type": "number"
+        }
+      }
+    },
+    "changeCarAdStatus": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "format":"email"
         },
-        "minPrice": {
-          "type": "number"
-        },
-        "maxPrice": {
-          "type": "number"
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "postCarAd": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "format":"email"
         },
         "manufacturer": {
           "type": "string"
         },
         "model": {
-          "type": "number"
-        },
-        "carId": {
-          "type": "number"
-        },
-        "bodyType": {
           "type": "string"
+        },
+        "body_type": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "state": {
+          "type": "string"
+        },
+        "car_image": {
+          "type": "file"
         }
       }
     },
-    "Orders": {
+    "makeOrder": {
       "properties": {
-        "id": {
+        "email": {
+          "type": "string",
+          "format":"email"
+        },
+        "car_id": {
           "type": "number"
         },
-        "carId": {
+        "price_offered": {
           "type": "number"
+        }
+      }
+    },
+    "updateOrderPrice": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "format":"email"
         },
-        "buyer": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "priceOffered": {
+        "price_offered": {
           "type": "number"
         }
       }
