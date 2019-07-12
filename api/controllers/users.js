@@ -135,7 +135,14 @@ class Users {
 						});
 					}
 					else if (bcryptHash.correctPassword(password, result.rows[0].password)) {
-						const token = response.locals.token;
+						const token = jwt.sign(
+							{
+								email, first_name
+							},
+							privateKey, {
+								expiresIn: '24h'
+							}
+						);
 						const { email, first_name, last_name, address, id} = { ...result.rows[0] };
 						const data = { token, id, first_name, last_name, email, address };
 						response.status(200).json({
