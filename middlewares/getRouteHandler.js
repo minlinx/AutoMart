@@ -33,14 +33,14 @@ class GetRouteValidator {
 		return [
 			check('email').not().isEmpty().exists().isEmail().escape(),
 			check('car_id').not().isEmpty().exists().isInt().trim().escape(),
-			check('price_offered').not().isEmpty().exists().isFloat().trim().escape()
+			check('amount').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
 	static updateOrderValidator() {
 		return [
 			check('order_id').not().isEmpty().exists().isInt().trim().escape(),
 			check('email').not().isEmpty().exists().isEmail().escape(),
-			check('price_offered').not().isEmpty().exists().isFloat().trim().escape()
+			check('price').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
 	static signUpValidator() {

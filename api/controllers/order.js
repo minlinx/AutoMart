@@ -3,7 +3,7 @@ import pool from '../../dbConifg';
 
 class Orders {
 	static createOrder(request, response) {
-		const { email } = response.locals;
+		const { id } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { token, car_id, amount } = request.body;
@@ -35,8 +35,8 @@ class Orders {
 				})
 				.then(() => {
 					const createdOn = new Date();
-					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ((SELECT id FROM users WHERE email=$2), (SELECT id FROM cars  WHERE id=$1), (SELECT price FROM cars  WHERE id=$1), $3, $4) RETURNING *';
-					const params = [parsedId, email, 'pending', createdOn];
+					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ((SELECT id FROM users WHERE id=$2), (SELECT id FROM cars  WHERE id=$1), (SELECT price FROM cars  WHERE id=$1), $3, $4) RETURNING *';
+					const params = [parsedId, id, 'pending', createdOn];
 					return pool.query(sql, params);
 				})
 				.catch(error => {
@@ -56,7 +56,7 @@ class Orders {
 					}
 					else {
 						const { id, car_id, created_on, status, amount } = result.rows[0];
-						const data = { id, car_id, created_on, status, price: amount, price_Offered: parsedPrice };
+						const data = { id, car_id, created_on, status, price: amount, price_Offered: parsedPrice, token };
 						return response.status(201).json({
 							status: 201,
 							data
@@ -68,11 +68,11 @@ class Orders {
 	static updateOrder(request, response) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { price_offered, token } = request.body;
+		const { price, token } = request.body;
 		const { email } = response.locals;
 		// const confirmedUser = userEmail === email;
 		const { order_id } = request.params;
-		const parsedPrice = parseFloat(price_offered);
+		const parsedPrice = parseFloat(price);
 		const parsedOrderId = parseInt(order_id);
 		let amount;
 		if (!errors.isEmpty()) {

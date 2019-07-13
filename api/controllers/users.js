@@ -135,15 +135,16 @@ class Users {
 						});
 					}
 					else if (bcryptHash.correctPassword(password, result.rows[0].password)) {
+						const { id, email } = result.rows[0];
 						const token = jwt.sign(
 							{
-								email, first_name
+								id, email
 							},
 							privateKey, {
 								expiresIn: '24h'
 							}
 						);
-						const { email, first_name, last_name, address, id} = { ...result.rows[0] };
+						const { first_name, last_name, address } = { ...result.rows[0] };
 						const data = { token, id, first_name, last_name, email, address };
 						response.status(200).json({
 							status: 200,

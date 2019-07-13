@@ -15,7 +15,7 @@ class Cars {
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (token) {
+		if (queryLength === 0) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -45,7 +45,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows];
+						const data = [...result.rows, token];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -375,7 +375,7 @@ class Cars {
 		}
 	}
 	static specificCar(request, response) {
-		const { token } = request.body;
+		// const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -392,7 +392,7 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		else if (errors.isEmpty() && token) {
+		else if (errors.isEmpty()) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -423,7 +423,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows, token];
+						const data = [...result.rows];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -433,7 +433,8 @@ class Cars {
 		}
 	}
 	static postCarAd(request, response) {
-		const { email } = response.locals;
+		const { email, id } = response.locals;
+		console.log([email, id]);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
 			token,
@@ -480,9 +481,10 @@ class Cars {
 				})
 				.then(() => {
 					const createdOn = new Date();
-					const url = (request.file.secure_url);
-					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, car_image) VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-					const params = [email, createdOn, state, status, price, manufacturer, model, body_type, url];
+					// const url = (request.file.secure_url);
+					const url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car4.jpg.jpg';
+					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, car_image) VALUES ((SELECT id FROM users WHERE id=$1), $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+					const params = [id, createdOn, state, status, price, manufacturer, model, body_type, url];
 					return pool.query(sql, params);
 				})
 				.catch(error => {
@@ -512,8 +514,8 @@ class Cars {
 		}
 	}
 	static deleteCarAd(request, response) {
-		// const { adminToken } = response.locals;
-		const { token } = request.body;
+		const { token } = response.locals;
+		// const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -652,7 +654,7 @@ class Cars {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { token } = request.body;
-		const { email } = response.locals;
+		const { id } = response.locals;
 		// const confirmedUser = userEmail === email;
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);
@@ -681,8 +683,8 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE email=$3) RETURNING *';
-					const param = [status, parsedCarId, email];
+					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE id=$3) RETURNING *';
+					const param = ['sold', parsedCarId, id];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
