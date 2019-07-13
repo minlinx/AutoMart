@@ -21,10 +21,10 @@ const {
 const router = express.Router();
 router.get(
 	'/',
-	// checkAuthentication,
+	checkAuthentication,
 	getCarOrCars
 );
-router.get('/:car_id', checkCarId(), specificCar);
+router.get('/:car_id', checkAuthentication, checkCarId(), specificCar);
 router.post(
 	'/',
 	checkAuthentication,
