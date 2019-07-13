@@ -55,7 +55,7 @@ class Users {
 					}
 					else {
 						const hashedPassword = bcryptHash.hashPassword(password);
-						const sql = 'INSERT INTO users (email, password, first_name, last_name, address, is_admin)  VALUES($1, $2, $3, $4, $5, $6) RETURNING email, first_name, last_name, address';
+						const sql = 'INSERT INTO users (email, password, first_name, last_name, address, is_admin)  VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
 						const params = [email, hashedPassword, first_name, last_name, address, isAdmin];
 						return pool.query(sql, params);
 					}
@@ -144,8 +144,8 @@ class Users {
 								expiresIn: '24h'
 							}
 						);
-						const { first_name, last_name, address } = { ...result.rows[0] };
-						const data = { token, id, first_name, last_name, email, address };
+						const { first_name, last_name, address, is_admin } = { ...result.rows[0] };
+						const data = { is_admin, token, id, first_name, last_name, email, address };
 						response.status(200).json({
 							status: 200,
 							data
