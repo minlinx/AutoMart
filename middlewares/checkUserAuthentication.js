@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-const privateKey = process.env.JWT_PRIVATE_KEY;
+const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 function checkUserAuthentication(request, response, next) {
 	// const bearerToken = request.headers.authorization;
 	const { token } = request.body;
