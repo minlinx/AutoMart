@@ -22,9 +22,6 @@ const getConnectionString = () => {
 	else if (process.env.NODE_ENV === 'production') {
 		return productionConfig;
 	}
-	else {
-		console.log(process.env.NODE_ENV);
-	}
 };
 const pool = new Pool(getConnectionString());
 export default pool;

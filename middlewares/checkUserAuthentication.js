@@ -6,7 +6,6 @@ function checkUserAuthentication(request, response, next) {
 	if (token) {
 		// const token = bearerToken.split(' ')[1];
 		const decodedToken = jwt.verify(token, privateKey);
-		console.log('FRom here', decodedToken);
 		const { email, id } = decodedToken;
 		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
 		const isAdmin = regex.test(email);
