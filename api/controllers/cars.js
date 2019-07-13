@@ -514,7 +514,7 @@ class Cars {
 		}
 	}
 	static deleteCarAd(request, response) {
-		const { token } = response.locals;
+		const { adminToken } = response.locals;
 		// const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
@@ -533,7 +533,7 @@ class Cars {
 			});
 		}
 		else if (
-			errors.isEmpty() && token
+			errors.isEmpty() && adminToken
 		) {
 			pool.connect()
 				.catch(error => {
