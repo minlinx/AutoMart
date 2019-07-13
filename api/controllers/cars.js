@@ -14,7 +14,7 @@ class Cars {
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (adminToken) {
+		if (queryLength === 0) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
