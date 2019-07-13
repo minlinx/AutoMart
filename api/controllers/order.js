@@ -105,7 +105,6 @@ class Orders {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log('from here', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -114,7 +113,6 @@ class Orders {
 					}
 				})
 				.then(result => {
-					console.log(result);
 					if (!result.rowCount > 0) {
 						response.status(401).json({
 							status: 401,
@@ -128,7 +126,6 @@ class Orders {
 						return pool.query(sql, params);
 					}
 				}).catch((error) => {
-					console.log(error);
 					if (error) {
 						response.status(500).json({
 							status: 500,

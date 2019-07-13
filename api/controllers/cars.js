@@ -434,7 +434,6 @@ class Cars {
 	}
 	static postCarAd(request, response) {
 		const { email, id } = response.locals;
-		console.log([email, id]);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
 			token,
@@ -488,7 +487,6 @@ class Cars {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
-					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,

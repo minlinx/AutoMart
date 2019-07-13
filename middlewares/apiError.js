@@ -12,7 +12,6 @@ class apiEror {
 			});
 		}
 		else {
-			console.log(error);
 			response.status(500).json({
 				status: 500,
 				error: 'Oops!!! Server is down, Try again later'
