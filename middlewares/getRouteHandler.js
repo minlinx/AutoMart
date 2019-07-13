@@ -7,7 +7,6 @@ class GetRouteValidator {
 	}
 	static postCarAdValidator() {
 		return [
-			check('email').not().isEmpty().exists().isEmail().escape(),
 			check('price').not().isEmpty().exists().isFloat().trim().escape(),
 			check('state').not().isEmpty().exists().isString().trim().escape().withMessage('state should be new 0r used'),
 			check('manufacturer').not().isEmpty().exists().isString().trim().escape(),
@@ -18,20 +17,16 @@ class GetRouteValidator {
 	static checkCarADStatus() {
 		return [
 			check('car_id').not().isEmpty().exists().isInt().trim().escape(),
-			check('email').not().isEmpty().exists().isEmail().escape(),
-			check('status').not().isEmpty().exists().isString().trim().escape()
 		];
 	}
 	static checkCarADPrice() {
 		return [
 			check('car_id').not().isEmpty().exists().isInt().trim().escape(),
-			check('email').not().isEmpty().exists().isEmail().escape(),
 			check('price').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
 	static createOrderValidator() {
 		return [
-			check('email').not().isEmpty().exists().isEmail().escape(),
 			check('car_id').not().isEmpty().exists().isInt().trim().escape(),
 			check('amount').not().isEmpty().exists().isFloat().trim().escape()
 		];
@@ -39,7 +34,6 @@ class GetRouteValidator {
 	static updateOrderValidator() {
 		return [
 			check('order_id').not().isEmpty().exists().isInt().trim().escape(),
-			check('email').not().isEmpty().exists().isEmail().escape(),
 			check('price').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
