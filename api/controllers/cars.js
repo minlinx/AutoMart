@@ -3,19 +3,18 @@ import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static getCarOrCars(request, response) {
-		// const { adminToken } = response.locals;
+		const { adminToken } = response.locals;
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
 		const { status, state, min_price, max_price, body_type, manufacturer } = queryParams;
-		const { token } = request.body;
 		const stateIsDefined = arrayOfQueryParams.includes('state');
 		const statusIsDefined = arrayOfQueryParams.includes('status');
 		const manufacturerIsDefined = arrayOfQueryParams.includes('manufacturer', 'status');
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (queryLength === 0) {
+		if (adminToken) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -45,7 +44,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows, token];
+						const data = [...result.rows, adminToken];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -375,7 +374,8 @@ class Cars {
 		}
 	}
 	static specificCar(request, response) {
-		// const { token } = request.body;
+		const { token, adminToken } = response.locals;
+		const userToken = token || adminToken;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -392,7 +392,7 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		else if (errors.isEmpty()) {
+		else if (errors.isEmpty() && userToken) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
