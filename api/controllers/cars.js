@@ -3,8 +3,8 @@ import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		const { adminToken, token } = response.locals;
-		const userToken = adminToken || token;
+		// const { adminToken, token } = response.locals;
+		// const userToken = adminToken || token;
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
@@ -15,7 +15,7 @@ class Cars {
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (userToken) {
+		if (queryLength === 0) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -45,7 +45,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows, adminToken];
+						const data = [...result.rows];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -511,7 +511,7 @@ class Cars {
 		}
 	}
 	static async deleteCarAd(request, response, next) {
-		const { adminToken } = response.locals;
+		// const { adminToken } = response.locals;
 		const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
@@ -530,7 +530,7 @@ class Cars {
 			});
 		}
 		if (
-			adminToken
+			token
 		) {
 			pool.connect()
 				.catch(error => {
