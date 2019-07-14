@@ -12,7 +12,7 @@ function checkUserAuthentication(request, response, next) {
 		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
 		const isAdmin = regex.test(email);
 		if (isAdmin) {
-			response.locals.adminToken = token;
+			response.locals.token = token;
 			response.locals.adminEmail = email;
 			response.locals.adminId = id;
 			next();
@@ -31,7 +31,7 @@ function checkUserAuthentication(request, response, next) {
 		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
 		const isAdmin = regex.test(email);
 		if (isAdmin) {
-			response.locals.adminToken = token;
+			response.locals.token = token;
 			response.locals.adminEmail = email;
 			response.locals.adminId = id;
 			next();

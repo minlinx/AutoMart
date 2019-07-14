@@ -3,7 +3,7 @@ import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		// const { adminToken, token } = response.locals;
+		const { token } = response.locals;
 		// const userToken = adminToken || token;
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
@@ -45,7 +45,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows];
+						const data = [...result.rows, token];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -375,8 +375,7 @@ class Cars {
 		}
 	}
 	static async specificCar(request, response, next) {
-		const { token, adminToken } = response.locals;
-		const userToken = token || adminToken;
+		const { token } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -393,7 +392,7 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		if (userToken) {
+		else if (token) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -424,7 +423,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows];
+						const data = [...result.rows, token];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -542,7 +541,7 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'DELETE FROM cars WHERE id=$1';
+					const sql = 'DELETE FROM cars WHERE id=$1 RETURNING *';
 					const param = [parsedCarId];
 					return pool.query(sql, param);
 				})
@@ -562,10 +561,10 @@ class Cars {
 						});
 					}
 					else {
+						const data = { ...result.rows[0], token };
 						return response.status(301).json({
 							status: 301,
-							message: `Car AD ${car_id} successfully deleted`,
-							token
+							data
 						});
 					}
 				});
