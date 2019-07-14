@@ -7,7 +7,7 @@ class GetRouteValidator {
 	}
 	static postCarAdValidator() {
 		return [
-			check('price').not().isEmpty().exists().isInt().trim().escape(),
+			check('price').not().isEmpty().exists().isFloat().trim().escape(),
 			check('state').not().isEmpty().exists().isString().trim().escape(),
 			check('status').not().isEmpty().exists().isString().trim().escape(),
 			check('manufacturer').not().isEmpty().exists().isString().trim().escape(),
@@ -22,7 +22,8 @@ class GetRouteValidator {
 	}
 	static checkCarADPrice() {
 		return [
-			check('price').not().isEmpty().exists().isInt().trim().escape()
+			check('price').not().isEmpty().exists().isFloat().trim().escape(),
+			check('car_id').not().isEmpty().exists().isInt().trim().escape()
 		];
 	}
 	static createOrderValidator() {
@@ -33,7 +34,7 @@ class GetRouteValidator {
 	}
 	static updateOrderValidator() {
 		return [
-			check('price').not().isEmpty().exists().isInt().trim().escape()
+			check('price').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
 	static signUpValidator() {
