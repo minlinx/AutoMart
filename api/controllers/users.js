@@ -62,9 +62,9 @@ class Users {
 				})
 				.catch(error => {
 					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: 'server is down'
+						return response.status(400).json({
+							status: 400,
+							error: 'check your inputs'
 						});
 					}
 				})
@@ -152,8 +152,8 @@ class Users {
 						});
 					}
 					else {
-						response.status(403).json({
-							status: 403,
+						response.status(400).json({
+							status: 400,
 							error: 'Forbidden'
 						});
 					}
