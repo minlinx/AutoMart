@@ -1,28 +1,28 @@
 import jwt from 'jsonwebtoken';
 import pool from '../../dbConifg';
-// import { validationResult } from 'express-validator/check';
+import { validationResult } from 'express-validator/check';
 import bcryptHash from '../../middlewares/bcryptHash';
 const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 class Users {
 	static async signUpFunction(request, response, next) {
-		// const queryParams = request.query;
-		// const queryLength = Object.keys(queryParams).length;
+		const queryParams = request.query;
+		const queryLength = Object.keys(queryParams).length;
 		const { email, password, first_name, last_name, address } = request.body;
 		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
 		const isAdmin = regex.test(email);
-		// const errors = validationResult(request);
-		// if (queryLength > 0) {
-		// 	response.status(400).json({
-		// 		status: 400,
-		// 		error: 'No Query Params'
-		// 	});
-		// }
-		// else if (!errors.isEmpty()) {
-		// 	response.status(422).json({
-		// 		status: 422,
-		// 		error: errors.array()
-		// 	});
-		// }
+		const errors = validationResult(request);
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		else if (!errors.isEmpty()) {
+			response.status(405).json({
+				status: 405,
+				error: errors.array()
+			});
+		}
 		if (email) {
 			pool.connect()
 				.catch(error => {
@@ -88,22 +88,22 @@ class Users {
 		}
 	}
 	static async signInFunction(request, response, next) {
-		// const queryParams = request.query;
-		// const queryLength = Object.keys(queryParams).length;
+		const queryParams = request.query;
+		const queryLength = Object.keys(queryParams).length;
 		const { email, password } = request.body;
-		// const errors = validationResult(request);
-		// if (queryLength > 0) {
-		// 	response.status(400).json({
-		// 		status: 400,
-		// 		error: 'No Query Params'
-		// 	});
-		// }
-		// if (!errors.isEmpty()) {
-		// 	response.status(422).json({
-		// 		status: 422,
-		// 		error: errors.array()
-		// 	});
-		// }
+		const errors = validationResult(request);
+		if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
+		if (!errors.isEmpty()) {
+			response.status(405).json({
+				status: 405,
+				error: errors.array()
+			});
+		}
 		if (email) {
 			pool.connect()
 				.catch(error => {
