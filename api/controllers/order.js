@@ -10,13 +10,13 @@ class Orders {
 		const parsedId = parseInt(car_id);
 		const parsedPrice = parseFloat(amount);
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
 		}
 		else if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
@@ -75,13 +75,13 @@ class Orders {
 		const parsedOrderId = parseInt(order_id);
 		let amount;
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
 		}
 		else if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
@@ -113,7 +113,7 @@ class Orders {
 				})
 				.then(result => {
 					if (!result.rowCount > 0) {
-						response.status(401).json({
+						return response.status(401).json({
 							status: 401,
 							error: 'Unauthorized'
 						});
@@ -126,7 +126,7 @@ class Orders {
 					}
 				}).catch((error) => {
 					if (error) {
-						response.status(500).json({
+						return response.status(500).json({
 							status: 500,
 							error: 'Server is Down'
 						});
@@ -149,7 +149,7 @@ class Orders {
 				});
 		}
 		else {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: '*Check Your Inputs*'
 			});
