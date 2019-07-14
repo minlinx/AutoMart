@@ -61,8 +61,8 @@ class Cars {
 			check('max_price').not().isEmpty().exists().isFloat().trim().escape();
 			const errors = validationResult(request);
 			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
+				response.status(405).json({
+					status: 405,
 					error: errors.array()
 				});
 			}
@@ -112,8 +112,8 @@ class Cars {
 				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
 			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
+				response.status(405).json({
+					status: 405,
 					error: errors.array()
 				});
 			}
@@ -163,8 +163,8 @@ class Cars {
 				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
 			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
+				response.status(405).json({
+					status: 405,
 					error: errors.array()
 				});
 			}
@@ -217,8 +217,8 @@ class Cars {
 				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
 			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
+				response.status(405).json({
+					status: 405,
 					error: errors.array()
 				});
 			}
@@ -271,8 +271,8 @@ class Cars {
 				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
 			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
+				response.status(405).json({
+					status: 405,
 					error: errors.array()
 				});
 			}
@@ -322,8 +322,8 @@ class Cars {
 				.trim().not().isEmpty().isString();
 			const errors = validationResult(request);
 			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
+				response.status(405).json({
+					status: 405,
 					error: errors.array()
 				});
 			}
@@ -377,22 +377,22 @@ class Cars {
 	static async specificCar(request, response, next) {
 		const { token, adminToken } = response.locals;
 		const userToken = token || adminToken;
-		// const queryLength = parseInt(Object.keys(request.query).length);
+		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
-		// const errors = validationResult(request);
-		// if (!errors.isEmpty()) {
-		// 	response.status(422).json({
-		// 		status: 422,
-		// 		error: errors.array()
-		// 	});
-		// }
-		// else if (queryLength > 0) {
-		// 	response.status(400).json({
-		// 		status: 400,
-		// 		error: 'No Query Params'
-		// 	});
-		// }
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(405).json({
+				status: 405,
+				error: errors.array()
+			});
+		}
+		else if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
 		if (userToken) {
 			pool.connect()
 				.catch(error => {
@@ -435,11 +435,10 @@ class Cars {
 	}
 	static async postCarAd(request, response, next) {
 		const { id } = response.locals;
-		// const queryLength = parseInt(Object.keys(request.query).length);
+		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
 			token,
 			status,
-			// email,
 			manufacturer,
 			model,
 			body_type,
@@ -447,18 +446,18 @@ class Cars {
 			state
 		} = request.body;
 		const errors = validationResult(request);
-		// if (!errors.isEmpty()) {
-		// 	response.status(422).json({
-		// 		status: 422,
-		// 		error: errors.array()
-		// 	});
-		// }
-		// else if (queryLength > 0) {
-		// 	response.status(400).json({
-		// 		status: 400,
-		// 		error: 'No Query Params'
-		// 	});
-		// }
+		if (!errors.isEmpty()) {
+			response.status(405).json({
+				status: 405,
+				error: errors.array()
+			});
+		}
+		else if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
 		if (
 			manufacturer &&
 			model &&
@@ -513,23 +512,23 @@ class Cars {
 	}
 	static async deleteCarAd(request, response, next) {
 		const { adminToken } = response.locals;
-		// const { token } = request.body;
-		// const queryLength = parseInt(Object.keys(request.query).length);
+		const { token } = request.body;
+		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
-		// const errors = validationResult(request);
-		// if (!errors.isEmpty()) {
-		// 	response.status(422).json({
-		// 		status: 422,
-		// 		error: errors.array()
-		// 	});
-		// }
-		// else if (queryLength > 0) {
-		// 	response.status(400).json({
-		// 		status: 400,
-		// 		error: 'No Query Params'
-		// 	});
-		// }
+		const errors = validationResult(request);
+		if (!errors.isEmpty()) {
+			response.status(405).json({
+				status: 405,
+				error: errors.array()
+			});
+		}
+		else if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
 		if (
 			adminToken
 		) {
@@ -579,26 +578,25 @@ class Cars {
 		}
 	}
 	static async changeCarAdPrice(request, response, next) {
-		// const queryLength = parseInt(Object.keys(request.query).length);
-		// const errors = validationResult(request);
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const errors = validationResult(request);
 		const { price, token } = request.body;
 		const { id } = response.locals;
-		// const confirmedUser = userEmail === email;
 		const { car_id } = request.params;
 		const parsedPrice = parseFloat(price);
 		const parsedCarId = parseInt(car_id);
-		// if (!errors.isEmpty()) {
-		// 	response.status(422).json({
-		// 		status: 422,
-		// 		error: errors.array()
-		// 	});
-		// }
-		// else if (queryLength > 0) {
-		// 	response.status(400).json({
-		// 		status: 400,
-		// 		error: 'No Query Params'
-		// 	});
-		// }
+		if (!errors.isEmpty()) {
+			response.status(405).json({
+				status: 405,
+				error: errors.array()
+			});
+		}
+		else if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
 		if (
 			token
 		) {
@@ -648,25 +646,24 @@ class Cars {
 		}
 	}
 	static async changeCarAdStatus(request, response, next) {
-		// const queryLength = parseInt(Object.keys(request.query).length);
-		// const errors = validationResult(request);
+		const queryLength = parseInt(Object.keys(request.query).length);
+		const errors = validationResult(request);
 		const { token } = request.body;
 		const { id } = response.locals;
-		// const confirmedUser = userEmail === email;
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);
-		// if (!errors.isEmpty()) {
-		// 	response.status(422).json({
-		// 		status: 422,
-		// 		error: errors.array()
-		// 	});
-		// }
-		// else if (queryLength > 0) {
-		// 	response.status(400).json({
-		// 		status: 400,
-		// 		error: 'No Query Params'
-		// 	});
-		// }
+		if (!errors.isEmpty()) {
+			response.status(405).json({
+				status: 405,
+				error: errors.array()
+			});
+		}
+		else if (queryLength > 0) {
+			response.status(400).json({
+				status: 400,
+				error: 'No Query Params'
+			});
+		}
 		if (
 			token
 		) {
