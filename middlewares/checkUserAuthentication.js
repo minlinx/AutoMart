@@ -3,7 +3,7 @@ const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 function checkUserAuthentication(request, response, next) {
 	// console.log(request.headers);
 	const bearerToken = request.headers.authorization;
-	const { token } = request.headers;
+	const { token } = request.body;
 	// const bodyToken = request.body;
 	if (token) {
 		// const token = bearerToken.split(' ')[1];
