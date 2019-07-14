@@ -2,7 +2,7 @@ import { validationResult } from 'express-validator/check';
 import pool from '../../dbConifg';
 
 class Orders {
-	static createOrder(request, response) {
+	static async createOrder(request, response, next) {
 		const { id } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
@@ -65,7 +65,7 @@ class Orders {
 				});
 		}
 	}
-	static updateOrder(request, response) {
+	static async updateOrder(request, response, next) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { price, token } = request.body;
