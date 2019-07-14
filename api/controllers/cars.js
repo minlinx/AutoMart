@@ -600,7 +600,7 @@ class Cars {
 		// 	});
 		// }
 		if (
-			errors.isEmpty() && token
+			token
 		) {
 			pool.connect()
 				.catch(error => {
