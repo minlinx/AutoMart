@@ -382,13 +382,13 @@ class Cars {
 		const parsedCarId = parseInt(car_id, 10);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
 		}
 		else if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
@@ -447,13 +447,13 @@ class Cars {
 		} = request.body;
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
 		}
 		else if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
@@ -518,13 +518,13 @@ class Cars {
 		const parsedCarId = parseInt(car_id, 10);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
 		}
 		else if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
@@ -571,7 +571,7 @@ class Cars {
 				});
 		}
 		else {
-			response.status(401).json({
+			return response.status(401).json({
 				status: 401,
 				error: 'Unauthorized'
 			});
@@ -586,13 +586,13 @@ class Cars {
 		const parsedPrice = parseFloat(price);
 		const parsedCarId = parseInt(car_id);
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
 		}
 		else if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
@@ -653,13 +653,13 @@ class Cars {
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
 		}
 		else if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
@@ -706,7 +706,7 @@ class Cars {
 				});
 		}
 		else {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'Bad Request'
 			});
