@@ -6,25 +6,25 @@ import Cars from '../controllers/cars';
 
 const {
 	postCarAdValidator,
-	// checkCarId,
+	checkCarId,
 	checkCarADStatus,
 	checkCarADPrice
 } = validator;
 const {
-	// getCarOrCars,
-	// specificCar,
+	getCarOrCars,
+	specificCar,
 	postCarAd,
-	// deleteCarAd,
+	deleteCarAd,
 	changeCarAdPrice,
 	changeCarAdStatus
 } = Cars;
 const router = express.Router();
-// router.get(
-// 	'/',
-// 	checkAuthentication,
-// 	getCarOrCars
-// );
-// router.get('/:car_id', checkAuthentication, specificCar);
+router.get(
+	'/',
+	checkAuthentication,
+	getCarOrCars
+);
+router.get('/:car_id', checkAuthentication, specificCar);
 router.post(
 	'/',
 	checkAuthentication,
@@ -32,7 +32,7 @@ router.post(
 	postCarAdValidator(),
 	postCarAd
 );
-// router.delete('/:car_id', checkCarId(), checkAuthentication, deleteCarAd);
+router.delete('/:car_id', checkCarId(), checkAuthentication, deleteCarAd);
 router.patch('/:car_id/price', checkCarADPrice(), checkAuthentication, changeCarAdPrice);
 router.patch('/:car_id/status', checkCarADStatus(), checkAuthentication, changeCarAdStatus);
 export default router;
