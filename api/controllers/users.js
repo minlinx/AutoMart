@@ -50,7 +50,7 @@ class Users {
 					if (result.rowCount > 0) {
 						return response.status(400).json({
 							status: 400,
-							message: 'Sign in instead',
+							error: 'Sign in instead',
 						});
 					}
 					else {
