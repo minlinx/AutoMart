@@ -4,7 +4,7 @@ import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
 		const { token } = response.locals;
-		// const userToken = adminToken || token;
+		console.log(request);
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
@@ -375,6 +375,7 @@ class Cars {
 		}
 	}
 	static async specificCar(request, response, next) {
+		console.log(request);
 		const { token } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
@@ -512,6 +513,7 @@ class Cars {
 	}
 	static async deleteCarAd(request, response, next) {
 		// const { adminToken } = response.locals;
+		console.log(request.body);
 		const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
