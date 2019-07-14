@@ -15,7 +15,7 @@ class Cars {
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (queryLength === 0) {
+		if (token) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -45,7 +45,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows, token];
+						const data = [...result.rows];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -93,7 +93,7 @@ class Cars {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
-								message: 'Not Found',
+								error: 'Not Found',
 							});
 						}
 						else {
@@ -144,7 +144,7 @@ class Cars {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
-								message: 'Not Found',
+								error: 'Not Found',
 							});
 						}
 						else {
@@ -195,7 +195,7 @@ class Cars {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
-								message: 'Not Found',
+								error: 'Not Found',
 							});
 						}
 						else {
@@ -249,7 +249,7 @@ class Cars {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
-								message: 'Not Found',
+								error: 'Not Found',
 							});
 						}
 						else {
@@ -303,7 +303,7 @@ class Cars {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
-								message: 'Not Found',
+								error: 'Not Found',
 							});
 						}
 						else {
@@ -354,7 +354,7 @@ class Cars {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
-								message: 'Not Found',
+								error: 'Not Found',
 							});
 						}
 						else {
@@ -419,11 +419,11 @@ class Cars {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
 							status: 404,
-							message: 'Not Found',
+							error: 'Not Found',
 						});
 					}
 					else {
-						const data = [...result.rows, token];
+						const data = { ...result.rows[0] };
 						return response.status(200).json({
 							status: 200,
 							data
@@ -541,7 +541,7 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'DELETE FROM cars WHERE id=$1 RETURNING *';
+					const sql = 'DELETE FROM cars WHERE id=$1';
 					const param = [parsedCarId];
 					return pool.query(sql, param);
 				})
@@ -557,14 +557,13 @@ class Cars {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
 							status: 404,
-							message: 'Not Found',
+							error: 'Not Found',
 						});
 					}
 					else {
-						const data = { ...result.rows[0], token };
 						return response.status(301).json({
 							status: 301,
-							data
+							data: 'Car Ad successfully deleted'
 						});
 					}
 				});
@@ -625,7 +624,7 @@ class Cars {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
 							status: 404,
-							message: 'Not Found',
+							error: 'Not Found',
 						});
 					}
 					else {
@@ -692,7 +691,7 @@ class Cars {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
 							status: 404,
-							message: 'Not Found',
+							error: 'Not Found',
 						});
 					}
 					else {

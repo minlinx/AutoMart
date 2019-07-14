@@ -51,7 +51,7 @@ class Orders {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
 							status: 404,
-							message: 'Not Found',
+							error: 'Not Found',
 						});
 					}
 					else {
@@ -135,7 +135,7 @@ class Orders {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
 							status: 404,
-							message: 'Not Found',
+							error: 'Not Found',
 						});
 					}
 					else {
