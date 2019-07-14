@@ -63,8 +63,8 @@ function checkUserAuthentication(request, response, next) {
 	// 	}
 	// }
 	else {
-		response.status(422).json({
-			status: 422,
+		response.status(403).json({
+			status: 403,
 			error: 'No Token Provided'
 		});
 	}

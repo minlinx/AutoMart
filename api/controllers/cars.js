@@ -3,7 +3,8 @@ import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		const { adminToken } = response.locals;
+		const { adminToken, token } = response.locals;
+		const userToken = adminToken || token;
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
@@ -14,7 +15,7 @@ class Cars {
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (queryLength === 0 && adminToken) {
+		if (userToken) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -376,23 +377,23 @@ class Cars {
 	static async specificCar(request, response, next) {
 		const { token, adminToken } = response.locals;
 		const userToken = token || adminToken;
-		const queryLength = parseInt(Object.keys(request.query).length);
+		// const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
-		const errors = validationResult(request);
-		if (!errors.isEmpty()) {
-			response.status(422).json({
-				status: 422,
-				error: errors.array()
-			});
-		}
-		else if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (errors.isEmpty() && userToken) {
+		// const errors = validationResult(request);
+		// if (!errors.isEmpty()) {
+		// 	response.status(422).json({
+		// 		status: 422,
+		// 		error: errors.array()
+		// 	});
+		// }
+		// else if (queryLength > 0) {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'No Query Params'
+		// 	});
+		// }
+		if (userToken) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -433,8 +434,8 @@ class Cars {
 		}
 	}
 	static async postCarAd(request, response, next) {
-		const { email, id } = response.locals;
-		const queryLength = parseInt(Object.keys(request.query).length);
+		const { id } = response.locals;
+		// const queryLength = parseInt(Object.keys(request.query).length);
 		const {
 			token,
 			status,
@@ -446,20 +447,19 @@ class Cars {
 			state
 		} = request.body;
 		const errors = validationResult(request);
-		if (!errors.isEmpty()) {
-			response.status(422).json({
-				status: 422,
-				error: errors.array()
-			});
-		}
-		else if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
-			email &&
+		// if (!errors.isEmpty()) {
+		// 	response.status(422).json({
+		// 		status: 422,
+		// 		error: errors.array()
+		// 	});
+		// }
+		// else if (queryLength > 0) {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'No Query Params'
+		// 	});
+		// }
+		if (
 			manufacturer &&
 			model &&
 			body_type &&
@@ -514,24 +514,24 @@ class Cars {
 	static async deleteCarAd(request, response, next) {
 		const { adminToken } = response.locals;
 		// const { token } = request.body;
-		const queryLength = parseInt(Object.keys(request.query).length);
+		// const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
-		const errors = validationResult(request);
-		if (!errors.isEmpty()) {
-			response.status(422).json({
-				status: 422,
-				error: errors.array()
-			});
-		}
-		else if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
-			errors.isEmpty() && adminToken
+		// const errors = validationResult(request);
+		// if (!errors.isEmpty()) {
+		// 	response.status(422).json({
+		// 		status: 422,
+		// 		error: errors.array()
+		// 	});
+		// }
+		// else if (queryLength > 0) {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'No Query Params'
+		// 	});
+		// }
+		if (
+			adminToken
 		) {
 			pool.connect()
 				.catch(error => {
@@ -579,28 +579,27 @@ class Cars {
 		}
 	}
 	static async changeCarAdPrice(request, response, next) {
-		const { email } = response.locals;
-		const queryLength = parseInt(Object.keys(request.query).length);
-		const errors = validationResult(request);
+		// const queryLength = parseInt(Object.keys(request.query).length);
+		// const errors = validationResult(request);
 		const { price, token } = request.body;
-		// const { userEmail } = response.locals;
+		const { id } = response.locals;
 		// const confirmedUser = userEmail === email;
 		const { car_id } = request.params;
 		const parsedPrice = parseFloat(price);
 		const parsedCarId = parseInt(car_id);
-		if (!errors.isEmpty()) {
-			response.status(422).json({
-				status: 422,
-				error: errors.array()
-			});
-		}
-		else if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
+		// if (!errors.isEmpty()) {
+		// 	response.status(422).json({
+		// 		status: 422,
+		// 		error: errors.array()
+		// 	});
+		// }
+		// else if (queryLength > 0) {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'No Query Params'
+		// 	});
+		// }
+		if (
 			errors.isEmpty() && token
 		) {
 			pool.connect()
@@ -613,8 +612,8 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE email=$3) RETURNING *';
-					const param = [parsedPrice, parsedCarId, email];
+					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE id=$3) RETURNING *';
+					const param = [parsedPrice, parsedCarId, id];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
@@ -649,27 +648,27 @@ class Cars {
 		}
 	}
 	static async changeCarAdStatus(request, response, next) {
-		const queryLength = parseInt(Object.keys(request.query).length);
-		const errors = validationResult(request);
+		// const queryLength = parseInt(Object.keys(request.query).length);
+		// const errors = validationResult(request);
 		const { token } = request.body;
 		const { id } = response.locals;
 		// const confirmedUser = userEmail === email;
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);
-		if (!errors.isEmpty()) {
-			response.status(422).json({
-				status: 422,
-				error: errors.array()
-			});
-		}
-		else if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
-			errors.isEmpty() && token
+		// if (!errors.isEmpty()) {
+		// 	response.status(422).json({
+		// 		status: 422,
+		// 		error: errors.array()
+		// 	});
+		// }
+		// else if (queryLength > 0) {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'No Query Params'
+		// 	});
+		// }
+		if (
+			token
 		) {
 			pool.connect()
 				.catch(error => {
