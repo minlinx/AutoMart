@@ -12,13 +12,13 @@ class Users {
 		const isAdmin = regex.test(email);
 		const errors = validationResult(request);
 		if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
 		else if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
@@ -79,7 +79,7 @@ class Users {
 							}
 						);
 						const data = {...result.rows[0], token, email };
-						response.status(201).json({
+						return response.status(201).json({
 							status: 201,
 							data
 						});
@@ -93,13 +93,13 @@ class Users {
 		const { email, password } = request.body;
 		const errors = validationResult(request);
 		if (queryLength > 0) {
-			response.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				error: 'No Query Params'
 			});
 		}
 		if (!errors.isEmpty()) {
-			response.status(405).json({
+			return response.status(405).json({
 				status: 405,
 				error: errors.array()
 			});
@@ -129,7 +129,7 @@ class Users {
 				})
 				.then((result) => {
 					if (!result.rowCount > 0) {
-						response.status(400).json({
+						return response.status(400).json({
 							status: 400,
 							error: 'Sign up Instead'
 						});
@@ -146,13 +146,13 @@ class Users {
 						);
 						const { first_name, last_name, address, is_admin } = { ...result.rows[0] };
 						const data = { is_admin, token, id, first_name, last_name, email, address };
-						response.status(200).json({
+						return response.status(200).json({
 							status: 200,
 							data
 						});
 					}
 					else {
-						response.status(400).json({
+						return response.status(400).json({
 							status: 400,
 							error: 'Forbidden'
 						});
