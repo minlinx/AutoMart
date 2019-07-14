@@ -15,13 +15,13 @@ function checkUserAuthentication(request, response, next) {
 			response.locals.token = token;
 			response.locals.adminEmail = email;
 			response.locals.adminId = id;
-			next();
+			return next();
 		}
 		else {
 			response.locals.token = token;
 			response.locals.email = email;
 			response.locals.id = id;
-			next();
+			return next();
 		}
 	}
 	else if (bearerToken) {
@@ -34,13 +34,13 @@ function checkUserAuthentication(request, response, next) {
 			response.locals.token = token;
 			response.locals.adminEmail = email;
 			response.locals.adminId = id;
-			next();
+			return next();
 		}
 		else {
 			response.locals.token = token;
 			response.locals.email = email;
 			response.locals.id = id;
-			next();
+			return next();
 		}
 	}
 	// else if (bearerToken) {
