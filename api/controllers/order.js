@@ -1,28 +1,28 @@
-import { validationResult } from 'express-validator/check';
+// import { validationResult } from 'express-validator/check';
 import pool from '../../dbConifg';
 
 class Orders {
 	static async createOrder(request, response, next) {
 		const { id } = response.locals;
-		const queryLength = parseInt(Object.keys(request.query).length);
-		const errors = validationResult(request);
+		// const queryLength = parseInt(Object.keys(request.query).length);
+		// const errors = validationResult(request);
 		const { token, car_id, amount } = request.body;
 		const parsedId = parseInt(car_id);
 		const parsedPrice = parseFloat(amount);
-		if (!errors.isEmpty()) {
-			response.status(422).json({
-				status: 422,
-				error: errors.array()
-			});
-		}
-		else if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
-			errors.isEmpty() && token
+		// if (!errors.isEmpty()) {
+		// 	response.status(422).json({
+		// 		status: 422,
+		// 		error: errors.array()
+		// 	});
+		// }
+		// else if (queryLength > 0) {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'No Query Params'
+		// 	});
+		// }
+		if (
+			token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -66,29 +66,29 @@ class Orders {
 		}
 	}
 	static async updateOrder(request, response, next) {
-		const queryLength = parseInt(Object.keys(request.query).length);
-		const errors = validationResult(request);
+		// const queryLength = parseInt(Object.keys(request.query).length);
+		// const errors = validationResult(request);
 		const { price, token } = request.body;
-		const { email } = response.locals;
+		const { id } = response.locals;
 		// const confirmedUser = userEmail === email;
 		const { order_id } = request.params;
 		const parsedPrice = parseFloat(price);
 		const parsedOrderId = parseInt(order_id);
 		let amount;
-		if (!errors.isEmpty()) {
-			response.status(422).json({
-				status: 422,
-				error: errors.array()
-			});
-		}
-		else if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
-			errors.isEmpty() && token
+		// if (!errors.isEmpty()) {
+		// 	response.status(422).json({
+		// 		status: 422,
+		// 		error: errors.array()
+		// 	});
+		// }
+		// else if (queryLength > 0) {
+		// 	response.status(400).json({
+		// 		status: 400,
+		// 		error: 'No Query Params'
+		// 	});
+		// }
+		if (
+			token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -100,8 +100,8 @@ class Orders {
 					}
 				})
 				.then(() => {
-					const sql = 'SELECT amount FROM orders WHERE id=$1 AND buyer=(SELECT id FROM users WHERE email=$2)';
-					const param = [parsedOrderId, email];
+					const sql = 'SELECT amount FROM orders WHERE id=$1 AND buyer=(SELECT id FROM users WHERE id=$2)';
+					const param = [parsedOrderId, id];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
