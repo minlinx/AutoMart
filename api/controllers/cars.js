@@ -14,7 +14,7 @@ class Cars {
 		const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (queryLength === 0) {
+		if (queryLength === 0 && adminToken) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -367,9 +367,9 @@ class Cars {
 			}
 		}
 		else {
-			response.status(400).json({
-				status: 400,
-				error: 'Check your params'
+			response.status(401).json({
+				status: 401,
+				error: 'Unauthorised'
 			});
 		}
 	}
