@@ -2,7 +2,7 @@ import { validationResult } from 'express-validator/check';
 import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
-	static getCarOrCars(request, response) {
+	static async getCarOrCars(request, response, next) {
 		const { adminToken } = response.locals;
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
@@ -373,7 +373,7 @@ class Cars {
 			});
 		}
 	}
-	static specificCar(request, response) {
+	static async specificCar(request, response, next) {
 		const { token, adminToken } = response.locals;
 		const userToken = token || adminToken;
 		const queryLength = parseInt(Object.keys(request.query).length);
@@ -432,7 +432,7 @@ class Cars {
 				});
 		}
 	}
-	static postCarAd(request, response) {
+	static async postCarAd(request, response, next) {
 		const { email, id } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
@@ -511,7 +511,7 @@ class Cars {
 				});
 		}
 	}
-	static deleteCarAd(request, response) {
+	static async deleteCarAd(request, response, next) {
 		const { adminToken } = response.locals;
 		// const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
@@ -578,7 +578,7 @@ class Cars {
 			});
 		}
 	}
-	static changeCarAdPrice(request, response) {
+	static async changeCarAdPrice(request, response, next) {
 		const { email } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
@@ -648,7 +648,7 @@ class Cars {
 			});
 		}
 	}
-	static changeCarAdStatus(request, response) {
+	static async changeCarAdStatus(request, response, next) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { token } = request.body;

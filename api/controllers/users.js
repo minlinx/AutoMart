@@ -4,7 +4,7 @@ import { validationResult } from 'express-validator/check';
 import bcryptHash from '../../middlewares/bcryptHash';
 const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 class Users {
-	static signUpFunction(request, response) {
+	static async signUpFunction(request, response, next) {
 		const queryParams = request.query;
 		const queryLength = Object.keys(queryParams).length;
 		const { email, password, first_name, last_name, address } = request.body;
@@ -87,7 +87,7 @@ class Users {
 				});
 		}
 	}
-	static signInFunction(request, response) {
+	static async signInFunction(request, response, next) {
 		const queryParams = request.query;
 		const queryLength = Object.keys(queryParams).length;
 		const { email, password } = request.body;
