@@ -433,6 +433,7 @@ class Cars {
 		}
 	}
 	static async postCarAd(request, response, next) {
+		console.log(request.body);
 		const { id } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
