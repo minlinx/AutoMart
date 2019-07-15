@@ -4,10 +4,10 @@ import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
 		console.log(request);
-		const { token } = response.locals;
-		// const queryParams = request.query;
+		// const { token } = response.locals;
+		const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
-		// const queryLength = Object.keys(queryParams).length;
+		const queryLength = Object.keys(queryParams).length;
 		// const { status, state, min_price, max_price, body_type, manufacturer } = queryParams;
 		// const stateIsDefined = arrayOfQueryParams.includes('state');
 		// const statusIsDefined = arrayOfQueryParams.includes('status');
@@ -15,7 +15,7 @@ class Cars {
 		// const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		// const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		// const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (token) {
+		if (queryLength === 0) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
