@@ -485,8 +485,8 @@ class Cars {
 				.then(() => {
 					const createdOn = new Date();
 					// const url = (request.file.secure_url);
-					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car4.jpg.jpg';
-					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, car_image) VALUES ((SELECT id FROM users WHERE id=$1), $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car5.jpg.jpg';
+					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, img_url) VALUES ((SELECT id FROM users WHERE id=$1), $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
 					const params = [id, createdOn, state, status, price, manufacturer, model, body_type, img_url];
 					return pool.query(sql, params);
 				})
