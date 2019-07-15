@@ -3,6 +3,7 @@ import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
+		console.log(request);
 		const { token } = response.locals;
 		// const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
