@@ -17,7 +17,8 @@ class GetRouteValidator {
 	}
 	static checkCarADStatus() {
 		return [
-			check('car_id').not().isEmpty().exists().isInt().trim().escape(),
+			check('status').not().isEmpty().exists().isString().trim().escape(),
+			check('car_id').not().isEmpty().exists().isInt().trim().escape()
 		];
 	}
 	static checkCarADPrice() {
