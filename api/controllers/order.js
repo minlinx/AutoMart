@@ -4,6 +4,7 @@ import pool from '../../dbConifg';
 class Orders {
 	static async createOrder(request, response, next) {
 		const { id } = response.locals;
+		console.log(id);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { token, car_id, amount } = request.body;
@@ -22,7 +23,7 @@ class Orders {
 			});
 		}
 		if (
-			token
+			car_id
 		) {
 			pool.connect()
 				.catch(error => {
@@ -40,6 +41,7 @@ class Orders {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -70,6 +72,7 @@ class Orders {
 		const errors = validationResult(request);
 		const { price, token } = request.body;
 		const { id } = response.locals;
+		console.log(id);
 		const { order_id } = request.params;
 		const parsedPrice = parseFloat(price);
 		const parsedOrderId = parseInt(order_id);
@@ -87,7 +90,7 @@ class Orders {
 			});
 		}
 		if (
-			token
+			id
 		) {
 			pool.connect()
 				.catch(error => {
@@ -104,6 +107,7 @@ class Orders {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
