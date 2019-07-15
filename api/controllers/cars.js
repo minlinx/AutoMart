@@ -442,7 +442,6 @@ class Cars {
 		const { id } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
-			token,
 			status,
 			manufacturer,
 			model,
@@ -470,7 +469,6 @@ class Cars {
 			price &&
 			state &&
 			status &&
-			token &&
 			errors.isEmpty()
 		) {
 			pool.connect()
@@ -491,6 +489,7 @@ class Cars {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -506,7 +505,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = { ...result.rows[0], token };
+						const data = { ...result.rows[0] };
 						return response.status(201).json({
 							status: 201,
 							data
