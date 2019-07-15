@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 function checkUserAuthentication(request, response, next) {
-	// console.log(request.headers);
 	const bearerToken = request.headers.authorization;
 	const { token } = request.body;
 	const headersToken = request.headers.token;
@@ -16,25 +15,13 @@ function checkUserAuthentication(request, response, next) {
 		}
 		else {
 			const { email, id } = decodedToken;
-			const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
-			const isAdmin = regex.test(email);
-			if (isAdmin) {
-				response.locals.token = token;
-				response.locals.email = email;
-				response.locals.id = id;
-				return next();
-			}
-			else {
-				response.locals.token = token;
-				response.locals.email = email;
-				response.locals.id = id;
-				return next();
-			}
+			response.locals.token = token;
+			response.locals.email = email;
+			response.locals.id = id;
+			return next();
 		}
-
 	}
 	else if (token) {
-		// const token = bearerToken.split(' ')[1];
 		const decodedToken = jwt.verify(token, privateKey);
 		if (!decodedToken) {
 			return response.status(401).json({
@@ -44,20 +31,10 @@ function checkUserAuthentication(request, response, next) {
 		}
 		else {
 			const { email, id } = decodedToken;
-			const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
-			const isAdmin = regex.test(email);
-			if (isAdmin) {
-				response.locals.token = token;
-				response.locals.email = email;
-				response.locals.id = id;
-				return next();
-			}
-			else {
-				response.locals.token = token;
-				response.locals.email = email;
-				response.locals.id = id;
-				return next();
-			}
+			response.locals.token = token;
+			response.locals.email = email;
+			response.locals.id = id;
+			return next();
 		}
 	}
 	else if (bearerToken) {
@@ -71,20 +48,10 @@ function checkUserAuthentication(request, response, next) {
 		}
 		else {
 			const { email, id } = decodedToken;
-			const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
-			const isAdmin = regex.test(email);
-			if (isAdmin) {
-				response.locals.token = token;
-				response.locals.email = email;
-				response.locals.id = id;
-				return next();
-			}
-			else {
-				response.locals.token = token;
-				response.locals.email = email;
-				response.locals.id = id;
-				return next();
-			}
+			response.locals.token = token;
+			response.locals.email = email;
+			response.locals.id = id;
+			return next();
 		}
 	}
 	else {
