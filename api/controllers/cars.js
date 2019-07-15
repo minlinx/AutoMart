@@ -44,7 +44,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows];
+						const data = { ...result.rows };
 						return response.status(200).json({
 							status: 200,
 							data
@@ -55,7 +55,7 @@ class Cars {
 		else {
 			return response.status(400).json({
 				status: 400,
-				error: 'Unauthorised'
+				error: 'Bae Request'
 			});
 		}
 		// else if (priceRange && queryLength === 3) {
