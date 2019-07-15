@@ -423,7 +423,9 @@ class Cars {
 						});
 					}
 					else {
-						const data = { ...result.rows[0] };
+						const {car_image} = { ...result.rows[0] };
+						const img_url = car_image;
+						const data = { ...result.rows[0], img_url };
 						return response.status(200).json({
 							status: 200,
 							data
@@ -483,9 +485,9 @@ class Cars {
 				.then(() => {
 					const createdOn = new Date();
 					// const url = (request.file.secure_url);
-					const url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car4.jpg.jpg';
+					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car4.jpg.jpg';
 					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, car_image) VALUES ((SELECT id FROM users WHERE id=$1), $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-					const params = [id, createdOn, state, status, price, manufacturer, model, body_type, url];
+					const params = [id, createdOn, state, status, price, manufacturer, model, body_type, img_url];
 					return pool.query(sql, params);
 				})
 				.catch(error => {
@@ -505,7 +507,9 @@ class Cars {
 						});
 					}
 					else {
-						const data = { ...result.rows[0] };
+						const { car_image } = { ...result.rows[0] };
+						const img_url = car_image;
+						const data = { ...result.rows[0], img_url };
 						return response.status(201).json({
 							status: 201,
 							data
