@@ -649,6 +649,7 @@ class Cars {
 		}
 	}
 	static async changeCarAdStatus(request, response, next) {
+		console.log(request.body);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { token } = request.body;
