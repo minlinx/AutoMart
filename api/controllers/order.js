@@ -113,9 +113,9 @@ class Orders {
 				})
 				.then(result => {
 					if (!result.rowCount > 0) {
-						return response.status(401).json({
-							status: 401,
-							error: 'Unauthorized'
+						return response.status(400).json({
+							status: 400,
+							error: 'Bad Request'
 						});
 					}
 					else {
