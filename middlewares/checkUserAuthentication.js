@@ -1,30 +1,71 @@
 import jwt from 'jsonwebtoken';
-const privateKey = process.env.JWT_PRIVATE_KEY;
+const privateKey = process.env.JWT_PRIVATE_KEY || 'automart';
 function checkUserAuthentication(request, response, next) {
-	const queryLength = parseInt(Object.keys(request.query).length);
+	// console.log(request.headers);
 	const bearerToken = request.headers.authorization;
-	try {
-		if (queryLength > 0) {
-			response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		if (bearerToken) {
-			const token = bearerToken.split(' ')[1];
-			const decodedToken = jwt.verify(token, privateKey);
-			console.log(decodedToken);
+	const { token } = request.body;
+	// const bodyToken = request.body;
+	if (token) {
+		// const token = bearerToken.split(' ')[1];
+		const decodedToken = jwt.verify(token, privateKey);
+		const { email, id } = decodedToken;
+		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
+		const isAdmin = regex.test(email);
+		if (isAdmin) {
 			response.locals.token = token;
-			next();
+			response.locals.adminEmail = email;
+			response.locals.adminId = id;
+			return next();
 		}
-		response.status(422).json({
-			status: 422,
+		else {
+			response.locals.token = token;
+			response.locals.email = email;
+			response.locals.id = id;
+			return next();
+		}
+	}
+	else if (bearerToken) {
+		const token = bearerToken.split(' ')[1];
+		const decodedToken = jwt.verify(token, privateKey);
+		const { email, id } = decodedToken;
+		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
+		const isAdmin = regex.test(email);
+		if (isAdmin) {
+			response.locals.token = token;
+			response.locals.adminEmail = email;
+			response.locals.adminId = id;
+			return next();
+		}
+		else {
+			response.locals.token = token;
+			response.locals.email = email;
+			response.locals.id = id;
+			return next();
+		}
+	}
+	// else if (bearerToken) {
+	// 	const token = bearerToken.split(' ')[1];
+	// 	const decodedToken = jwt.verify(token, privateKey);
+	// 	const { email, id } = decodedToken;
+	// 	const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
+	// 	const isAdmin = regex.test(email);
+	// 	if (isAdmin) {
+	// 		response.locals.adminToken = token;
+	// 		response.locals.adminEmail = email;
+	// 		response.locals.adminId = id;
+	// 		next();
+	// 	}
+	// 	else {
+	// 		response.locals.token = token;
+	// 		response.locals.email = email;
+	// 		response.locals.id = id;
+	// 		next();
+	// 	}
+	// }
+	else {
+		response.status(403).json({
+			status: 403,
 			error: 'No Token Provided'
-		});
-	} catch (param) {
-		response.status(401).json({
-			status: 401,
-			error: 'Authentication Failed',
 		});
 	}
 }

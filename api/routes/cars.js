@@ -1,6 +1,7 @@
 import express from 'express';
 import validator from '../../middlewares/getRouteHandler';
-import imageParser from '../../middlewares/uploadImage';
+import checkAuthentication from '../../middlewares/checkUserAuthentication';
+// import imageParser from '../../middlewares/uploadImage';
 import Cars from '../controllers/cars';
 
 const {
@@ -20,16 +21,18 @@ const {
 const router = express.Router();
 router.get(
 	'/',
+	checkAuthentication,
 	getCarOrCars
 );
-router.get('/:carId', checkCarId(), specificCar);
+router.get('/:car_id', checkAuthentication, specificCar);
 router.post(
 	'/',
-	imageParser.single('carImage'),
+	checkAuthentication,
+	// imageParser.single('car_image'),
 	postCarAdValidator(),
 	postCarAd
 );
-router.delete('/:carId', checkCarId(), deleteCarAd);
-router.patch('/:carId/price', checkCarADPrice(), changeCarAdPrice);
-router.patch('/:carId/status', checkCarADStatus(), changeCarAdStatus);
+router.delete('/:car_id', checkCarId(), checkAuthentication, deleteCarAd);
+router.patch('/:car_id/price', checkCarADPrice(), checkAuthentication, changeCarAdPrice);
+router.patch('/:car_id/status', checkCarADStatus(), checkAuthentication, changeCarAdStatus);
 export default router;

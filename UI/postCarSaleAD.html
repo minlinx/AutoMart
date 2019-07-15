@@ -27,41 +27,46 @@
         <div class="page-body"></div>
             <div class="page-body-post-car-ad-form-div" >
                 <h2>Post car Ad</h2>
-                <form  class="page-body-post-car-ad-form" action="#" method="post">
+                <form  class="page-body-post-car-ad-form" enctype="multipart/form-data">
+                    <div>
+                        <label for="id">ID</label>
+                        <input type="text"  required  name="id" placeholder="" id="id">
+                    </div>
+                    <div>
+                        <label for="Owner">Owner</label>
+                        <input type="text"  required  name="owner" placeholder="User's Id" id="owner">
+                    </div>
+                    <div>
+                        <label for="email">Your Email</label>
+                        <input type="email"  required  name="email" placeholder="" id="email">
+                    </div>
                     <div>
                         <label for="manufacturer">Manufacturer</label>
-                        <select name="manufacturer" id="manufacturer">
-                            <option value="">Benz</option>
-                            <option value="">BMW</option>
-                            <option value="">Toyota</option>
-                            <option value="">Honda</option>
-                            <option value="">Volks Wagen</option>
-                            <option value="">Mitsubushi</option>
-                            <option value="">GOlf</option>
-                            <option value="">Kia</option>
-                        </select>
+                        <input type="text"  required  name="manufacturer" placeholder="" id="manufacturer">
+                    </div>
+                    <div>
+                        <label for="model">Model</label>
+                        <input type="text"  required  name="model" placeholder="" id="model">
+                    </div>
+                    <div>
+                        <label for="bodyType">Body Type</label>
+                        <input type="text"  required  name="bodyType" placeholder="Truck, car, or van" id="bodyType">
                     </div>
                     <div>
                         <label for="price">Price</label>
-                        <input type="text"  required  name="price" id="price">
+                        <input type="text"  required  name="price" placeholder="" id="price">
                     </div>
                     <div>
-                        <label for="state">State</label>
-                        <select name="state" id="state">
-                            <option value="">New</option>
-                            <option value="">Used</option>
-                        </select>
+                        <label for="State">State</label>
+                        <input type="text"  required  name="state" placeholder="new or used" id="State">
                     </div>
                     <div>
                         <label for="status">Status</label>
-                        <select name="status" id="status">
-                            <option value="">Available</option>
-                            <option value="">Sold</option>
-                        </select>
+                        <input type="text"  required  name="status" placeholder="" value="available" id="status">
                     </div>
                     <div>
                         <label for="image">Vehicle Photo</label>
-                        <input type="file"  required  name="image" id="image">
+                        <input type="file"  required name="carImage" id="image">
                     </div>
                     <button  type="submit" >Post</button>
                 </form>
@@ -73,5 +78,6 @@
             <div class="page-footer-icons" ></div>
         </div>
     </div> <!--page main container ends here -->
+    <script src="./js/postCarSaleAD.js"></script>
 </body>
 </html>
