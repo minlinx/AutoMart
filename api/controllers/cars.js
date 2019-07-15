@@ -44,7 +44,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = { ...result.rows };
+						const data = [...result.rows];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -55,7 +55,7 @@ class Cars {
 		else {
 			return response.status(400).json({
 				status: 400,
-				error: 'Bae Request'
+				error: 'Bad Request'
 			});
 		}
 		// else if (priceRange && queryLength === 3) {
@@ -374,7 +374,6 @@ class Cars {
 		// }
 	}
 	static async specificCar(request, response, next) {
-		console.log(request);
 		// const { token } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
