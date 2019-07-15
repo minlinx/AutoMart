@@ -1,10 +1,10 @@
 import { validationResult } from 'express-validator/check';
 import pool from '../../dbConifg';
-import { check } from 'express-validator/check';
+// import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		console.log(request);
 		// const { token } = response.locals;
+		// console.log('from me', token);
 		const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;

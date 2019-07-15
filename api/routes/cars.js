@@ -21,13 +21,13 @@ const {
 const router = express.Router();
 router.get(
 	'/',
-	checkAuthentication,
+	// checkAuthentication,
 	getCarOrCars
 );
 router.get('/:car_id', checkAuthentication, specificCar);
 router.post(
 	'/',
-	checkAuthentication,
+	// checkAuthentication,
 	// imageParser.single('car_image'),
 	postCarAdValidator(),
 	postCarAd
