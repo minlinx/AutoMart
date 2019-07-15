@@ -668,7 +668,7 @@ class Cars {
 			});
 		}
 		if (
-			token && status === 'sold'
+			token
 		) {
 			pool.connect()
 				.catch(error => {
