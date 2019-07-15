@@ -15,7 +15,7 @@ function checkUserAuthentication(request, response, next) {
 		}
 		else {
 			const { email, id } = decodedToken;
-			response.locals.token = token;
+			response.locals.token = headersToken;
 			response.locals.email = email;
 			response.locals.id = id;
 			return next();
@@ -48,7 +48,7 @@ function checkUserAuthentication(request, response, next) {
 		}
 		else {
 			const { email, id } = decodedToken;
-			response.locals.token = token;
+			response.locals.token = token1;
 			response.locals.email = email;
 			response.locals.id = id;
 			return next();

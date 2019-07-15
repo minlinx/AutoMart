@@ -3,7 +3,6 @@ import pool from '../../dbConifg';
 // import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		console.log('get request', request);
 		// const { token } = response.locals;
 		// console.log('from me', token);
 		const queryParams = request.query;
@@ -377,7 +376,6 @@ class Cars {
 	}
 	static async specificCar(request, response, next) {
 		// const { token } = response.locals;
-		console.log('specific', request);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -425,9 +423,9 @@ class Cars {
 						});
 					}
 					else {
-						const {car_image} = { ...result.rows[0] };
-						const img_url = car_image;
-						const data = { ...result.rows[0], img_url };
+						// const {car_image} = { ...result.rows[0] };
+						// const img_url = car_image;
+						const data = { ...result.rows[0] };
 						return response.status(200).json({
 							status: 200,
 							data
@@ -493,7 +491,6 @@ class Cars {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
-					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -509,9 +506,9 @@ class Cars {
 						});
 					}
 					else {
-						const { car_image } = { ...result.rows[0] };
-						const img_url = car_image;
-						const data = { ...result.rows[0], img_url };
+						// const { car_image } = { ...result.rows[0] };
+						// const img_url = car_image;
+						const data = { ...result.rows[0] };
 						return response.status(201).json({
 							status: 201,
 							data
