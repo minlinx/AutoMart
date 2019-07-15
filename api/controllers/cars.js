@@ -52,6 +52,12 @@ class Cars {
 					}
 				});
 		}
+		else {
+			return response.status(401).json({
+				status: 401,
+				error: 'Unauthorised'
+			});
+		}
 		// else if (priceRange && queryLength === 3) {
 		// 	check('status')
 		// 		.isLength({ min: 4 })
@@ -366,14 +372,9 @@ class Cars {
 		// 			});
 		// 	}
 		// }
-		else {
-			return response.status(401).json({
-				status: 401,
-				error: 'Unauthorised'
-			});
-		}
 	}
 	static async specificCar(request, response, next) {
+		console.log(request);
 		// const { token } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
