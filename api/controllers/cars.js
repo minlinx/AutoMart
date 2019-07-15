@@ -3,6 +3,7 @@ import pool from '../../dbConifg';
 // import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
+		console.log('get request', request);
 		// const { token } = response.locals;
 		// console.log('from me', token);
 		const queryParams = request.query;
@@ -376,6 +377,7 @@ class Cars {
 	}
 	static async specificCar(request, response, next) {
 		// const { token } = response.locals;
+		console.log('specific', request);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
