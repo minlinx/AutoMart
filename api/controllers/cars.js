@@ -649,10 +649,9 @@ class Cars {
 		}
 	}
 	static async changeCarAdStatus(request, response, next) {
-		console.log(request.body);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { token } = request.body;
+		const { token, status } = request.body;
 		const { id } = response.locals;
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);
@@ -669,7 +668,7 @@ class Cars {
 			});
 		}
 		if (
-			token
+			token && status === 'sold'
 		) {
 			pool.connect()
 				.catch(error => {
@@ -711,7 +710,7 @@ class Cars {
 		}
 		else {
 			return response.status(400).json({
-				status: 400,
+				status: 405,
 				error: 'Bad Request'
 			});
 		}
