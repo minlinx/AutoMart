@@ -3,7 +3,6 @@ import pool from '../../dbConifg';
 
 class Orders {
 	static async createOrder(request, response, next) {
-		console.log(request.body);
 		const { id } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
