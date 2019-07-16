@@ -18,7 +18,7 @@ function checkUserAuthentication(request, response, next) {
 			return next();
 		}
 	} catch (error) {
-		console('checkauth error', error);
+		console.log('checkauth error', error);
 		return response.status(401).json({
 			status: 401,
 			error: 'Authentication Failed'
