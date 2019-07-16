@@ -639,7 +639,7 @@ class Cars {
 			pool.connect()
 			.catch(error => {
 				if (error) {
-					console.log(error);
+					console.log('FRom chage car price' , error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -653,6 +653,7 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
+						console.log('FRom chage car price' , error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check your inputs'
@@ -710,7 +711,7 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log(error);
+						console.log('FRom chage car status' , error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -724,6 +725,7 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
+						console.log('FRom chage car status' , error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check your inputs'

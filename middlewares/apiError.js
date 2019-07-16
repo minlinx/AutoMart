@@ -12,6 +12,7 @@ class apiEror {
 			});
 		}
 		else {
+			console.log('From apierrormiddleware', error);
 			return response.status(500).json({
 				status: 500,
 				error: 'Oops!!! Server is down, Try again later'

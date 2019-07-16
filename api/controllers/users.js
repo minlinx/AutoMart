@@ -26,6 +26,7 @@ class Users {
 		else if (email && password && first_name && last_name && address) {
 			pool.connect()
 				.catch(error => {
+					console.log('FRom users' , error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -40,6 +41,7 @@ class Users {
 				})
 				.catch(error => {
 					if (error) {
+						console.log('FRom users' , error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check your inputs'
@@ -62,6 +64,7 @@ class Users {
 				})
 				.catch(error => {
 					if (error) {
+						console.log('FRom usrs signup' , error);
 						return response.status(400).json({
 							status: 400,
 							error: 'check your inputs'
@@ -115,6 +118,7 @@ class Users {
 			pool.connect()
 				.catch(error => {
 					if (error) {
+						console.log('signin usres', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -128,6 +132,7 @@ class Users {
 				})
 				.catch(error => {
 					if (error) {
+						console.log('signin usres', error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check Your Inputs'
@@ -153,7 +158,7 @@ class Users {
 						);
 						const { first_name, last_name, address, is_admin } = { ...result.rows[0] };
 						const data = { is_admin, token, id, first_name, last_name, email, address };
-						console.log(data);
+						console.log('signin data', data);
 						return response.status(200).json({
 							status: 200,
 							data

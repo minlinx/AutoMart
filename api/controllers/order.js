@@ -107,6 +107,7 @@ class Orders {
 			pool.connect()
 				.catch(error => {
 					if (error) {
+						console.log('FRom updata order price' , error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
