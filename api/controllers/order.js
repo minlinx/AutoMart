@@ -4,13 +4,14 @@ import pool from '../../dbConifg';
 class Orders {
 	static async createOrder(request, response, next) {
 		const id = request.user.id;
+		const parsedId = Number(id);
 		const token = request.token || request.headers.token;
 		console.log(id);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { car_id, amount } = request.body;
-		const parsedId = parseInt(car_id);
-		const parsedPrice = parseFloat(amount);
+		const parsedCarId = Number(car_id);
+		const parsedPrice = Number(amount);
 		if (!errors.isEmpty()) {
 			return response.status(405).json({
 				status: 405,
@@ -28,8 +29,8 @@ class Orders {
 		) {
 			pool.connect()
 				.catch(error => {
+					console.log('From create order', error);
 					if (error) {
-						console.log(error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -39,11 +40,11 @@ class Orders {
 				.then(() => {
 					const createdOn = new Date();
 					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ($2, $2, $5, $3, $4) RETURNING *';
-					const params = [parsedId, id, 'pending', createdOn, parsedPrice];
+					const params = [parsedCarId, parsedId, 'pending', createdOn, parsedPrice];
 					return pool.query(sql, params);
 				})
 				.catch(error => {
-					console.log(error);
+					console.log('From create order', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -82,10 +83,11 @@ class Orders {
 		const token = request.token || request.headers.token;
 		const { price } = request.body;
 		const id = request.user.id;
+		const parsedId = Number(id);
 		console.log(id);
 		const { order_id } = request.params;
-		const parsedPrice = parseFloat(price);
-		const parsedOrderId = parseInt(order_id);
+		const parsedPrice = Number(price);
+		const parsedOrderId = Number(order_id);
 		let amount;
 		if (!errors.isEmpty()) {
 			return response.status(405).json({
@@ -100,7 +102,7 @@ class Orders {
 			});
 		}
 		else if (
-			id && token && order_id
+			parsedId && token && order_id
 		) {
 			pool.connect()
 				.catch(error => {
@@ -112,12 +114,12 @@ class Orders {
 					}
 				})
 				.then(() => {
-					const sql = 'SELECT amount FROM orders WHERE id=$1 AND buyer=(SELECT id FROM users WHERE id=$2)';
-					const param = [parsedOrderId, id];
+					const sql = 'SELECT amount FROM orders WHERE id=$1 AND buyer=$2';
+					const param = [parsedOrderId, parsedId];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log(error);
+					console.log('From update order', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -139,6 +141,7 @@ class Orders {
 						return pool.query(sql, params);
 					}
 				}).catch((error) => {
+					console.log('From update order', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
