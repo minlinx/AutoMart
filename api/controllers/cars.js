@@ -3,8 +3,8 @@ import pool from '../../dbConifg';
 // import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		const { token } = response.locals || request.headers;
-		console.log(request.headers);
+		const { token } = request.headers;
+		console.log(token);
 		const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
@@ -15,7 +15,7 @@ class Cars {
 		// const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		// const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		// const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (queryLength === 0) {
+		if (queryLength === 0 && token) {
 			pool.connect()
 				// .catch(error => {
 				// 	if (error) {
@@ -375,7 +375,7 @@ class Cars {
 		// }
 	}
 	static async specificCar(request, response, next) {
-		const { token } = response.locals || request.headers;
+		const { token } = request.headers;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -392,7 +392,7 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		else if (car_id) {
+		else if (car_id && token) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -466,13 +466,15 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		if (
+		else if (
 			manufacturer &&
 			model &&
 			body_type &&
 			price &&
 			state &&
 			status &&
+			id &&
+			token &&
 			errors.isEmpty()
 		) {
 			pool.connect()
@@ -519,10 +521,16 @@ class Cars {
 					}
 				});
 		}
+		else {
+			return response.status(400).json({
+				status: 400,
+				error: 'unauthorised'
+			});
+		}
 	}
 	static async deleteCarAd(request, response, next) {
 		// const { adminToken } = response.locals;
-		const { token } = request.body || response.locals;
+		const { token } = request.body;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -539,8 +547,8 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		if (
-			car_id
+		else if (
+			car_id && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -609,8 +617,8 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		if (
-			token
+		else if (
+			token && id
 		) {
 			pool.connect()
 				.catch(error => {
@@ -677,8 +685,8 @@ class Cars {
 				error: 'No Query Params'
 			});
 		}
-		if (
-			token && status === 'sold'
+		else if (
+			id && token && status === 'sold'
 		) {
 			pool.connect()
 				.catch(error => {
