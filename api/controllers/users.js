@@ -78,7 +78,8 @@ class Users {
 								expiresIn: '24h'
 							}
 						);
-						const data = {...result.rows[0], token, email };
+						const data = {...result.rows[0], token };
+						console.log(data);
 						return response.status(201).json({
 							status: 201,
 							data
@@ -146,6 +147,7 @@ class Users {
 						);
 						const { first_name, last_name, address, is_admin } = { ...result.rows[0] };
 						const data = { is_admin, token, id, first_name, last_name, email, address };
+						console.log(data);
 						return response.status(200).json({
 							status: 200,
 							data
