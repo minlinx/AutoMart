@@ -445,6 +445,7 @@ class Cars {
 		const id  = request.user.id;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
+			token,
 			status,
 			manufacturer,
 			model,
