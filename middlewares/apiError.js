@@ -1,6 +1,7 @@
 class apiEror {
 	static notFoundError(request, response, next) {
 		const error = new Error('Not Found, check the URL you typed and try again');
+		console.log('From apierrormiddleware', error);
 		error.status = 404 || 500;
 		return next(error);
 	}
