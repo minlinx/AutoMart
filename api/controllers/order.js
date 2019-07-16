@@ -39,7 +39,7 @@ class Orders {
 				})
 				.then(() => {
 					const createdOn = new Date();
-					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ($2, $2, $5, $3, $4) RETURNING *';
+					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ($2, $1, $5, $3, $4) RETURNING *';
 					const params = [parsedCarId, parsedId, 'pending', createdOn, parsedPrice];
 					return pool.query(sql, params);
 				})

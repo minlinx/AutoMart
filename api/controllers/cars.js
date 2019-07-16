@@ -20,6 +20,7 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
+						console.log('from all cars', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -32,6 +33,7 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
+						console.log('from all cars', error);
 						return response.status(500).json({
 							status: 500,
 							error: 'server is down'
@@ -399,7 +401,7 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log(error);
+						console.log('from specific cars', error);
 						return response.status(505).json({
 							status: 505,
 							error: 'server is down'
@@ -412,7 +414,7 @@ class Cars {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log(error);
+					console.log('from specific cars', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
