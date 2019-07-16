@@ -6,9 +6,9 @@ class Cars {
 		// const { token } = request.headers;
 		const token = request.token || request.headers.token;
 		console.log('getall', token);
-		const queryParams = request.query;
+		// const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
-		const queryLength = Object.keys(queryParams).length;
+		// const queryLength = Object.keys(queryParams).length;
 		// const { status, state, min_price, max_price, body_type, manufacturer } = queryParams;
 		// const stateIsDefined = arrayOfQueryParams.includes('state');
 		// const statusIsDefined = arrayOfQueryParams.includes('status');
@@ -16,7 +16,7 @@ class Cars {
 		// const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		// const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		// const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (queryLength === 0 && token) {
+		if (token) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -399,8 +399,8 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						return response.status(500).json({
-							status: 500,
+						return response.status(505).json({
+							status: 505,
 							error: 'server is down'
 						});
 					}
