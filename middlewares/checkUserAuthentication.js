@@ -16,6 +16,10 @@ function checkUserAuthentication(request, response, next) {
 		else {
 			const { email, id } = decodedToken;
 			response.locals.token = headersToken;
+			request.body.token = headersToken;
+			request.headers.authorization = `bearer ${headersToken}`;
+			request.headers.token = headersToken;
+			request.token = headersToken;
 			response.locals.email = email;
 			response.locals.id = id;
 			return next();
@@ -32,6 +36,10 @@ function checkUserAuthentication(request, response, next) {
 		else {
 			const { email, id } = decodedToken;
 			response.locals.token = token;
+			request.body.token = token;
+			request.token = token;
+			request.headers.authorization = `bearer ${token}`;
+			request.headers.token = token;
 			response.locals.email = email;
 			response.locals.id = id;
 			return next();
@@ -49,6 +57,10 @@ function checkUserAuthentication(request, response, next) {
 		else {
 			const { email, id } = decodedToken;
 			response.locals.token = token1;
+			request.body.token = token1;
+			request.headers.authorization = `bearer ${token1}`;
+			request.headers.token = token1;
+			request.token = token1;
 			response.locals.email = email;
 			response.locals.id = id;
 			return next();
