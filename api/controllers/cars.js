@@ -3,8 +3,9 @@ import pool from '../../dbConifg';
 // import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		const { token } = request.headers;
-		console.log(token);
+		// const { token } = request.headers;
+		const token = request.token || request.headers.token;
+		console.log('getall', token);
 		const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
@@ -375,7 +376,8 @@ class Cars {
 		// }
 	}
 	static async specificCar(request, response, next) {
-		const { token } = request.headers;
+		const token = request.token || request.headers.token;
+		console.log('specii', token);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -437,15 +439,15 @@ class Cars {
 		else {
 			return response.status(405).json({
 				status: 405,
-				error: 'wait a minute'
+				error: ''
 			});
 		}
 	}
 	static async postCarAd(request, response, next) {
 		const id  = request.user.id;
+		const token = request.token || request.headers.token;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
-			token,
 			status,
 			manufacturer,
 			model,
@@ -530,7 +532,7 @@ class Cars {
 	}
 	static async deleteCarAd(request, response, next) {
 		// const { adminToken } = response.locals;
-		const { token } = request.body;
+		const token = request.token || request.headers.token;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -599,7 +601,8 @@ class Cars {
 	static async changeCarAdPrice(request, response, next) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { price, token } = request.body;
+		const token = request.token || request.headers.token;
+		const { price } = request.body;
 		console.log(['patch price', price]);
 		const  id  = request.user.id;
 		const { car_id } = request.params;
@@ -669,7 +672,8 @@ class Cars {
 	static async changeCarAdStatus(request, response, next) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { token, status } = request.body;
+		const token = request.token || request.headers.token;
+		const { status } = request.body;
 		const id = request.user.id;
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);

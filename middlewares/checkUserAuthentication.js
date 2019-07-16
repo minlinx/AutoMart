@@ -11,6 +11,7 @@ function checkUserAuthentication(request, response, next) {
 	}
 	else {
 		request.user = decodedToken;
+		request.token = headersToken;
 		return next();
 	}
 }
