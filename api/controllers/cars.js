@@ -381,7 +381,7 @@ class Cars {
 		console.log('specii', token);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
-		const parsedCarId = parseInt(car_id, 10);
+		const parsedCarId = Number(car_id);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
 			return response.status(405).json({
@@ -448,6 +448,7 @@ class Cars {
 	}
 	static async postCarAd(request, response, next) {
 		const id  = request.user.id;
+		const parsedId = Number(id);
 		const token = request.token || request.headers.token;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
@@ -478,13 +479,14 @@ class Cars {
 			price &&
 			state &&
 			status &&
-			id &&
+			parsedId &&
 			token &&
 			errors.isEmpty()
 		) {
+			const parsedPrice = Number(price);
 			pool.connect()
 				.catch(error => {
-					console.log(error);
+					console.log('from postcarad', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -497,7 +499,7 @@ class Cars {
 					// const url = (request.file.secure_url);
 					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car5.jpg.jpg';
 					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-					const params = [id, createdOn, state, status, price, manufacturer, model, body_type, img_url];
+					const params = [id, createdOn, state, status, parsedPrice, manufacturer, model, body_type, img_url];
 					return pool.query(sql, params);
 				})
 				.catch(error  => {
@@ -540,7 +542,7 @@ class Cars {
 		const token = request.token || request.headers.token;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
-		const parsedCarId = parseInt(car_id, 10);
+		const parsedCarId = Number(car_id);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
 			return response.status(405).json({
@@ -555,7 +557,7 @@ class Cars {
 			});
 		}
 		else if (
-			car_id && token
+			parsedCarId && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -612,6 +614,7 @@ class Cars {
 		const { price } = request.body;
 		console.log(['patch price', price]);
 		const  id  = request.user.id;
+		const parsedId = Number(id);
 		const { car_id } = request.params;
 		const parsedPrice = Number(price);
 		const parsedCarId = parseInt(car_id);
@@ -628,11 +631,12 @@ class Cars {
 			});
 		}
 		else if (
-			token && id
+			token && parsedId
 		) {
 			pool.connect()
-				.catch(error => {
-					if (error) {
+			.catch(error => {
+				if (error) {
+					console.log(error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -640,8 +644,8 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE id=$3) RETURNING *';
-					const param = [parsedPrice, parsedCarId, id];
+					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=$3 RETURNING *';
+					const param = [parsedPrice, parsedCarId, parsedId];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
@@ -661,7 +665,7 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						console.log('updata price', data);
+						console.log('updata car price', data);
 						return response.status(202).json({
 							status: 202,
 							data
@@ -682,8 +686,9 @@ class Cars {
 		const token = request.token || request.headers.token;
 		const { status } = request.body;
 		const id = request.user.id;
+		const parsedId = Number(id);
 		const { car_id } = request.params;
-		const parsedCarId = parseInt(car_id);
+		const parsedCarId = Number(car_id);
 		if (!errors.isEmpty()) {
 			return response.status(405).json({
 				status: 405,
@@ -697,11 +702,12 @@ class Cars {
 			});
 		}
 		else if (
-			id && token && status === 'sold'
+			parsedId && token && status === 'sold'
 		) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
+						console.log(error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -710,7 +716,7 @@ class Cars {
 				})
 				.then(() => {
 					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE id=$3) RETURNING *';
-					const param = ['sold', parsedCarId, id];
+					const param = ['sold', parsedCarId, parsedId];
 					return pool.query(sql, param);
 				})
 				.catch(error => {
