@@ -3,6 +3,7 @@ import pool from '../../dbConifg';
 // import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
+		console.log('get all cars', request);
 		// const { token } = request.headers;
 		const token = request.token || request.headers.token;
 		console.log('getall', token);
@@ -433,7 +434,7 @@ class Cars {
 						// const {car_image} = { ...result.rows[0] };
 						// const img_url = car_image;
 						const data = { ...result.rows[0], token };
-						console.log( 'specific data', data);
+						console.log('specific data', data);
 						return response.status(200).json({
 							status: 200,
 							data
@@ -449,7 +450,7 @@ class Cars {
 		}
 	}
 	static async postCarAd(request, response, next) {
-		const id  = request.user.id;
+		const id = request.user.id;
 		const parsedId = Number(id);
 		console.log(parsedId);
 		const token = request.token || request.headers.token;
@@ -505,7 +506,7 @@ class Cars {
 					const params = [parsedId, createdOn, state, status, parsedPrice, manufacturer, model, body_type, img_url];
 					return pool.query(sql, params);
 				})
-				.catch(error  => {
+				.catch(error => {
 					console.log('from postcarad', error);
 					if (error) {
 						return response.status(400).json({
@@ -525,7 +526,7 @@ class Cars {
 						// const { car_image } = { ...result.rows[0] };
 						// const img_url = car_image;
 						const data = { ...result.rows[0], token };
-						console.log(  'post car data', data);
+						console.log('post car data', data);
 						return response.status(201).json({
 							status: 201,
 							data
@@ -616,7 +617,7 @@ class Cars {
 		const token = request.token || request.headers.token;
 		const { price } = request.body;
 		console.log(['patch price', price]);
-		const  id  = request.user.id;
+		const id = request.user.id;
 		const parsedId = Number(id);
 		const { car_id } = request.params;
 		const parsedPrice = Number(price);
@@ -637,9 +638,9 @@ class Cars {
 			token && parsedId
 		) {
 			pool.connect()
-			.catch(error => {
-				if (error) {
-					console.log('FRom chage car price' , error);
+				.catch(error => {
+					if (error) {
+						console.log('FRom chage car price', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -653,7 +654,7 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
-						console.log('FRom chage car price' , error);
+						console.log('FRom chage car price', error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check your inputs'
@@ -711,7 +712,7 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log('FRom chage car status' , error);
+						console.log('FRom chage car status', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -725,7 +726,7 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
-						console.log('FRom chage car status' , error);
+						console.log('FRom chage car status', error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check your inputs'
