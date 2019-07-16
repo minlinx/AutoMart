@@ -9,7 +9,9 @@ function checkUserAuthentication(request, response, next) {
 			error: 'Unauthorized'
 		});
 	}
-	request.user = decodedToken;
-	return next();
+	else {
+		request.user = decodedToken;
+		return next();
+	}
 }
 export default checkUserAuthentication;
