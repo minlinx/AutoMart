@@ -451,6 +451,7 @@ class Cars {
 	static async postCarAd(request, response, next) {
 		const id  = request.user.id;
 		const parsedId = Number(id);
+		console.log(parsedId);
 		const token = request.token || request.headers.token;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
@@ -461,6 +462,7 @@ class Cars {
 			price,
 			state
 		} = request.body;
+		const parsedPrice = Number(price);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
 			return response.status(405).json({
@@ -478,14 +480,13 @@ class Cars {
 			manufacturer &&
 			model &&
 			body_type &&
-			price &&
+			parsedPrice &&
 			state &&
 			status &&
 			parsedId &&
 			token &&
 			errors.isEmpty()
 		) {
-			const parsedPrice = Number(price);
 			pool.connect()
 				.catch(error => {
 					console.log('from postcarad', error);
@@ -501,11 +502,11 @@ class Cars {
 					// const url = (request.file.secure_url);
 					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car5.jpg.jpg';
 					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-					const params = [id, createdOn, state, status, parsedPrice, manufacturer, model, body_type, img_url];
+					const params = [parsedId, createdOn, state, status, parsedPrice, manufacturer, model, body_type, img_url];
 					return pool.query(sql, params);
 				})
 				.catch(error  => {
-					console.log(error);
+					console.log('from postcarad', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -563,7 +564,7 @@ class Cars {
 		) {
 			pool.connect()
 				.catch(error => {
-					console.log(error);
+					console.log('From delete', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -577,7 +578,7 @@ class Cars {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log(error);
+					console.log('delete', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
