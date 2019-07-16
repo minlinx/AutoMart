@@ -3,7 +3,7 @@ import pool from '../../dbConifg';
 // import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		// const { token } = response.locals;
+		const { token } = response.locals || request.headers;
 		console.log(request.headers);
 		const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
@@ -45,7 +45,7 @@ class Cars {
 						});
 					}
 					else {
-						const data = [...result.rows];
+						const data = [...result.rows, token];
 						return response.status(200).json({
 							status: 200,
 							data
@@ -375,7 +375,7 @@ class Cars {
 		// }
 	}
 	static async specificCar(request, response, next) {
-		// const { token } = response.locals;
+		const { token } = response.locals || request.headers;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -425,7 +425,8 @@ class Cars {
 					else {
 						// const {car_image} = { ...result.rows[0] };
 						// const img_url = car_image;
-						const data = { ...result.rows[0] };
+						const data = { ...result.rows[0], token };
+						console.log(data);
 						return response.status(200).json({
 							status: 200,
 							data
@@ -441,10 +442,9 @@ class Cars {
 		}
 	}
 	static async postCarAd(request, response, next) {
-		const { id } = response.locals;
+		const { id, token } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
-			img_url,
 			status,
 			manufacturer,
 			model,
@@ -509,7 +509,8 @@ class Cars {
 					else {
 						// const { car_image } = { ...result.rows[0] };
 						// const img_url = car_image;
-						const data = { ...result.rows[0] };
+						const data = { ...result.rows[0], token };
+						console.log(data);
 						return response.status(201).json({
 							status: 201,
 							data
@@ -520,7 +521,7 @@ class Cars {
 	}
 	static async deleteCarAd(request, response, next) {
 		// const { adminToken } = response.locals;
-		// const { token } = request.body;
+		const { token } = request.body || response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id, 10);
@@ -570,9 +571,11 @@ class Cars {
 						});
 					}
 					else {
-						return response.status(301).json({
-							status: 301,
-							data: 'Car Ad successfully deleted'
+
+						return response.status(200).json({
+							status: 200,
+							data: 'Car Ad successfully deleted',
+							token
 						});
 					}
 				});
@@ -638,6 +641,7 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
+						console.log(data);
 						return response.status(202).json({
 							status: 202,
 							data
@@ -705,6 +709,7 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
+						console.log(data);
 						return response.status(202).json({
 							status: 202,
 							data

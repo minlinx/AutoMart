@@ -59,6 +59,7 @@ class Orders {
 					else {
 						const { id, car_id, created_on, status, amount } = result.rows[0];
 						const data = { id, car_id, created_on, status, price: amount, price_Offered: parsedPrice, token };
+						console.log(data);
 						return response.status(201).json({
 							status: 201,
 							data
@@ -145,6 +146,7 @@ class Orders {
 					else {
 						const { id, car_id, status } = result.rows[0];
 						const data = { id, car_id, status, old_price_offered: amount, new_price_offered: parsedPrice, token };
+						console.log(data);
 						return response.status(202).json({
 							status: 202,
 							data
