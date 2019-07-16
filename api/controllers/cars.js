@@ -18,26 +18,26 @@ class Cars {
 		// const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
 		if (queryLength === 0 && token) {
 			pool.connect()
-				// .catch(error => {
-				// 	if (error) {
-				// 		return response.status(500).json({
-				// 			status: 500,
-				// 			error: '***server is down***'
-				// 		});
-				// 	}
-				// })
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: '***server is down***'
+						});
+					}
+				})
 				.then(() => {
 					const sql = 'SELECT * FROM cars';
 					return pool.query(sql);
 				})
-				// .catch(error => {
-				// 	if (error) {
-				// 		return response.status(500).json({
-				// 			status: 500,
-				// 			error: 'server is down'
-				// 		});
-				// 	}
-				// })
+				.catch(error => {
+					if (error) {
+						return response.status(500).json({
+							status: 500,
+							error: 'server is down'
+						});
+					}
+				})
 				.then((result) => {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
