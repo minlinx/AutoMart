@@ -29,6 +29,7 @@ class Orders {
 			pool.connect()
 				.catch(error => {
 					if (error) {
+						console.log(error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -37,8 +38,8 @@ class Orders {
 				})
 				.then(() => {
 					const createdOn = new Date();
-					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ((SELECT id FROM users WHERE id=$2), (SELECT id FROM cars  WHERE id=$1), (SELECT price FROM cars  WHERE id=$1), $3, $4) RETURNING *';
-					const params = [parsedId, id, 'pending', createdOn];
+					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ($2, $2, $5, $3, $4) RETURNING *';
+					const params = [parsedId, id, 'pending', createdOn, parsedPrice];
 					return pool.query(sql, params);
 				})
 				.catch(error => {
@@ -58,8 +59,8 @@ class Orders {
 						});
 					}
 					else {
-						const { id, car_id, created_on, status, amount } = result.rows[0];
-						const data = { id, car_id, created_on, status, price: amount, price_Offered: parsedPrice, token };
+						const { id, car_id, created_on, status } = result.rows[0];
+						const data = { id, car_id, created_on, status, price_Offered: parsedPrice, token };
 						console.log('create order', data);
 						return response.status(201).json({
 							status: 201,
