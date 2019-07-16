@@ -7,9 +7,10 @@ class Cars {
 		// const { token } = request.headers;
 		const token = request.token || request.headers.token;
 		console.log('getall', token);
-		// const queryParams = request.query;
+		const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
-		// const queryLength = Object.keys(queryParams).length;
+		const queryLength = Object.keys(queryParams).length;
+		console.log(queryLength, 'querylength all  cars routes');
 		// const { status, state, min_price, max_price, body_type, manufacturer } = queryParams;
 		// const stateIsDefined = arrayOfQueryParams.includes('state');
 		// const statusIsDefined = arrayOfQueryParams.includes('status');
@@ -17,7 +18,7 @@ class Cars {
 		// const bodyTypeIsDefined = arrayOfQueryParams.includes('body_type');
 		// const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		// const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
-		if (token) {
+		if (token && queryLength === 0) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
