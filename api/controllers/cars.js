@@ -47,6 +47,7 @@ class Cars {
 					}
 					else {
 						const data = [...result.rows, token];
+						console.log('get all', data);
 						return response.status(200).json({
 							status: 200,
 							data
@@ -428,7 +429,7 @@ class Cars {
 						// const {car_image} = { ...result.rows[0] };
 						// const img_url = car_image;
 						const data = { ...result.rows[0], token };
-						console.log(data);
+						console.log( 'specific data', data);
 						return response.status(200).json({
 							status: 200,
 							data
@@ -515,7 +516,7 @@ class Cars {
 						// const { car_image } = { ...result.rows[0] };
 						// const img_url = car_image;
 						const data = { ...result.rows[0], token };
-						console.log(data);
+						console.log(  'post car data', data);
 						return response.status(201).json({
 							status: 201,
 							data
@@ -582,7 +583,7 @@ class Cars {
 						});
 					}
 					else {
-
+						console.log(result.rows[0])
 						return response.status(200).json({
 							status: 200,
 							data: 'Car Ad successfully deleted',
@@ -654,7 +655,7 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						console.log(data);
+						console.log('updata price', data);
 						return response.status(202).json({
 							status: 202,
 							data
@@ -723,7 +724,7 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						console.log(data);
+						console.log('status change', data);
 						return response.status(202).json({
 							status: 202,
 							data
