@@ -591,9 +591,10 @@ class Cars {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { price, token } = request.body;
+		console.log(['patch price', price]);
 		const { id } = response.locals;
 		const { car_id } = request.params;
-		const parsedPrice = parseFloat(price);
+		const parsedPrice = Number(price);
 		const parsedCarId = parseInt(car_id);
 		if (!errors.isEmpty()) {
 			return response.status(405).json({
