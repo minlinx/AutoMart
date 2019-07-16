@@ -32,11 +32,11 @@ app.use(function (request, response, next) {
 // app.use(haltOnTimedout);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // app.use(haltOnTimedout);
-app.use('api/v1/auth', usersRoute);
+app.use('/api/v1/auth', usersRoute);
 // app.use(haltOnTimedout);
-app.use('api/v1/car', carsRoute);
+app.use('/api/v1/car', carsRoute);
 // app.use(haltOnTimedout);
-app.use('api/v1/order', ordersRoute);
+app.use('/api/v1/order', ordersRoute);
 // app.use(haltOnTimedout);
 // function haltOnTimedout(request, response, next) {
 // 	if (!request.timedout) next();
