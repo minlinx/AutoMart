@@ -22,8 +22,8 @@ class Orders {
 				error: 'No Query Params'
 			});
 		}
-		if (
-			car_id
+		else if (
+			car_id && id && token
 		) {
 			pool.connect()
 				.catch(error => {
@@ -67,6 +67,12 @@ class Orders {
 					}
 				});
 		}
+		else {
+			return response.status(400).json({
+				status: 400,
+				error: 'Bad request'
+			});
+		}
 	}
 	static async updateOrder(request, response, next) {
 		const queryLength = parseInt(Object.keys(request.query).length);
@@ -90,8 +96,8 @@ class Orders {
 				error: 'No Query Params'
 			});
 		}
-		if (
-			id
+		else if (
+			id && token && order_id
 		) {
 			pool.connect()
 				.catch(error => {

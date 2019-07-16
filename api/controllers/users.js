@@ -23,7 +23,7 @@ class Users {
 				error: errors.array()
 			});
 		}
-		if (email) {
+		else if (email && password && first_name && last_name && address) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -87,6 +87,12 @@ class Users {
 					}
 				});
 		}
+		else {
+			return response.status(400).json({
+				status: 400,
+				error: 'Bad Request'
+			});
+		}
 	}
 	static async signInFunction(request, response, next) {
 		const queryParams = request.query;
@@ -105,7 +111,7 @@ class Users {
 				error: errors.array()
 			});
 		}
-		if (email) {
+		else if (email && password) {
 			pool.connect()
 				.catch(error => {
 					if (error) {
@@ -160,6 +166,12 @@ class Users {
 						});
 					}
 				});
+		}
+		else {
+			return response.status(400).json({
+				status: 400,
+				error: 'Bad Request'
+			});
 		}
 	}
 }
