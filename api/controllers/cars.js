@@ -399,6 +399,7 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
+						console.log(error);
 						return response.status(505).json({
 							status: 505,
 							error: 'server is down'
@@ -411,6 +412,7 @@ class Cars {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -438,9 +440,9 @@ class Cars {
 				});
 		}
 		else {
-			return response.status(405).json({
-				status: 405,
-				error: ''
+			return response.status(400).json({
+				status: 400,
+				error: 'Bad requests'
 			});
 		}
 	}
@@ -482,6 +484,7 @@ class Cars {
 		) {
 			pool.connect()
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -493,11 +496,12 @@ class Cars {
 					const createdOn = new Date();
 					// const url = (request.file.secure_url);
 					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car5.jpg.jpg';
-					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, img_url) VALUES ((SELECT id FROM users WHERE id=$1), $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
 					const params = [id, createdOn, state, status, price, manufacturer, model, body_type, img_url];
 					return pool.query(sql, params);
 				})
 				.catch(error  => {
+					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -555,6 +559,7 @@ class Cars {
 		) {
 			pool.connect()
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -568,6 +573,7 @@ class Cars {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
+					console.log(error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -583,7 +589,7 @@ class Cars {
 						});
 					}
 					else {
-						console.log(result.rows[0])
+						console.log('From delete', result.rows[0]);
 						return response.status(200).json({
 							status: 200,
 							data: 'Car Ad successfully deleted',
