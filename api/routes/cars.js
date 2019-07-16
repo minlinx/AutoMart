@@ -11,7 +11,7 @@ const {
 	checkCarADPrice
 } = validator;
 const {
-	// getCarOrCars,
+	getCarOrCars,
 	specificCar,
 	postCarAd,
 	deleteCarAd,
@@ -19,11 +19,11 @@ const {
 	changeCarAdStatus
 } = Cars;
 const router = express.Router();
-// router.get(
-// 	'/',
-// 	checkAuthentication,
-// 	getCarOrCars
-// );
+router.get(
+	'/',
+	checkAuthentication,
+	getCarOrCars
+);
 router.get('/:car_id', checkAuthentication, specificCar);
 router.post(
 	'/',

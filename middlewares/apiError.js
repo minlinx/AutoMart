@@ -7,7 +7,7 @@ class apiEror {
 	}
 	static serverError(error, request, response, next) {
 		if (error.status === 404) {
-			console.log('From apierrormiddleware', error);
+			console.log('From 404 apierrormiddleware', error);
 			return response.status(404).json({
 				status: 404,
 				error: error.message
