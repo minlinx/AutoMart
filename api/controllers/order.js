@@ -4,10 +4,11 @@ import pool from '../../dbConifg';
 class Orders {
 	static async createOrder(request, response, next) {
 		const id = request.user.id;
+		const token = request.token || request.headers.token;
 		console.log(id);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { token, car_id, amount } = request.body;
+		const { car_id, amount } = request.body;
 		const parsedId = parseInt(car_id);
 		const parsedPrice = parseFloat(amount);
 		if (!errors.isEmpty()) {
@@ -77,7 +78,8 @@ class Orders {
 	static async updateOrder(request, response, next) {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
-		const { price, token } = request.body;
+		const token = request.token || request.headers.token;
+		const { price } = request.body;
 		const id = request.user.id;
 		console.log(id);
 		const { order_id } = request.params;
