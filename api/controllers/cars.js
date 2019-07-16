@@ -4,7 +4,7 @@ import pool from '../../dbConifg';
 class Cars {
 	static async getCarOrCars(request, response, next) {
 		// const { token } = response.locals;
-		// console.log('from me', token);
+		console.log(request.headers);
 		const queryParams = request.query;
 		// const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
@@ -17,26 +17,26 @@ class Cars {
 		// const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
 		if (queryLength === 0) {
 			pool.connect()
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: '***server is down***'
-						});
-					}
-				})
+				// .catch(error => {
+				// 	if (error) {
+				// 		return response.status(500).json({
+				// 			status: 500,
+				// 			error: '***server is down***'
+				// 		});
+				// 	}
+				// })
 				.then(() => {
 					const sql = 'SELECT * FROM cars';
 					return pool.query(sql);
 				})
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: 'server is down'
-						});
-					}
-				})
+				// .catch(error => {
+				// 	if (error) {
+				// 		return response.status(500).json({
+				// 			status: 500,
+				// 			error: 'server is down'
+				// 		});
+				// 	}
+				// })
 				.then((result) => {
 					if (!result.rowCount > 0) {
 						return response.status(404).json({
@@ -444,6 +444,7 @@ class Cars {
 		const { id } = response.locals;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
+			img_url,
 			status,
 			manufacturer,
 			model,
@@ -490,7 +491,7 @@ class Cars {
 					const params = [id, createdOn, state, status, price, manufacturer, model, body_type, img_url];
 					return pool.query(sql, params);
 				})
-				.catch(error => {
+				.catch(error  => {
 					if (error) {
 						return response.status(400).json({
 							status: 400,
