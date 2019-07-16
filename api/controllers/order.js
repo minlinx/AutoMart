@@ -3,7 +3,7 @@ import pool from '../../dbConifg';
 
 class Orders {
 	static async createOrder(request, response, next) {
-		const { id } = response.locals;
+		const id = request.user.id;
 		console.log(id);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
@@ -72,7 +72,7 @@ class Orders {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { price, token } = request.body;
-		const { id } = response.locals;
+		const id = request.user.id;
 		console.log(id);
 		const { order_id } = request.params;
 		const parsedPrice = parseFloat(price);

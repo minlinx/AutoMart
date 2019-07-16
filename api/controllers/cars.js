@@ -442,7 +442,7 @@ class Cars {
 		}
 	}
 	static async postCarAd(request, response, next) {
-		const { id, token } = response.locals;
+		const id  = request.user.id;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
 			status,
@@ -592,7 +592,7 @@ class Cars {
 		const errors = validationResult(request);
 		const { price, token } = request.body;
 		console.log(['patch price', price]);
-		const { id } = response.locals;
+		const  id  = request.user.id;
 		const { car_id } = request.params;
 		const parsedPrice = Number(price);
 		const parsedCarId = parseInt(car_id);
@@ -661,7 +661,7 @@ class Cars {
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { token, status } = request.body;
-		const { id } = response.locals;
+		const id = request.user.id;
 		const { car_id } = request.params;
 		const parsedCarId = parseInt(car_id);
 		if (!errors.isEmpty()) {
