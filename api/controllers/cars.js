@@ -73,8 +73,8 @@ class Cars {
 		// 	check('max_price').not().isEmpty().exists().isFloat().trim().escape();
 		// 	const errors = validationResult(request);
 		// 	if (!errors.isEmpty()) {
-		// 		response.status(405).json({
-		// 			status: 405,
+		// 		response.status(422).json({
+		// 			status: 422,
 		// 			error: errors.array()
 		// 		});
 		// 	}
@@ -124,8 +124,8 @@ class Cars {
 		// 		.trim().not().isEmpty().isString();
 		// 	const errors = validationResult(request);
 		// 	if (!errors.isEmpty()) {
-		// 		response.status(405).json({
-		// 			status: 405,
+		// 		response.status(422).json({
+		// 			status: 422,
 		// 			error: errors.array()
 		// 		});
 		// 	}
@@ -175,8 +175,8 @@ class Cars {
 		// 		.trim().not().isEmpty().isString();
 		// 	const errors = validationResult(request);
 		// 	if (!errors.isEmpty()) {
-		// 		response.status(405).json({
-		// 			status: 405,
+		// 		response.status(422).json({
+		// 			status: 422,
 		// 			error: errors.array()
 		// 		});
 		// 	}
@@ -229,8 +229,8 @@ class Cars {
 		// 		.trim().not().isEmpty().isString();
 		// 	const errors = validationResult(request);
 		// 	if (!errors.isEmpty()) {
-		// 		response.status(405).json({
-		// 			status: 405,
+		// 		response.status(422).json({
+		// 			status: 422,
 		// 			error: errors.array()
 		// 		});
 		// 	}
@@ -283,8 +283,8 @@ class Cars {
 		// 		.trim().not().isEmpty().isString();
 		// 	const errors = validationResult(request);
 		// 	if (!errors.isEmpty()) {
-		// 		response.status(405).json({
-		// 			status: 405,
+		// 		response.status(422).json({
+		// 			status: 422,
 		// 			error: errors.array()
 		// 		});
 		// 	}
@@ -334,8 +334,8 @@ class Cars {
 		// 		.trim().not().isEmpty().isString();
 		// 	const errors = validationResult(request);
 		// 	if (!errors.isEmpty()) {
-		// 		response.status(405).json({
-		// 			status: 405,
+		// 		response.status(422).json({
+		// 			status: 422,
 		// 			error: errors.array()
 		// 		});
 		// 	}
@@ -388,8 +388,8 @@ class Cars {
 		const parsedCarId = Number(car_id);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
@@ -467,8 +467,8 @@ class Cars {
 		const parsedPrice = Number(price);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
@@ -550,8 +550,8 @@ class Cars {
 		const parsedCarId = Number(car_id);
 		const errors = validationResult(request);
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
@@ -606,8 +606,8 @@ class Cars {
 				});
 		}
 		else {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: 'Unauthorized'
 			});
 		}
@@ -624,8 +624,8 @@ class Cars {
 		const parsedPrice = Number(price);
 		const parsedCarId = parseInt(car_id);
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
@@ -696,8 +696,8 @@ class Cars {
 		const { car_id } = request.params;
 		const parsedCarId = Number(car_id);
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
@@ -753,7 +753,7 @@ class Cars {
 		}
 		else {
 			return response.status(400).json({
-				status: 405,
+				status: 422,
 				error: 'Bad Request'
 			});
 		}

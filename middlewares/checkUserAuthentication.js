@@ -4,7 +4,7 @@ function checkUserAuthentication(request, response, next) {
 	try {
 		const bearerToken = request.headers.authorization;
 		const token = bearerToken.split(' ')[1];
-		const headersToken = request.headers.token || request.body.token || token;
+		const headersToken = token || request.headers.token || request.body.token;
 		const decodedToken = jwt.verify(headersToken, privateKey);
 		if (!decodedToken) {
 			return response.status(401).json({
