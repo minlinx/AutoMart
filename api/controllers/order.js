@@ -3,6 +3,7 @@ import pool from '../../dbConifg';
 
 class Orders {
 	static async createOrder(request, response, next) {
+		let price;
 		const id = request.user.id;
 		const parsedId = Number(id);
 		const token = request.token || request.headers.token;
@@ -13,8 +14,8 @@ class Orders {
 		const parsedCarId = Number(car_id);
 		const parsedPrice = Number(amount);
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
@@ -38,6 +39,21 @@ class Orders {
 					}
 				})
 				.then(() => {
+					const sql = 'SELECT price FROM cars WHERE id=$1';
+					const param = [parsedCarId];
+					return pool.query(sql, param);
+				})
+				.catch(error => {
+					console.log('From update order', error);
+					if (error) {
+						return response.status(400).json({
+							status: 400,
+							error: 'Check your inputs'
+						});
+					}
+				})
+				.then((result) => {
+					price = result.rows[0].price;
 					const createdOn = new Date();
 					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ($2, $1, $5, $3, $4) RETURNING *';
 					const params = [parsedCarId, parsedId, 'pending', createdOn, parsedPrice];
@@ -61,7 +77,7 @@ class Orders {
 					}
 					else {
 						const { id, car_id, created_on, status } = result.rows[0];
-						const data = { id, car_id, created_on, status, price_Offered: parsedPrice, token };
+						const data = { id, car_id, created_on, status, price, price_Offered: parsedPrice, token };
 						console.log('create order', data);
 						return response.status(201).json({
 							status: 201,
@@ -90,8 +106,8 @@ class Orders {
 		const parsedOrderId = Number(order_id);
 		let amount;
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}

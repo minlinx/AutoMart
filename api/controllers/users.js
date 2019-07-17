@@ -18,12 +18,12 @@ class Users {
 			});
 		}
 		else if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
-		else if (email && password && first_name && last_name && address) {
+		else if (email && password && first_name && last_name && address && errors.isEmpty()) {
 			pool.connect()
 				.catch(error => {
 					console.log('FRom users' , error);
@@ -111,8 +111,8 @@ class Users {
 			});
 		}
 		if (!errors.isEmpty()) {
-			return response.status(405).json({
-				status: 405,
+			return response.status(422).json({
+				status: 422,
 				error: errors.array()
 			});
 		}
