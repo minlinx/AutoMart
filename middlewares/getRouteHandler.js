@@ -35,6 +35,7 @@ class GetRouteValidator {
 	}
 	static updateOrderValidator() {
 		return [
+			check('order_id').not().isEmpty().exists().isInt().trim().escape(),
 			check('price').not().isEmpty().exists().isFloat().trim().escape()
 		];
 	}
@@ -45,6 +46,13 @@ class GetRouteValidator {
 			check('first_name').not().isEmpty().exists().isString().trim().escape(),
 			check('last_name').not().isEmpty().exists().isString().trim().escape(),
 			check('address').not().isEmpty().exists().isString().trim().escape()
+		];
+	}
+	static flagValidator() {
+		return [
+			check('reason').not().isEmpty().exists().isString().trim().escape(),
+			check('description').not().isEmpty().exists().isString().trim().escape(),
+			check('car_id').not().isEmpty().exists().isInt().trim().escape()
 		];
 	}
 	static signInValidator() {
