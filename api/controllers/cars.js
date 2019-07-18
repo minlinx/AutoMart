@@ -75,7 +75,7 @@ class Cars {
 		// 	if (!errors.isEmpty()) {
 		// 		response.status(422).json({
 		// 			status: 422,
-		// 			error: errors.array()
+		// 			error: 'Unprocessable Entity'
 		// 		});
 		// 	}
 		// 	else if (errors.isEmpty()) {
@@ -126,7 +126,7 @@ class Cars {
 		// 	if (!errors.isEmpty()) {
 		// 		response.status(422).json({
 		// 			status: 422,
-		// 			error: errors.array()
+		// 			error: 'Unprocessable Entity'
 		// 		});
 		// 	}
 		// 	else if (errors.isEmpty()) {
@@ -177,7 +177,7 @@ class Cars {
 		// 	if (!errors.isEmpty()) {
 		// 		response.status(422).json({
 		// 			status: 422,
-		// 			error: errors.array()
+		// 			error: 'Unprocessable Entity'
 		// 		});
 		// 	}
 		// 	else if (errors.isEmpty()) {
@@ -231,7 +231,7 @@ class Cars {
 		// 	if (!errors.isEmpty()) {
 		// 		response.status(422).json({
 		// 			status: 422,
-		// 			error: errors.array()
+		// 			error: 'Unprocessable Entity'
 		// 		});
 		// 	}
 		// 	else if (errors.isEmpty()) {
@@ -285,7 +285,7 @@ class Cars {
 		// 	if (!errors.isEmpty()) {
 		// 		response.status(422).json({
 		// 			status: 422,
-		// 			error: errors.array()
+		// 			error: 'Unprocessable Entity'
 		// 		});
 		// 	}
 		// 	else if (errors.isEmpty()) {
@@ -336,7 +336,7 @@ class Cars {
 		// 	if (!errors.isEmpty()) {
 		// 		response.status(422).json({
 		// 			status: 422,
-		// 			error: errors.array()
+		// 			error: 'Unprocessable Entity'
 		// 		});
 		// 	}
 		// 	else if (errors.isEmpty()) {
@@ -382,7 +382,7 @@ class Cars {
 	}
 	static async specificCar(request, response, next) {
 		const token = request.token || request.headers.token;
-		console.log('specii', token);
+		console.log('From specific car', token);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = Number(car_id);
@@ -390,7 +390,7 @@ class Cars {
 		if (!errors.isEmpty()) {
 			return response.status(422).json({
 				status: 422,
-				error: errors.array()
+				error: 'Unprocessable Entity'
 			});
 		}
 		else if (queryLength > 0) {
@@ -432,8 +432,6 @@ class Cars {
 						});
 					}
 					else {
-						// const {car_image} = { ...result.rows[0] };
-						// const img_url = car_image;
 						const data = { ...result.rows[0], token };
 						console.log('specific data', data);
 						return response.status(200).json({
@@ -469,7 +467,7 @@ class Cars {
 		if (!errors.isEmpty()) {
 			return response.status(422).json({
 				status: 422,
-				error: errors.array()
+				error: 'Unprocessable Entity'
 			});
 		}
 		else if (queryLength > 0) {
@@ -484,7 +482,7 @@ class Cars {
 			body_type &&
 			parsedPrice &&
 			state &&
-			status &&
+			status === 'available' &&
 			parsedId &&
 			token &&
 			errors.isEmpty()
@@ -527,6 +525,7 @@ class Cars {
 						// const { car_image } = { ...result.rows[0] };
 						// const img_url = car_image;
 						const data = { ...result.rows[0], token };
+						// const data = { manufacturer, model, state, status, parsedId };
 						console.log('post car data', data);
 						return response.status(201).json({
 							status: 201,
@@ -538,7 +537,7 @@ class Cars {
 		else {
 			return response.status(400).json({
 				status: 400,
-				error: 'unauthorised'
+				error: 'Bad Request'
 			});
 		}
 	}
@@ -552,7 +551,7 @@ class Cars {
 		if (!errors.isEmpty()) {
 			return response.status(422).json({
 				status: 422,
-				error: errors.array()
+				error: 'Unprocessable Entity'
 			});
 		}
 		else if (queryLength > 0) {
@@ -626,7 +625,7 @@ class Cars {
 		if (!errors.isEmpty()) {
 			return response.status(422).json({
 				status: 422,
-				error: errors.array()
+				error: 'Unprocessable Entity'
 			});
 		}
 		else if (queryLength > 0) {
@@ -641,7 +640,7 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log('FRom chage car price', error);
+						console.log('From change car price', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -698,7 +697,7 @@ class Cars {
 		if (!errors.isEmpty()) {
 			return response.status(422).json({
 				status: 422,
-				error: errors.array()
+				error: 'Unprocessable Entity'
 			});
 		}
 		else if (queryLength > 0) {
@@ -721,7 +720,7 @@ class Cars {
 					}
 				})
 				.then(() => {
-					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=(SELECT id FROM users WHERE id=$3) RETURNING *';
+					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=$3 RETURNING *';
 					const param = ['sold', parsedCarId, parsedId];
 					return pool.query(sql, param);
 				})

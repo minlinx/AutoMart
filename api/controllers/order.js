@@ -7,7 +7,7 @@ class Orders {
 		const id = request.user.id;
 		const parsedId = Number(id);
 		const token = request.token || request.headers.token;
-		console.log(id);
+		console.log(parsedId);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { car_id, amount } = request.body;

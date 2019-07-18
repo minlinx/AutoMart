@@ -73,17 +73,19 @@ class Users {
 				})
 				.then((result) => {
 					if (result.rowCount > 0) {
+						console.log('FROM SIGNUP', email, first_name);
+						// const { email, first_name } = result.rows[0];
 						const token = jwt.sign(
 							{
-								email, first_name
+								first_name, email
 							},
 							privateKey, {
 								expiresIn: '24h'
 							}
 						);
 						// const data = {...result.rows[0], token };
-						const { id, first_name, last_name, address, is_admin } = { ...result.rows[0] };
-						const data = { id, is_admin, token, first_name, last_name, email, address };
+						const { id, last_name, address, is_admin } = { ...result.rows[0] };
+						const data = { id, is_admin, token, first_name, last_name, address };
 						console.log(data);
 						return response.status(201).json({
 							status: 201,
@@ -149,7 +151,9 @@ class Users {
 						});
 					}
 					else if (bcryptHash.correctPassword(password, result.rows[0].password)) {
-						const { id, email } = result.rows[0];
+						console.log('FROM SIGNIN', email);
+						const { id } = result.rows[0];
+						// const id = 10;
 						const token = jwt.sign(
 							{
 								id, email

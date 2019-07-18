@@ -13,6 +13,7 @@ function checkUserAuthentication(request, response, next) {
 			});
 		}
 		else {
+			console.log('From checkAuthentication middleware', decodedToken);
 			request.user = decodedToken;
 			request.token = headersToken;
 			return next();

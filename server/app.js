@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import carsRoute from '../api/routes/cars';
 import usersRoute from '../api/routes/users';
 import ordersRoute from '../api/routes/orders';
+import flagsRoute from '../api/routes/flags';
 import apiError from '../middlewares/apiError';
 import swaggerDocument from '../swagger/swagger.json';
 dotenv.config();
@@ -37,6 +38,7 @@ app.use('/api/v1/auth', usersRoute);
 app.use('/api/v1/car', carsRoute);
 // app.use(haltOnTimedout);
 app.use('/api/v1/order', ordersRoute);
+app.use('/api/v1/flag', flagsRoute);
 // app.use(haltOnTimedout);
 // function haltOnTimedout(request, response, next) {
 // 	if (!request.timedout) next();
