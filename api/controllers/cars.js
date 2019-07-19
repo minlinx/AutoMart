@@ -15,7 +15,7 @@ class Cars {
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
 		if (token && queryLength === 0) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -50,7 +50,7 @@ class Cars {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else if (priceRange && queryLength === 3) {
 			check('status')
@@ -66,7 +66,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				pool.connect()
+				await pool.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -102,7 +102,7 @@ class Cars {
 								data
 							});
 						}
-					});
+					}).catch((error) => next(error));
 			}
 		}
 		else if (stateIsDefined && queryLength === 1) {
@@ -117,7 +117,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				pool.connect()
+				await pool.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -153,7 +153,7 @@ class Cars {
 								data
 							});
 						}
-					});
+					}).catch((error) => next(error));
 			}
 		}
 		else if (statusIsDefined && queryLength === 1) {
@@ -168,7 +168,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				pool.connect()
+				await pool.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -204,7 +204,7 @@ class Cars {
 								data
 							});
 						}
-					});
+					}).catch((error) => next(error));
 			}
 		}
 		else if (statusAndStateAreDefined && queryLength === 2) {
@@ -222,7 +222,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				pool.connect()
+				await pool.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -258,7 +258,7 @@ class Cars {
 								data
 							});
 						}
-					});
+					}).catch((error) => next(error));
 			}
 		}
 		else if (manufacturerIsDefined && queryLength === 2) {
@@ -276,7 +276,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				pool.connect()
+				await pool.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -312,7 +312,7 @@ class Cars {
 								data
 							});
 						}
-					});
+					}).catch((error) => next(error));
 			}
 		}
 		else if (bodyTypeIsDefined && queryLength === 1) {
@@ -327,7 +327,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				pool.connect()
+				await pool.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -363,7 +363,7 @@ class Cars {
 								data
 							});
 						}
-					});
+					}).catch((error) => next(error));
 			}
 		}
 		else {
@@ -392,7 +392,7 @@ class Cars {
 			});
 		}
 		else if (car_id && token) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(505).json({
@@ -428,7 +428,7 @@ class Cars {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({
@@ -475,7 +475,7 @@ class Cars {
 			token &&
 			errors.isEmpty()
 		) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -514,7 +514,7 @@ class Cars {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({
@@ -545,7 +545,7 @@ class Cars {
 		else if (
 			parsedCarId && token
 		) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -581,7 +581,7 @@ class Cars {
 							token
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(422).json({
@@ -615,7 +615,7 @@ class Cars {
 		else if (
 			token && parsedId
 		) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -651,7 +651,7 @@ class Cars {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			response.status(400).json({
@@ -684,7 +684,7 @@ class Cars {
 		else if (
 			parsedId && token && status === 'sold'
 		) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -720,7 +720,7 @@ class Cars {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({

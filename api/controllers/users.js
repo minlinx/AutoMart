@@ -24,7 +24,7 @@ class Users {
 			});
 		}
 		else if (email && password && first_name && last_name && address && errors.isEmpty()) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -85,7 +85,7 @@ class Users {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({
@@ -112,7 +112,7 @@ class Users {
 			});
 		}
 		else if (email && password) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -164,7 +164,7 @@ class Users {
 							error: 'Bad Request'
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({
