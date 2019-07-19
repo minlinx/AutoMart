@@ -27,7 +27,7 @@ class Orders {
 		else if (
 			car_id && id && token
 		) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -79,7 +79,7 @@ class Orders {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({
@@ -114,7 +114,7 @@ class Orders {
 		else if (
 			parsedId && token && order_id
 		) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -171,7 +171,7 @@ class Orders {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({

@@ -23,7 +23,7 @@ class Flags {
 		else if (
 			car_id && reason && token && description
 		) {
-			pool.connect()
+			await pool.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -60,7 +60,7 @@ class Flags {
 							data
 						});
 					}
-				});
+				}).catch((error) => next(error));
 		}
 		else {
 			return response.status(400).json({
