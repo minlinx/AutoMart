@@ -25,7 +25,6 @@ class Flags {
 		) {
 			pool.connect()
 				.catch(error => {
-					console.log('From create flags', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -40,7 +39,6 @@ class Flags {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
-					console.log('From create flag', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -57,7 +55,6 @@ class Flags {
 					}
 					else {
 						const { data } = result.rows[0];
-						console.log('create flag', data);
 						return response.status(201).json({
 							status: 201,
 							data

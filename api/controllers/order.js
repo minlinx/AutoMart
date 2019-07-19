@@ -7,7 +7,6 @@ class Orders {
 		const id = request.user.id;
 		const parsedId = Number(id);
 		const token = request.token || request.headers.token;
-		console.log(parsedId);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const errors = validationResult(request);
 		const { car_id, amount } = request.body;
@@ -30,7 +29,6 @@ class Orders {
 		) {
 			pool.connect()
 				.catch(error => {
-					console.log('From create order', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -44,7 +42,6 @@ class Orders {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log('From update order', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -60,7 +57,6 @@ class Orders {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
-					console.log('From create order', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -78,7 +74,6 @@ class Orders {
 					else {
 						const { id, car_id, created_on, status } = result.rows[0];
 						const data = { id, car_id, created_on, status, price, price_Offered: parsedPrice, token };
-						console.log('create order', data);
 						return response.status(201).json({
 							status: 201,
 							data
@@ -100,7 +95,6 @@ class Orders {
 		const { price } = request.body;
 		const id = request.user.id;
 		const parsedId = Number(id);
-		console.log(id);
 		const { order_id } = request.params;
 		const parsedPrice = Number(price);
 		const parsedOrderId = Number(order_id);
@@ -123,7 +117,6 @@ class Orders {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log('FRom updata order price' , error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -136,7 +129,6 @@ class Orders {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log('From update order', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -158,7 +150,6 @@ class Orders {
 						return pool.query(sql, params);
 					}
 				}).catch((error) => {
-					console.log('From update order', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -175,7 +166,6 @@ class Orders {
 					else {
 						const { id, car_id, status } = result.rows[0];
 						const data = { id, car_id, status, old_price_offered: amount, new_price_offered: parsedPrice, token };
-						console.log('updat order price', data);
 						return response.status(202).json({
 							status: 202,
 							data

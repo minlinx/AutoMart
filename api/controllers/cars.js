@@ -3,13 +3,10 @@ import pool from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
-		console.log('get all cars', request);
 		const token = request.token || request.headers.token;
-		console.log('getall', token);
 		const queryParams = request.query;
 		const arrayOfQueryParams = Object.keys(queryParams);
 		const queryLength = Object.keys(queryParams).length;
-		console.log(queryLength, 'querylength all  cars routes');
 		const { status, state, min_price, max_price, body_type, manufacturer } = queryParams;
 		const stateIsDefined = arrayOfQueryParams.includes('state');
 		const statusIsDefined = arrayOfQueryParams.includes('status');
@@ -21,7 +18,6 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log('from all cars', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -34,7 +30,6 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
-						console.log('from all cars', error);
 						return response.status(500).json({
 							status: 500,
 							error: 'server is down'
@@ -50,7 +45,6 @@ class Cars {
 					}
 					else {
 						const data = [...result.rows, token];
-						console.log('get all', data);
 						return response.status(200).json({
 							status: 200,
 							data
@@ -381,7 +375,6 @@ class Cars {
 	}
 	static async specificCar(request, response, next) {
 		const token = request.token || request.headers.token;
-		console.log('From specific car', token);
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = Number(car_id);
@@ -402,10 +395,9 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log('from specific cars', error);
 						return response.status(505).json({
 							status: 505,
-							error: 'server is down'
+							error: '***server is down***'
 						});
 					}
 				})
@@ -415,7 +407,6 @@ class Cars {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log('from specific cars', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -432,7 +423,6 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						console.log('specific data', data);
 						return response.status(200).json({
 							status: 200,
 							data
@@ -450,7 +440,6 @@ class Cars {
 	static async postCarAd(request, response, next) {
 		const id = request.user.id;
 		const parsedId = Number(id);
-		console.log(parsedId);
 		const token = request.token || request.headers.token;
 		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
@@ -488,7 +477,6 @@ class Cars {
 		) {
 			pool.connect()
 				.catch(error => {
-					console.log('from postcarad', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -505,7 +493,6 @@ class Cars {
 					return pool.query(sql, params);
 				})
 				.catch(error => {
-					console.log('from postcarad', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -521,11 +508,7 @@ class Cars {
 						});
 					}
 					else {
-						// const { car_image } = { ...result.rows[0] };
-						// const img_url = car_image;
 						const data = { ...result.rows[0], token };
-						// const data = { manufacturer, model, state, status, parsedId };
-						console.log('post car data', data);
 						return response.status(201).json({
 							status: 201,
 							data
@@ -564,7 +547,6 @@ class Cars {
 		) {
 			pool.connect()
 				.catch(error => {
-					console.log('From delete', error);
 					if (error) {
 						return response.status(500).json({
 							status: 500,
@@ -578,7 +560,6 @@ class Cars {
 					return pool.query(sql, param);
 				})
 				.catch(error => {
-					console.log('delete', error);
 					if (error) {
 						return response.status(400).json({
 							status: 400,
@@ -594,7 +575,6 @@ class Cars {
 						});
 					}
 					else {
-						console.log('From delete', result.rows[0]);
 						return response.status(200).json({
 							status: 200,
 							data: 'Car Ad successfully deleted',
@@ -615,7 +595,6 @@ class Cars {
 		const errors = validationResult(request);
 		const token = request.token || request.headers.token;
 		const { price } = request.body;
-		console.log(['patch price', price]);
 		const id = request.user.id;
 		const parsedId = Number(id);
 		const { car_id } = request.params;
@@ -639,7 +618,6 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log('From change car price', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -653,7 +631,6 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
-						console.log('FRom chage car price', error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check your inputs'
@@ -669,7 +646,6 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						console.log('updata car price', data);
 						return response.status(202).json({
 							status: 202,
 							data
@@ -711,7 +687,6 @@ class Cars {
 			pool.connect()
 				.catch(error => {
 					if (error) {
-						console.log('FRom chage car status', error);
 						return response.status(500).json({
 							status: 500,
 							error: '***server is down***'
@@ -725,7 +700,6 @@ class Cars {
 				})
 				.catch(error => {
 					if (error) {
-						console.log('FRom chage car status', error);
 						return response.status(400).json({
 							status: 400,
 							error: 'Check your inputs'
@@ -741,7 +715,6 @@ class Cars {
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						console.log('status change', data);
 						return response.status(202).json({
 							status: 202,
 							data
@@ -751,7 +724,7 @@ class Cars {
 		}
 		else {
 			return response.status(400).json({
-				status: 422,
+				status: 400,
 				error: 'Bad Request'
 			});
 		}
