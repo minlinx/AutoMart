@@ -153,7 +153,6 @@ class Users {
 					else if (bcryptHash.correctPassword(password, result.rows[0].password)) {
 						console.log('FROM SIGNIN', email);
 						const { id } = result.rows[0];
-						// const id = 10;
 						const token = jwt.sign(
 							{
 								id, email
@@ -173,7 +172,7 @@ class Users {
 					else {
 						return response.status(400).json({
 							status: 400,
-							error: 'Forbidden'
+							error: 'Bad Request'
 						});
 					}
 				});
