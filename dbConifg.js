@@ -24,7 +24,8 @@ const getConnectionString = () => {
 	}
 };
 const pool = new Pool(getConnectionString());
-export default pool;
+const connectionToDatabase = pool.connect();
+export default connectionToDatabase;
 
 ////////////////////////////////////////
 // const getDatabase = () => {
