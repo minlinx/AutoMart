@@ -36,10 +36,10 @@ class Orders {
 						});
 					}
 				})
-				.then(() => {
+				.then(async () => {
 					const sql = 'SELECT price FROM cars WHERE id=$1';
 					const param = [parsedCarId];
-					return pool.query(sql, param);
+					return await pool.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
@@ -49,12 +49,12 @@ class Orders {
 						});
 					}
 				})
-				.then((result) => {
+				.then(async (result) => {
 					price = result.rows[0].price;
 					const createdOn = new Date();
 					const sql = 'INSERT INTO orders(buyer, car_id, amount, status, created_on) VALUES ($2, $1, $5, $3, $4) RETURNING *';
 					const params = [parsedCarId, parsedId, 'pending', createdOn, parsedPrice];
-					return pool.query(sql, params);
+					return await pool.query(sql, params);
 				})
 				.catch(error => {
 					if (error) {
@@ -64,9 +64,9 @@ class Orders {
 						});
 					}
 				})
-				.then(result => {
+				.then(async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Not Found',
 						});
@@ -74,7 +74,7 @@ class Orders {
 					else {
 						const { id, car_id, created_on, status } = result.rows[0];
 						const data = { id, car_id, created_on, status, price, price_Offered: parsedPrice, token };
-						return response.status(201).json({
+						return await response.status(201).json({
 							status: 201,
 							data
 						});
@@ -82,7 +82,7 @@ class Orders {
 				}).catch((error) => next(error));
 		}
 		else {
-			return response.status(400).json({
+			return await response.status(400).json({
 				status: 400,
 				error: 'Bad request'
 			});
@@ -123,10 +123,10 @@ class Orders {
 						});
 					}
 				})
-				.then(() => {
+				.then(async() => {
 					const sql = 'SELECT amount FROM orders WHERE id=$1 AND buyer=$2';
 					const param = [parsedOrderId, parsedId];
-					return pool.query(sql, param);
+					return await pool.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
@@ -136,9 +136,9 @@ class Orders {
 						});
 					}
 				})
-				.then(result => {
+				.then(async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(400).json({
+						return await response.status(400).json({
 							status: 400,
 							error: 'Bad Request'
 						});
@@ -147,7 +147,7 @@ class Orders {
 						amount = result.rows[0].amount;
 						const sql = 'UPDATE orders SET amount=$2 WHERE (id=$1 AND status=$3) RETURNING *';
 						const params = [parsedOrderId, parsedPrice, 'pending'];
-						return pool.query(sql, params);
+						return await pool.query(sql, params);
 					}
 				}).catch((error) => {
 					if (error) {
@@ -156,9 +156,9 @@ class Orders {
 							error: 'Server is Down'
 						});
 					}
-				}).then((result) => {
+				}).then(async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Not Found',
 						});
@@ -166,7 +166,7 @@ class Orders {
 					else {
 						const { id, car_id, status } = result.rows[0];
 						const data = { id, car_id, status, old_price_offered: amount, new_price_offered: parsedPrice, token };
-						return response.status(202).json({
+						return await response.status(202).json({
 							status: 202,
 							data
 						});
@@ -174,7 +174,7 @@ class Orders {
 				}).catch((error) => next(error));
 		}
 		else {
-			return response.status(400).json({
+			return await response.status(400).json({
 				status: 400,
 				error: '*Check Your Inputs*'
 			});

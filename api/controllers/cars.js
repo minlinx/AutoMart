@@ -1,5 +1,5 @@
 import { validationResult } from 'express-validator/check';
-import pool from '../../dbConifg';
+import connectionToDatabase from '../../dbConifg';
 import { check } from 'express-validator/check';
 class Cars {
 	static async getCarOrCars(request, response, next) {
@@ -15,7 +15,7 @@ class Cars {
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
 		if (token && queryLength === 0) {
-			await pool.connect()
+			await connectionToDatabase.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -24,9 +24,9 @@ class Cars {
 						});
 					}
 				})
-				.then(() => {
+				.then( async () => {
 					const sql = 'SELECT * FROM cars';
-					return pool.query(sql);
+					return await connectionToDatabase.query(sql);
 				})
 				.catch(error => {
 					if (error) {
@@ -36,16 +36,16 @@ class Cars {
 						});
 					}
 				})
-				.then((result) => {
+				.then( async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Database is empty'
 						});
 					}
 					else {
 						const data = [...result.rows, token];
-						return response.status(200).json({
+						return await response.status(200).json({
 							status: 200,
 							data
 						});
@@ -66,7 +66,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				await pool.connect()
+				await connectionToDatabase.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -75,10 +75,10 @@ class Cars {
 							});
 						}
 					})
-					.then(() => {
+					.then( async () => {
 						const sql = 'SELECT * FROM cars WHERE status=$1 AND price>=$2 AND price<=$3 AND status=$4';
 						const param = [status, min_price, max_price, 'available'];
-						return pool.query(sql, param);
+						return await connectionToDatabase.query(sql, param);
 					})
 					.catch(error => {
 						if (error) {
@@ -88,7 +88,7 @@ class Cars {
 							});
 						}
 					})
-					.then(result => {
+					.then(async(result) => {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
@@ -97,7 +97,7 @@ class Cars {
 						}
 						else {
 							const data = [...result.rows];
-							return response.status(200).json({
+							return await response.status(200).json({
 								status: 200,
 								data
 							});
@@ -117,7 +117,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				await pool.connect()
+				await connectionToDatabase.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -126,10 +126,10 @@ class Cars {
 							});
 						}
 					})
-					.then(() => {
+					.then(async () => {
 						const sql = 'SELECT * FROM cars WHERE (state=$1)  AND (state=$2 OR state=$3) AND status=$4';
 						const param = [state, 'new', 'used', 'available'];
-						return pool.query(sql, param);
+						return connectionToDatabase.query(sql, param);
 					})
 					.catch(error => {
 						if (error) {
@@ -139,16 +139,16 @@ class Cars {
 							});
 						}
 					})
-					.then(result => {
+					.then(async (result) => {
 						if (!result.rowCount > 0) {
-							return response.status(404).json({
+							return await response.status(404).json({
 								status: 404,
 								error: 'Not Found',
 							});
 						}
 						else {
 							const data = [...result.rows];
-							return response.status(200).json({
+							return await response.status(200).json({
 								status: 200,
 								data
 							});
@@ -168,7 +168,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				await pool.connect()
+				await connectionToDatabase.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -177,10 +177,10 @@ class Cars {
 							});
 						}
 					})
-					.then(() => {
+					.then(async () => {
 						const sql = 'SELECT * FROM cars WHERE status=$1';
 						const param = [status];
-						return pool.query(sql, param);
+						return await connectionToDatabase.query(sql, param);
 					})
 					.catch(error => {
 						if (error) {
@@ -190,16 +190,16 @@ class Cars {
 							});
 						}
 					})
-					.then(result => {
+					.then(async (result) => {
 						if (!result.rowCount > 0) {
-							return response.status(404).json({
+							return await response.status(404).json({
 								status: 404,
 								error: 'Not Found',
 							});
 						}
 						else {
 							const data = [...result.rows];
-							return response.status(200).json({
+							return await response.status(200).json({
 								status: 200,
 								data
 							});
@@ -222,7 +222,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				await pool.connect()
+				await connectionToDatabase.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -231,10 +231,10 @@ class Cars {
 							});
 						}
 					})
-					.then(() => {
+					.then(async () => {
 						const sql = 'SELECT * FROM cars WHERE (state=$1)  AND status=$2 AND status=$3';
 						const param = [state, status, 'available'];
-						return pool.query(sql, param);
+						return await connectionToDatabase.query(sql, param);
 					})
 					.catch(error => {
 						if (error) {
@@ -244,16 +244,16 @@ class Cars {
 							});
 						}
 					})
-					.then(result => {
+					.then(async (result) => {
 						if (!result.rowCount > 0) {
-							return response.status(404).json({
+							return await response.status(404).json({
 								status: 404,
 								error: 'Not Found',
 							});
 						}
 						else {
 							const data = [...result.rows];
-							return response.status(200).json({
+							return await response.status(200).json({
 								status: 200,
 								data
 							});
@@ -276,7 +276,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				await pool.connect()
+				await connectionToDatabase.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -285,10 +285,10 @@ class Cars {
 							});
 						}
 					})
-					.then(() => {
+					.then(async () => {
 						const sql = 'SELECT * FROM cars WHERE manufacturer=$1  AND status=$2 AND status=$3';
 						const param = [manufacturer, status, 'available'];
-						return pool.query(sql, param);
+						return await connectionToDatabase.query(sql, param);
 					})
 					.catch(error => {
 						if (error) {
@@ -298,16 +298,16 @@ class Cars {
 							});
 						}
 					})
-					.then(result => {
+					.then(async(result) => {
 						if (!result.rowCount > 0) {
-							return response.status(404).json({
+							return await response.status(404).json({
 								status: 404,
 								error: 'Not Found',
 							});
 						}
 						else {
 							const data = [...result.rows];
-							return response.status(200).json({
+							return await response.status(200).json({
 								status: 200,
 								data
 							});
@@ -327,7 +327,7 @@ class Cars {
 				});
 			}
 			else if (errors.isEmpty()) {
-				await pool.connect()
+				await connectionToDatabase.connect()
 					.catch(error => {
 						if (error) {
 							return response.status(500).json({
@@ -336,10 +336,10 @@ class Cars {
 							});
 						}
 					})
-					.then(() => {
+					.then(async() => {
 						const sql = 'SELECT * FROM cars WHERE body_type=$1  AND status=$2';
 						const param = [body_type, 'available'];
-						return pool.query(sql, param);
+						return await connectionToDatabase.query(sql, param);
 					})
 					.catch(error => {
 						if (error) {
@@ -349,7 +349,7 @@ class Cars {
 							});
 						}
 					})
-					.then(result => {
+					.then(async(result) => {
 						if (!result.rowCount > 0) {
 							return response.status(404).json({
 								status: 404,
@@ -358,7 +358,7 @@ class Cars {
 						}
 						else {
 							const data = [...result.rows];
-							return response.status(200).json({
+							return await response.status(200).json({
 								status: 200,
 								data
 							});
@@ -392,7 +392,7 @@ class Cars {
 			});
 		}
 		else if (car_id && token) {
-			await pool.connect()
+			await connectionToDatabase.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(505).json({
@@ -401,10 +401,10 @@ class Cars {
 						});
 					}
 				})
-				.then(() => {
+				.then(async () => {
 					const sql = 'SELECT * FROM cars WHERE id=$1';
 					const param = [parsedCarId];
-					return pool.query(sql, param);
+					return await connectionToDatabase.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
@@ -414,16 +414,16 @@ class Cars {
 						});
 					}
 				})
-				.then(result => {
+				.then(async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Not Found',
 						});
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						return response.status(200).json({
+						return await response.status(200).json({
 							status: 200,
 							data
 						});
@@ -431,7 +431,7 @@ class Cars {
 				}).catch((error) => next(error));
 		}
 		else {
-			return response.status(400).json({
+			return await response.status(400).json({
 				status: 400,
 				error: 'Bad requests'
 			});
@@ -475,7 +475,7 @@ class Cars {
 			token &&
 			errors.isEmpty()
 		) {
-			await pool.connect()
+			await connectionToDatabase.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -484,13 +484,13 @@ class Cars {
 						});
 					}
 				})
-				.then(() => {
+				.then(async () => {
 					const createdOn = new Date();
 					// const url = (request.file.secure_url);
 					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car5.jpg.jpg';
 					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
 					const params = [parsedId, createdOn, state, status, parsedPrice, manufacturer, model, body_type, img_url];
-					return pool.query(sql, params);
+					return await connectionToDatabase.query(sql, params);
 				})
 				.catch(error => {
 					if (error) {
@@ -500,16 +500,16 @@ class Cars {
 						});
 					}
 				})
-				.then(result => {
+				.then(async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Not Found',
 						});
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						return response.status(201).json({
+						return await response.status(201).json({
 							status: 201,
 							data
 						});
@@ -517,7 +517,7 @@ class Cars {
 				}).catch((error) => next(error));
 		}
 		else {
-			return response.status(400).json({
+			return await response.status(400).json({
 				status: 400,
 				error: 'Bad Request'
 			});
@@ -545,7 +545,7 @@ class Cars {
 		else if (
 			parsedCarId && token
 		) {
-			await pool.connect()
+			await connectionToDatabase.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -554,10 +554,10 @@ class Cars {
 						});
 					}
 				})
-				.then(() => {
+				.then(async() => {
 					const sql = 'DELETE FROM cars WHERE id=$1';
 					const param = [parsedCarId];
-					return pool.query(sql, param);
+					return await connectionToDatabase.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
@@ -567,15 +567,15 @@ class Cars {
 						});
 					}
 				})
-				.then(result => {
+				.then(async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Not Found',
 						});
 					}
 					else {
-						return response.status(200).json({
+						return await response.status(200).json({
 							status: 200,
 							data: 'Car Ad successfully deleted',
 							token
@@ -584,7 +584,7 @@ class Cars {
 				}).catch((error) => next(error));
 		}
 		else {
-			return response.status(422).json({
+			return await response.status(422).json({
 				status: 422,
 				error: 'Unauthorized'
 			});
@@ -615,7 +615,7 @@ class Cars {
 		else if (
 			token && parsedId
 		) {
-			await pool.connect()
+			await connectionToDatabase.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -624,10 +624,10 @@ class Cars {
 						});
 					}
 				})
-				.then(() => {
+				.then(async () => {
 					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=$3 RETURNING *';
 					const param = [parsedPrice, parsedCarId, parsedId];
-					return pool.query(sql, param);
+					return await connectionToDatabase.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
@@ -637,16 +637,16 @@ class Cars {
 						});
 					}
 				})
-				.then(result => {
+				.then(async(result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Not Found',
 						});
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						return response.status(202).json({
+						return await response.status(202).json({
 							status: 202,
 							data
 						});
@@ -654,7 +654,7 @@ class Cars {
 				}).catch((error) => next(error));
 		}
 		else {
-			response.status(400).json({
+			return await response.status(400).json({
 				status: 400,
 				error: 'Bad Request'
 			});
@@ -684,7 +684,7 @@ class Cars {
 		else if (
 			parsedId && token && status === 'sold'
 		) {
-			await pool.connect()
+			await connectionToDatabase.connect()
 				.catch(error => {
 					if (error) {
 						return response.status(500).json({
@@ -693,10 +693,10 @@ class Cars {
 						});
 					}
 				})
-				.then(() => {
+				.then(async () => {
 					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=$3 RETURNING *';
 					const param = ['sold', parsedCarId, parsedId];
-					return pool.query(sql, param);
+					return await connectionToDatabase.query(sql, param);
 				})
 				.catch(error => {
 					if (error) {
@@ -706,16 +706,16 @@ class Cars {
 						});
 					}
 				})
-				.then(result => {
+				.then(async (result) => {
 					if (!result.rowCount > 0) {
-						return response.status(404).json({
+						return await response.status(404).json({
 							status: 404,
 							error: 'Not Found',
 						});
 					}
 					else {
 						const data = { ...result.rows[0], token };
-						return response.status(202).json({
+						return await response.status(202).json({
 							status: 202,
 							data
 						});
@@ -723,7 +723,7 @@ class Cars {
 				}).catch((error) => next(error));
 		}
 		else {
-			return response.status(400).json({
+			return await response.status(400).json({
 				status: 400,
 				error: 'Bad Request'
 			});

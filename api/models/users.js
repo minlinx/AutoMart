@@ -1,30 +1,35 @@
-const users = [
-	{
-		id: 1,
-		email: 'firstUser@automart.com',
-		firstName: 'john',
-		lastName: 'doe',
-		password: '12345',
-		address: 'No. 25 macauly street, Era Ijanikin, Lagos',
-		isAdmin: false
-	},
-	{
-		id: 2,
-		email: 'minaproblemsolver@gmail.com',
-		firstName: 'john1',
-		lastName: 'doe1',
-		password: '123456',
-		address: 'No. 26 macauly street, Era Ijanikin, Lagos',
-		isAdmin: false
-	},
-	{
-		id: 3,
-		email: 'thirdUser@automart.com',
-		firstName: 'john2',
-		lastName: 'doe2',
-		password: '1234567',
-		address: 'No. 27 macauly street, Era Ijanikin, Lagos',
-		isAdmin: true
+import pool from '../../dbConifg';
+class Users {
+	static async insertIntoDatabase(userData) {
+		const { email, password, first_name, last_name, address } = userData;
+		const regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(automart)\.com$/g;
+		const isAdmin = regex.test(email);
+		const sql = 'INSERT INTO users (email, password, first_name, last_name, address, is_admin)  VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+		const params = [email, password, first_name, last_name, address, isAdmin];
+		try {
+			return await pool.query(sql, params);
+		} catch (error) {
+			throw error;
+		}
 	}
-];
-export default users;
+
+	static async getUserData(email) {
+		const sql = 'SELECT * FROM users WHERE email = $1';
+		const params = [email];
+		try {
+			return await pool.query(sql, params);
+		} catch (error) {
+			throw error;
+		}
+	}
+	static async getUserEmail(email) {
+		const sql = 'SELECT email FROM users WHERE email = $1';
+		const params = [email];
+		try {
+			return await pool.query(sql, params);
+		} catch (error) {
+			throw error;
+		}
+	}
+}
+export default Users;
