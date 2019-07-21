@@ -2,7 +2,7 @@ class apiEror {
 	static notFoundError(request, response, next) {
 		const error = new Error('Not Found, check the URL you typed and try again');
 		error.status = 404 || 500;
-		return next(error);
+		next(error);
 	}
 	static serverError(error, request, response) {
 		if (error.status === 404) {
