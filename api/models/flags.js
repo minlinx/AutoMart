@@ -1,24 +1,14 @@
-const flags = [
-	{
-		id: 1,
-		carId: 1,
-		createdOn: new Date(),
-		reason: 'princing', // [pricing, weird demands, etc]
-		description: 'The vehicle is too expensive'
-	},
-	{
-		id: 2,
-		carId: 1,
-		createdOn: new Date(),
-		reason: 'princing', // [pricing, weird demands, etc]
-		description: 'The vehicle is too expensive'
-	},
-	{
-		id: 3,
-		carId: 3,
-		createdOn: new Date(),
-		reason: 'princing', // [pricing, weird demands, etc]
-		description: 'The vehicle is too expensive'
+import pool from '../../dbConifg';
+class Flags {
+	static async postFlag(parsedCarId, reason, description) {
+		const createdOn = new Date();
+		const sql = 'INSERT INTO flags(car_id, created_on, reason, description) VALUES ($1, $2, $3, $4) RETURNING *';
+		const params = [parsedCarId, createdOn, reason, description];
+		try {
+			return await pool.query(sql, params);
+		} catch (error) {
+			throw error;
+		}
 	}
-];
-export default flags;
+}
+export default Flags;

@@ -1,6 +1,4 @@
-import { validationResult } from 'express-validator/check';
-import connectionToDatabase from '../../dbConifg';
-import { check } from 'express-validator/check';
+import CarsModel from '../models/cars';
 class Cars {
 	static async getCarOrCars(request, response, next) {
 		const token = request.token || request.headers.token;
@@ -15,433 +13,102 @@ class Cars {
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
 		if (token && queryLength === 0) {
-			await connectionToDatabase.connect()
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: '***server is down***'
-						});
-					}
-				})
-				.then( async () => {
-					const sql = 'SELECT * FROM cars';
-					return await connectionToDatabase.query(sql);
-				})
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: 'server is down'
-						});
-					}
-				})
-				.then( async (result) => {
-					if (!result.rowCount > 0) {
-						return await response.status(404).json({
-							status: 404,
-							error: 'Database is empty'
-						});
-					}
-					else {
-						const data = [...result.rows, token];
-						return await response.status(200).json({
-							status: 200,
-							data
-						});
-					}
-				}).catch((error) => next(error));
-		}
-		else if (priceRange && queryLength === 3) {
-			check('status')
-				.isLength({ min: 4 })
-				.trim().not().isEmpty().isString();
-			check('min_price').not().isEmpty().exists().isFloat().trim().escape();
-			check('max_price').not().isEmpty().exists().isFloat().trim().escape();
-			const errors = validationResult(request);
-			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
-					error: 'Unprocessable Entity'
+			const carDatabaseResult = await CarsModel.getAll();
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
 				});
 			}
-			else if (errors.isEmpty()) {
-				await connectionToDatabase.connect()
-					.catch(error => {
-						if (error) {
-							return response.status(500).json({
-								status: 500,
-								error: '***server is down***'
-							});
-						}
-					})
-					.then( async () => {
-						const sql = 'SELECT * FROM cars WHERE status=$1 AND price>=$2 AND price<=$3 AND status=$4';
-						const param = [status, min_price, max_price, 'available'];
-						return await connectionToDatabase.query(sql, param);
-					})
-					.catch(error => {
-						if (error) {
-							return response.status(400).json({
-								status: 400,
-								error: 'Check your inputs'
-							});
-						}
-					})
-					.then(async(result) => {
-						if (!result.rowCount > 0) {
-							return response.status(404).json({
-								status: 404,
-								error: 'Not Found',
-							});
-						}
-						else {
-							const data = [...result.rows];
-							return await response.status(200).json({
-								status: 200,
-								data
-							});
-						}
-					}).catch((error) => next(error));
+		}
+		else if (priceRange && queryLength === 3) {
+			const carDatabaseResult = await CarsModel.getCarsWithinPriceRange(status, min_price, max_price);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
+				});
 			}
 		}
 		else if (stateIsDefined && queryLength === 1) {
-			check('state')
-				.isLength({ min: 3 })
-				.trim().not().isEmpty().isString();
-			const errors = validationResult(request);
-			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
-					error: 'Unprocessable Entity'
+			const carDatabaseResult = await CarsModel.getCarsByState(state);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
 				});
-			}
-			else if (errors.isEmpty()) {
-				await connectionToDatabase.connect()
-					.catch(error => {
-						if (error) {
-							return response.status(500).json({
-								status: 500,
-								error: 'server is down'
-							});
-						}
-					})
-					.then(async () => {
-						const sql = 'SELECT * FROM cars WHERE (state=$1)  AND (state=$2 OR state=$3) AND status=$4';
-						const param = [state, 'new', 'used', 'available'];
-						return connectionToDatabase.query(sql, param);
-					})
-					.catch(error => {
-						if (error) {
-							return response.status(400).json({
-								status: 400,
-								error: 'Check your inputs'
-							});
-						}
-					})
-					.then(async (result) => {
-						if (!result.rowCount > 0) {
-							return await response.status(404).json({
-								status: 404,
-								error: 'Not Found',
-							});
-						}
-						else {
-							const data = [...result.rows];
-							return await response.status(200).json({
-								status: 200,
-								data
-							});
-						}
-					}).catch((error) => next(error));
 			}
 		}
 		else if (statusIsDefined && queryLength === 1) {
-			check('status')
-				.isLength({ min: 3 })
-				.trim().not().isEmpty().isString();
-			const errors = validationResult(request);
-			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
-					error: 'Unprocessable Entity'
+			const carDatabaseResult = await CarsModel.getCarsByStatus(status);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
 				});
-			}
-			else if (errors.isEmpty()) {
-				await connectionToDatabase.connect()
-					.catch(error => {
-						if (error) {
-							return response.status(500).json({
-								status: 500,
-								error: 'server is down'
-							});
-						}
-					})
-					.then(async () => {
-						const sql = 'SELECT * FROM cars WHERE status=$1';
-						const param = [status];
-						return await connectionToDatabase.query(sql, param);
-					})
-					.catch(error => {
-						if (error) {
-							return response.status(400).json({
-								status: 400,
-								error: 'Check your inputs'
-							});
-						}
-					})
-					.then(async (result) => {
-						if (!result.rowCount > 0) {
-							return await response.status(404).json({
-								status: 404,
-								error: 'Not Found',
-							});
-						}
-						else {
-							const data = [...result.rows];
-							return await response.status(200).json({
-								status: 200,
-								data
-							});
-						}
-					}).catch((error) => next(error));
 			}
 		}
 		else if (statusAndStateAreDefined && queryLength === 2) {
-			check('status')
-				.isLength({ min: 4 })
-				.trim().not().isEmpty().isString();
-			check('state')
-				.isLength({ min: 3 })
-				.trim().not().isEmpty().isString();
-			const errors = validationResult(request);
-			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
-					error: 'Unprocessable Entity'
+			const carDatabaseResult = await CarsModel.getCarsByStatusAndState(state, status);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
 				});
-			}
-			else if (errors.isEmpty()) {
-				await connectionToDatabase.connect()
-					.catch(error => {
-						if (error) {
-							return response.status(500).json({
-								status: 500,
-								error: '***server is down***'
-							});
-						}
-					})
-					.then(async () => {
-						const sql = 'SELECT * FROM cars WHERE (state=$1)  AND status=$2 AND status=$3';
-						const param = [state, status, 'available'];
-						return await connectionToDatabase.query(sql, param);
-					})
-					.catch(error => {
-						if (error) {
-							return response.status(400).json({
-								status: 400,
-								error: 'Check your inputs'
-							});
-						}
-					})
-					.then(async (result) => {
-						if (!result.rowCount > 0) {
-							return await response.status(404).json({
-								status: 404,
-								error: 'Not Found',
-							});
-						}
-						else {
-							const data = [...result.rows];
-							return await response.status(200).json({
-								status: 200,
-								data
-							});
-						}
-					}).catch((error) => next(error));
 			}
 		}
 		else if (manufacturerIsDefined && queryLength === 2) {
-			check('manufacturer').not().isEmpty()
-				.isLength({ min: 4 })
-				.trim().isString();
-			check('status')
-				.isLength({ min: 4 })
-				.trim().not().isEmpty().isString();
-			const errors = validationResult(request);
-			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
-					error: 'Unprocessable Entity'
+			const carDatabaseResult = await CarsModel.getCarsByStatusAndManufacturer(manufacturer, status);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
 				});
-			}
-			else if (errors.isEmpty()) {
-				await connectionToDatabase.connect()
-					.catch(error => {
-						if (error) {
-							return response.status(500).json({
-								status: 500,
-								error: 'server is down'
-							});
-						}
-					})
-					.then(async () => {
-						const sql = 'SELECT * FROM cars WHERE manufacturer=$1  AND status=$2 AND status=$3';
-						const param = [manufacturer, status, 'available'];
-						return await connectionToDatabase.query(sql, param);
-					})
-					.catch(error => {
-						if (error) {
-							return response.status(400).json({
-								status: 400,
-								error: 'Check your inputs'
-							});
-						}
-					})
-					.then(async(result) => {
-						if (!result.rowCount > 0) {
-							return await response.status(404).json({
-								status: 404,
-								error: 'Not Found',
-							});
-						}
-						else {
-							const data = [...result.rows];
-							return await response.status(200).json({
-								status: 200,
-								data
-							});
-						}
-					}).catch((error) => next(error));
 			}
 		}
 		else if (bodyTypeIsDefined && queryLength === 1) {
-			check('body_type')
-				.isLength({ min: 3 })
-				.trim().not().isEmpty().isString();
-			const errors = validationResult(request);
-			if (!errors.isEmpty()) {
-				response.status(422).json({
-					status: 422,
-					error: 'Unprocessable Entity'
+			const carDatabaseResult = await CarsModel.getCarsByBodyType(body_type);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
 				});
-			}
-			else if (errors.isEmpty()) {
-				await connectionToDatabase.connect()
-					.catch(error => {
-						if (error) {
-							return response.status(500).json({
-								status: 500,
-								error: 'server is down'
-							});
-						}
-					})
-					.then(async() => {
-						const sql = 'SELECT * FROM cars WHERE body_type=$1  AND status=$2';
-						const param = [body_type, 'available'];
-						return await connectionToDatabase.query(sql, param);
-					})
-					.catch(error => {
-						if (error) {
-							return response.status(400).json({
-								status: 400,
-								error: 'Check your inputs'
-							});
-						}
-					})
-					.then(async(result) => {
-						if (!result.rowCount > 0) {
-							return response.status(404).json({
-								status: 404,
-								error: 'Not Found',
-							});
-						}
-						else {
-							const data = [...result.rows];
-							return await response.status(200).json({
-								status: 200,
-								data
-							});
-						}
-					}).catch((error) => next(error));
 			}
 		}
 		else {
-			return response.status(400).json({
-				status: 400,
-				error: 'Bad Request'
-			});
+			return await next();
 		}
 	}
 	static async specificCar(request, response, next) {
 		const token = request.token || request.headers.token;
-		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = Number(car_id);
-		const errors = validationResult(request);
-		if (!errors.isEmpty()) {
-			return response.status(422).json({
-				status: 422,
-				error: 'Unprocessable Entity'
-			});
-		}
-		else if (queryLength > 0) {
-			return response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (car_id && token) {
-			await connectionToDatabase.connect()
-				.catch(error => {
-					if (error) {
-						return response.status(505).json({
-							status: 505,
-							error: '***server is down***'
-						});
-					}
-				})
-				.then(async () => {
-					const sql = 'SELECT * FROM cars WHERE id=$1';
-					const param = [parsedCarId];
-					return await connectionToDatabase.query(sql, param);
-				})
-				.catch(error => {
-					if (error) {
-						return response.status(400).json({
-							status: 400,
-							error: 'Check your inputs'
-						});
-					}
-				})
-				.then(async (result) => {
-					if (!result.rowCount > 0) {
-						return await response.status(404).json({
-							status: 404,
-							error: 'Not Found',
-						});
-					}
-					else {
-						const data = { ...result.rows[0], token };
-						return await response.status(200).json({
-							status: 200,
-							data
-						});
-					}
-				}).catch((error) => next(error));
+		if (car_id && token) {
+			const carDatabaseResult = await CarsModel.getSpecificCar(parsedCarId);
+			if(carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(200).json({
+					status: 200,
+					data
+				});
+			}
 		}
 		else {
-			return await response.status(400).json({
-				status: 400,
-				error: 'Bad requests'
-			});
+			return await next();
 		}
 	}
 	static async postCarAd(request, response, next) {
+		const img_url = (request.file.secure_url);
 		const id = request.user.id;
 		const parsedId = Number(id);
 		const token = request.token || request.headers.token;
-		const queryLength = parseInt(Object.keys(request.query).length);
 		const {
 			status,
 			manufacturer,
@@ -451,20 +118,7 @@ class Cars {
 			state
 		} = request.body;
 		const parsedPrice = Number(price);
-		const errors = validationResult(request);
-		if (!errors.isEmpty()) {
-			return response.status(422).json({
-				status: 422,
-				error: 'Unprocessable Entity'
-			});
-		}
-		else if (queryLength > 0) {
-			return response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
+		if (
 			manufacturer &&
 			model &&
 			body_type &&
@@ -472,127 +126,43 @@ class Cars {
 			state &&
 			status === 'available' &&
 			parsedId &&
-			token &&
-			errors.isEmpty()
+			token
 		) {
-			await connectionToDatabase.connect()
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: '***server is down***'
-						});
-					}
-				})
-				.then(async () => {
-					const createdOn = new Date();
-					// const url = (request.file.secure_url);
-					const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1562696499/min-automart-images/1562696490671car5.jpg.jpg';
-					const sql = 'INSERT INTO cars (owner, created_on, state, status, price, manufacturer, model, body_type, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-					const params = [parsedId, createdOn, state, status, parsedPrice, manufacturer, model, body_type, img_url];
-					return await connectionToDatabase.query(sql, params);
-				})
-				.catch(error => {
-					if (error) {
-						return response.status(400).json({
-							status: 400,
-							error: 'Check your inputs'
-						});
-					}
-				})
-				.then(async (result) => {
-					if (!result.rowCount > 0) {
-						return await response.status(404).json({
-							status: 404,
-							error: 'Not Found',
-						});
-					}
-					else {
-						const data = { ...result.rows[0], token };
-						return await response.status(201).json({
-							status: 201,
-							data
-						});
-					}
-				}).catch((error) => next(error));
+			const carDatabaseResult = await CarsModel.postCarAd(parsedId, state, status, parsedPrice, manufacturer, model, body_type, img_url);
+			if(carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(201).json({
+					status: 201,
+					data
+				});
+			}
 		}
 		else {
-			return await response.status(400).json({
-				status: 400,
-				error: 'Bad Request'
-			});
+			return await next();
 		}
 	}
 	static async deleteCarAd(request, response, next) {
 		// const { adminToken } = response.locals;
 		const token = request.token || request.headers.token;
-		const queryLength = parseInt(Object.keys(request.query).length);
 		const { car_id } = request.params;
 		const parsedCarId = Number(car_id);
-		const errors = validationResult(request);
-		if (!errors.isEmpty()) {
-			return response.status(422).json({
-				status: 422,
-				error: 'Unprocessable Entity'
-			});
-		}
-		else if (queryLength > 0) {
-			return response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
+		if (
 			parsedCarId && token
 		) {
-			await connectionToDatabase.connect()
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: '***server is down***'
-						});
-					}
-				})
-				.then(async() => {
-					const sql = 'DELETE FROM cars WHERE id=$1';
-					const param = [parsedCarId];
-					return await connectionToDatabase.query(sql, param);
-				})
-				.catch(error => {
-					if (error) {
-						return response.status(400).json({
-							status: 400,
-							error: 'Check your inputs'
-						});
-					}
-				})
-				.then(async (result) => {
-					if (!result.rowCount > 0) {
-						return await response.status(404).json({
-							status: 404,
-							error: 'Not Found',
-						});
-					}
-					else {
-						return await response.status(200).json({
-							status: 200,
-							data: 'Car Ad successfully deleted',
-							token
-						});
-					}
-				}).catch((error) => next(error));
+			const carDatabaseResult = await CarsModel.deleteCarAd(parsedCarId);
+			if(carDatabaseResult.rowCount > 0) {
+				const data = `Car Ad ${ parsedCarId } Successfully Deleted`;
+				return await response.status(301).json({
+					status: 301,
+					data
+				});
+			}
 		}
 		else {
-			return await response.status(422).json({
-				status: 422,
-				error: 'Unauthorized'
-			});
+			return await next();
 		}
 	}
 	static async changeCarAdPrice(request, response, next) {
-		const queryLength = parseInt(Object.keys(request.query).length);
-		const errors = validationResult(request);
 		const token = request.token || request.headers.token;
 		const { price } = request.body;
 		const id = request.user.id;
@@ -600,133 +170,43 @@ class Cars {
 		const { car_id } = request.params;
 		const parsedPrice = Number(price);
 		const parsedCarId = parseInt(car_id);
-		if (!errors.isEmpty()) {
-			return response.status(422).json({
-				status: 422,
-				error: 'Unprocessable Entity'
-			});
-		}
-		else if (queryLength > 0) {
-			return response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
+		if (
 			token && parsedId
 		) {
-			await connectionToDatabase.connect()
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: '***server is down***'
-						});
-					}
-				})
-				.then(async () => {
-					const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=$3 RETURNING *';
-					const param = [parsedPrice, parsedCarId, parsedId];
-					return await connectionToDatabase.query(sql, param);
-				})
-				.catch(error => {
-					if (error) {
-						return response.status(400).json({
-							status: 400,
-							error: 'Check your inputs'
-						});
-					}
-				})
-				.then(async(result) => {
-					if (!result.rowCount > 0) {
-						return await response.status(404).json({
-							status: 404,
-							error: 'Not Found',
-						});
-					}
-					else {
-						const data = { ...result.rows[0], token };
-						return await response.status(202).json({
-							status: 202,
-							data
-						});
-					}
-				}).catch((error) => next(error));
+			const carDatabaseResult = await CarsModel.changeCarAdPrice(parsedPrice, parsedCarId, parsedId);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(202).json({
+					status: 202,
+					data
+				});
+			}
 		}
 		else {
-			return await response.status(400).json({
-				status: 400,
-				error: 'Bad Request'
-			});
+			return await next();
 		}
 	}
 	static async changeCarAdStatus(request, response, next) {
-		const queryLength = parseInt(Object.keys(request.query).length);
-		const errors = validationResult(request);
 		const token = request.token || request.headers.token;
 		const { status } = request.body;
 		const id = request.user.id;
 		const parsedId = Number(id);
 		const { car_id } = request.params;
 		const parsedCarId = Number(car_id);
-		if (!errors.isEmpty()) {
-			return response.status(422).json({
-				status: 422,
-				error: 'Unprocessable Entity'
-			});
-		}
-		else if (queryLength > 0) {
-			return response.status(400).json({
-				status: 400,
-				error: 'No Query Params'
-			});
-		}
-		else if (
+		if (
 			parsedId && token && status === 'sold'
 		) {
-			await connectionToDatabase.connect()
-				.catch(error => {
-					if (error) {
-						return response.status(500).json({
-							status: 500,
-							error: '***server is down***'
-						});
-					}
-				})
-				.then(async () => {
-					const sql = 'UPDATE cars SET status=$1 WHERE id=$2 AND owner=$3 RETURNING *';
-					const param = ['sold', parsedCarId, parsedId];
-					return await connectionToDatabase.query(sql, param);
-				})
-				.catch(error => {
-					if (error) {
-						return response.status(400).json({
-							status: 400,
-							error: 'Check your inputs'
-						});
-					}
-				})
-				.then(async (result) => {
-					if (!result.rowCount > 0) {
-						return await response.status(404).json({
-							status: 404,
-							error: 'Not Found',
-						});
-					}
-					else {
-						const data = { ...result.rows[0], token };
-						return await response.status(202).json({
-							status: 202,
-							data
-						});
-					}
-				}).catch((error) => next(error));
+			const carDatabaseResult = await CarsModel.changeCarAdStatus(parsedCarId, parsedId);
+			if (carDatabaseResult.rowCount > 0) {
+				const data = [...carDatabaseResult.rows];
+				return await response.status(202).json({
+					status: 202,
+					data
+				});
+			}
 		}
 		else {
-			return await response.status(400).json({
-				status: 400,
-				error: 'Bad Request'
-			});
+			return await next();
 		}
 	}
 }
