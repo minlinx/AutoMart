@@ -29,6 +29,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -49,6 +50,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -69,6 +71,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -89,6 +92,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -109,6 +113,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -129,6 +134,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -149,6 +155,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -177,6 +184,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -215,6 +223,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -246,6 +255,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -277,6 +287,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
@@ -307,6 +318,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
+				console.log(error);
 				throw error;
 			}
 		}
