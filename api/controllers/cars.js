@@ -13,73 +13,143 @@ class Cars {
 		const statusAndStateAreDefined = arrayOfQueryParams.includes('state', 'status');
 		const priceRange = arrayOfQueryParams.includes('status', 'min_price', 'max_price');
 		if (token && queryLength === 0) {
-			const carDatabaseResult = await CarsModel.getAll();
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getAll();
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else if (priceRange && queryLength === 3) {
-			const carDatabaseResult = await CarsModel.getCarsWithinPriceRange(status, min_price, max_price);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getCarsWithinPriceRange(status, min_price, max_price);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else if (stateIsDefined && queryLength === 1) {
-			const carDatabaseResult = await CarsModel.getCarsByState(state);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getCarsByState(state);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else if (statusIsDefined && queryLength === 1) {
-			const carDatabaseResult = await CarsModel.getCarsByStatus(status);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getCarsByStatus(status);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else if (statusAndStateAreDefined && queryLength === 2) {
-			const carDatabaseResult = await CarsModel.getCarsByStatusAndState(state, status);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getCarsByStatusAndState(state, status);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else if (manufacturerIsDefined && queryLength === 2) {
-			const carDatabaseResult = await CarsModel.getCarsByStatusAndManufacturer(manufacturer, status);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getCarsByStatusAndManufacturer(manufacturer, status);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else if (bodyTypeIsDefined && queryLength === 1) {
-			const carDatabaseResult = await CarsModel.getCarsByBodyType(body_type);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getCarsByBodyType(body_type);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else {
@@ -91,17 +161,24 @@ class Cars {
 		const { car_id } = request.params;
 		const parsedCarId = Number(car_id);
 		if (car_id && token) {
-			const carDatabaseResult = await CarsModel.getSpecificCar(parsedCarId);
-			if(carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.getSpecificCar(parsedCarId);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(200).json({
+						status: 200,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
-		}
-		else {
-			return await next();
 		}
 	}
 	static async postCarAd(request, response, next) {
@@ -128,13 +205,17 @@ class Cars {
 			parsedId &&
 			token
 		) {
-			const carDatabaseResult = await CarsModel.postCarAd(parsedId, state, status, parsedPrice, manufacturer, model, body_type, img_url);
-			if(carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(201).json({
-					status: 201,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.postCarAd(parsedId, state, status, parsedPrice, manufacturer, model, body_type, img_url);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(201).json({
+						status: 201,
+						data
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else {
@@ -149,17 +230,24 @@ class Cars {
 		if (
 			parsedCarId && token
 		) {
-			const carDatabaseResult = await CarsModel.deleteCarAd(parsedCarId);
-			if(carDatabaseResult.rowCount > 0) {
-				const data = `Car Ad ${ parsedCarId } Successfully Deleted`;
-				return await response.status(301).json({
-					status: 301,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.deleteCarAd(parsedCarId);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = `Car Ad ${parsedCarId} Successfully Deleted`;
+					return await response.status(301).json({
+						status: 301,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
-		}
-		else {
-			return await next();
 		}
 	}
 	static async changeCarAdPrice(request, response, next) {
@@ -171,19 +259,26 @@ class Cars {
 		const parsedPrice = Number(price);
 		const parsedCarId = parseInt(car_id);
 		if (
-			token && parsedId
+			token && parsedId && parsedPrice
 		) {
-			const carDatabaseResult = await CarsModel.changeCarAdPrice(parsedPrice, parsedCarId, parsedId);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(202).json({
-					status: 202,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.changeCarAdPrice(parsedPrice, parsedCarId, parsedId);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(202).json({
+						status: 202,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
-		}
-		else {
-			return await next();
 		}
 	}
 	static async changeCarAdStatus(request, response, next) {
@@ -196,13 +291,23 @@ class Cars {
 		if (
 			parsedId && token && status === 'sold'
 		) {
-			const carDatabaseResult = await CarsModel.changeCarAdStatus(parsedCarId, parsedId);
-			if (carDatabaseResult.rowCount > 0) {
-				const data = [...carDatabaseResult.rows];
-				return await response.status(202).json({
-					status: 202,
-					data
-				});
+			try {
+				const carDatabaseResult = await CarsModel.changeCarAdStatus(parsedCarId, parsedId);
+				if (carDatabaseResult.rowCount > 0) {
+					const data = [...carDatabaseResult.rows];
+					return await response.status(202).json({
+						status: 202,
+						data
+					});
+				}
+				else {
+					return await response.status(404).json({
+						status: 404,
+						error: 'Not Found'
+					});
+				}
+			} catch (error) {
+				throw error;
 			}
 		}
 		else {
