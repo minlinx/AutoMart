@@ -30,7 +30,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else if (priceRange && queryLength === 3) {
@@ -51,7 +50,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else if (stateIsDefined && queryLength === 1) {
@@ -72,7 +70,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else if (statusIsDefined && queryLength === 1) {
@@ -93,7 +90,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else if (statusAndStateAreDefined && queryLength === 2) {
@@ -114,7 +110,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else if (manufacturerIsDefined && queryLength === 2) {
@@ -135,7 +130,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else if (bodyTypeIsDefined && queryLength === 1) {
@@ -156,7 +150,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else {
@@ -185,7 +178,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 	}
@@ -224,7 +216,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else {
@@ -256,7 +247,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 	}
@@ -288,7 +278,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 	}
@@ -319,7 +308,6 @@ class Cars {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 		else {
