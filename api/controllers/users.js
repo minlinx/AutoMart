@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import pool from '../../dbConifg';
 import { validationResult } from 'express-validator/check';
 import bcryptHash from '../../middlewares/bcryptHash';
 import UsersModel from '../models/users';

@@ -1,7 +1,10 @@
 import express from 'express';
 import validator from '../../middlewares/getRouteHandler';
 import checkAuthentication from '../../middlewares/checkUserAuthentication';
-// import imageParser from '../../middlewares/uploadImage';
+import imageParser from '../../middlewares/uploadImage';
+import checkQueryParams from '../../middlewares/checkQueryParams';
+import badRequestError from '../../middlewares/400Error';
+import checkValidationErrrors from '../../middlewares/checkValidationErrors';
 import Cars from '../controllers/cars';
 
 const {
@@ -22,17 +25,20 @@ const router = express.Router();
 router.get(
 	'/',
 	checkAuthentication,
-	getCarOrCars
+	getCarOrCars,
+	badRequestError
 );
-router.get('/:car_id', checkAuthentication, specificCar);
+router.get('/:car_id', checkQueryParams, checkCarId(), checkValidationErrrors, checkAuthentication, specificCar, badRequestError);
 router.post(
 	'/',
-	checkAuthentication,
-	// imageParser.single('car_image'),
+	checkQueryParams,
+	imageParser.single('car_image'),
 	postCarAdValidator(),
-	postCarAd
+	checkValidationErrrors,
+	checkAuthentication,
+	postCarAd, badRequestError
 );
-router.delete('/:car_id', checkAuthentication, checkCarId(), deleteCarAd);
-router.patch('/:car_id/price', checkAuthentication, checkCarADPrice(), changeCarAdPrice);
-router.patch('/:car_id/status', checkAuthentication, checkCarADStatus(), changeCarAdStatus);
+router.delete('/:car_id', checkQueryParams, checkCarId(), checkValidationErrrors, checkAuthentication, deleteCarAd, badRequestError);
+router.patch('/:car_id/price', checkQueryParams, checkCarADPrice(), checkValidationErrrors, checkAuthentication, changeCarAdPrice, badRequestError);
+router.patch('/:car_id/status', checkQueryParams, checkCarADStatus(), checkValidationErrrors, checkAuthentication, changeCarAdStatus, badRequestError);
 export default router;
