@@ -31,7 +31,6 @@ class Orders {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 	}
@@ -67,7 +66,6 @@ class Orders {
 				}
 			} catch (error) {
 				console.log(error);
-				throw error;
 			}
 		}
 	}
