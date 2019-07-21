@@ -17,10 +17,7 @@ class Flags {
 			}
 		}
 		else {
-			return await response.status(400).json({
-				status: 400,
-				error: 'Bad request'
-			});
+			return await next();
 		}
 	}
 }
