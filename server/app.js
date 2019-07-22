@@ -15,8 +15,8 @@ const { notFoundError, serverError } = apiError;
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(expressValidator());
 app.use(express.static('UI'));
 app.use(function (request, response, next) {
