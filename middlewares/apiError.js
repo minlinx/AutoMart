@@ -4,7 +4,7 @@ class apiEror {
 		error.status = 404 || 500;
 		next(error);
 	}
-	static serverError(error, request, response) {
+	static serverError(error, request, response, next) {
 		if (error.status === 404) {
 			return response.status(404).json({
 				status: 404,
