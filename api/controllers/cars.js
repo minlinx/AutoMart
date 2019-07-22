@@ -29,7 +29,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else if (priceRange && queryLength === 3) {
@@ -49,7 +49,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else if (stateIsDefined && queryLength === 1) {
@@ -69,7 +69,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else if (statusIsDefined && queryLength === 1) {
@@ -89,7 +89,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else if (statusAndStateAreDefined && queryLength === 2) {
@@ -109,7 +109,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else if (manufacturerIsDefined && queryLength === 2) {
@@ -129,7 +129,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else if (bodyTypeIsDefined && queryLength === 1) {
@@ -149,7 +149,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else {
@@ -177,12 +177,11 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 	}
 	static async postCarAd(request, response, next) {
-		const img_url = (request.file.secure_url);
 		const id = request.user.id;
 		const parsedId = Number(id);
 		const token = request.token || request.headers.token;
@@ -206,6 +205,7 @@ class Cars {
 			token
 		) {
 			try {
+				const img_url = (request.file.secure_url);
 				const carDatabaseResult = await CarsModel.postCarAd(parsedId, state, status, parsedPrice, manufacturer, model, body_type, img_url);
 				if (carDatabaseResult.rowCount > 0) {
 					const data = [...carDatabaseResult.rows];
@@ -215,7 +215,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else {
@@ -246,7 +246,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 	}
@@ -277,7 +277,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 	}
@@ -307,7 +307,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 		else {

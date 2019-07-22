@@ -30,7 +30,7 @@ class Orders {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 	}
@@ -65,7 +65,7 @@ class Orders {
 					});
 				}
 			} catch (error) {
-				console.log(error);
+				response.status(400).json({status: 400, error: 'Bad Request'});
 			}
 		}
 	}

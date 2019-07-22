@@ -5,6 +5,7 @@ import imageParser from '../../middlewares/uploadImage';
 import checkQueryParams from '../../middlewares/checkQueryParams';
 import badRequestError from '../../middlewares/400Error';
 import checkValidationErrrors from '../../middlewares/checkValidationErrors';
+// import checkContentType from '../../middlewares/checkContentType';
 import Cars from '../controllers/cars';
 
 const {
@@ -31,6 +32,7 @@ router.get(
 router.get('/:car_id', checkQueryParams, checkCarId(), checkValidationErrrors, checkAuthentication, specificCar, badRequestError);
 router.post(
 	'/',
+	// checkContentType,
 	checkQueryParams,
 	imageParser.single('car_image'),
 	postCarAdValidator(),
