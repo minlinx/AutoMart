@@ -1,486 +1,304 @@
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 import request from 'supertest';
 import { describe, it } from 'mocha';
 import app from '../app';
-import Cars from '../../api/controllers/cars';
+import Cars from '../../api/models/cars';
 
-
-/////////////////////////////CARS IESTS SUITE/////////////////////////////////////////////
-describe('#CARS: Tests all cars routes', () => {
-
-	describe('Tests all GET routes', () => {
-		const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1iYW5lbHNvbmlmZWFueWkxQGdtYWlsLmNvbSIsImlhdCI6MTU2MDUzMDgxOH0._8d_h8rsA4U-25ecAemdfkyOZMsiQuL9o4wtuzBdm4I';
-		// const data = {
-		// 	email: 'minaproblemsolver777@gmail.com',
-		// 	password: '00000000'
-		// };
-		// beforeEach((done) => {
-		// 	request(app)
-		// 		.post('/api/v1/auth/signup')
-		// 		.send(data)
-		// 		.end((error, response) => {
-		// 			if (error) {
-		// 				console.log(error);
-		// 			}
-		// 			else {
-		// 				token = response.body.token;
-		// 				console.log(response.body);
-		// 			}
-		// 			done();
-		// 		});
-		// });
-		it('Should return a 422 status', done => {
+let token, car_id;
+const userEmail = 'minaproblemsolver@automart.com';
+const userPassword = '0708@Automart';
+describe('***Cars***', () => {
+	const parsedId = 1, state = 'new', status = 'available', parsedPrice = 32000000, manufacturer = 'benz', model = 'benx-123', body_type = 'van';
+	const parsedCarId = 12, min_price = 360000, max_price = 9000000;
+	const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1563690211/min-automart-images/1563690206045g7.jpg.jpg';
+	before(async () => {
+		const response = await request(app)
+			.post('/api/v1/auth/signin')
+			.send({
+				email: userEmail,
+				password: userPassword
+			});
+		token = `Bearer ${response.body.data.token}`;
+	});
+	before(async () => {
+		const createdAd = Cars.postCarAd(parsedId, state, status, parsedPrice, manufacturer, model, body_type, img_url);
+		const patchedCarPrice = Cars.changeCarAdPrice(parsedPrice, parsedCarId, parsedId);
+		const patchedCarstatus = Cars.changeCarAdStatus(parsedCarId, parsedId);
+		const allCars = Cars.getAll();
+		const getCarsWithinPriceRange = Cars.getCarsWithinPriceRange(status, min_price, max_price);
+		const getCarsByState = Cars.getCarsByState(state);
+		const getCarsByStatus = Cars.getCarsByStatus(status);
+		const getCarsByStatusAndState = Cars.getCarsByStatusAndState(state, status);
+		const getCarsByStatusAndManufacturer = Cars.getCarsByStatusAndManufacturer(manufacturer, status);
+		const getCarsByBodyType = Cars.getCarsByBodyType(body_type);
+		const getSpecficar = Cars.getSpecificCar(parsedCarId);
+		const data = { createdAd, patchedCarPrice, allCars, getCarsByStatusAndState, getSpecficar, getCarsByStatusAndManufacturer, patchedCarstatus, getCarsWithinPriceRange, getCarsByBodyType, getCarsByState, getCarsByStatus  };
+	});
+	after(async () => {
+		const deletedCar = Cars.deleteCarAd(car_id);
+	});
+	describe('# Post Car', () => {
+		it('Should not add a car to the database because of query params', (done) => {
+			request(app)
+				.post('/api/v1/car?body_type=van')
+				.set({ Authorization: token })
+				.end((error, response) => {
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '400');
+					done();
+				});
+		});
+		it('Should return a 422 because of missing params', (done) => {
+			request(app)
+				.post('/api/v1/car')
+				.set({ Authorization: token })
+				.end((error, response) => {
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '422');
+					done();
+				});
+		});
+	});
+	describe('# Get Car', () => {
+		it('Should return all cars in the database', (done) => {
 			request(app)
 				.get('/api/v1/car')
-				.set('Authorization', 'Bearer ' + token)
+				.set({ Authorization: token })
 				.end((error, response) => {
-					expect(response.statusCode, '200');
+					car_id = response.body.data[(response.body.data.length - 1)].id;
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status', done => {
+		it('Should return all cars in the specified price range.', (done) => {
 			request(app)
-				.get('/api/v1/car')
-				.set('Authorization', 'Bearer ' + token)
+				.get('/api/v1/car?min_price=250000&max_price=9000000&status=available')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					expect(response.statusCode, '500');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status', done => {
+		it('Should return all available new cars in the database', (done) => {
 			request(app)
-				.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available&state=new')
-				.set('Authorization', 'Bearer ' + token)
+				.get('/api/v1/car?state=new&status=available')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '404');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status, if it is admin', done => {
+		it('Should return all available used cars in the database', (done) => {
 			request(app)
-				.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available')
-				.set('Authorization', 'Bearer ' + token)
+				.get('/api/v1/car?state=used&status=available')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '200');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status, if it is admin', done => {
+		it('Should return all available cars in the database, by brand', (done) => {
 			request(app)
-				.get('/api/v1/car?minPrice=160000.00&maxPrice=250000.00&status=available')
-				.set('Authorization', 'Bearer ' + token)
+				.get('/api/v1/car?manufacturer=bmw&status=available')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '500');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status, if it is admin', done => {
-			request(app)
-				.get('/api/v1/car?minPrice=&maxPrice=&status=available')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '422');
-					done();
-				});
-		});
-		it('Should return a 422 status, if it is admin', done => {
-			request(app)
-				.get('/api/v1/car?minPrice=kkkkk&maxPrice=oooooooooooiuytrr&status=available')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '400');
-					done();
-				});
-		});
-		it('Should return a 422 status', done => {
-			request(app)
-				.get('/api/v1/car/3')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '401');
-					done();
-				});
-		});
-		it('Should return a 422 status', done => {
-			request(app)
-				.get('/api/v1/car/3')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '500');
-					done();
-				});
-		});
-		it('Should return a 404 status code.', done => {
-			request(app)
-				.get('/api/v1/car/20')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '200');
-					done();
-				});
-		});
-		it('Should return a 404 status code.', done => {
-			request(app)
-				.get('/api/v1/car/20')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '401');
-					done();
-				});
-		});
-		it('Should return a 400 status code.', done => {
-			request(app)
-				.get('/api/v1/car/3?state=new')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '404');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?state=new')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '200');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?state=new')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '500');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
+		it('Should return all used cars in the database', (done) => {
 			request(app)
 				.get('/api/v1/car?state=used')
-				.set('Authorization', 'Bearer ' + token)
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '200');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Should return all cars in the database, by body type', (done) => {
 			request(app)
-				.get('/api/v1/car?state=')
-				.set('Authorization', 'Bearer ' + token)
+				.get('/api/v1/car?body_type=van')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '422');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Should return all cars in the database, by body type', (done) => {
 			request(app)
-				.get('/api/v1/car?status=available&bodyType=car')
-				.set('Authorization', 'Bearer ' + token)
+				.get(`/api/v1/car/${ car_id }`)
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '200');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Should return all cars in the database, by body type', (done) => {
 			request(app)
-				.get('/api/v1/car?status=available&bodyType=car')
-				.set('Authorization', 'Bearer ' + token)
+				.get('/api/v1/car?body_type=van')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '500');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Should return a 400 STATUS because of invalid path', (done) => {
 			request(app)
-				.get('/api/v1/car?status=available&bodyType=car')
-				.set('Authorization', 'Bearer ' + token)
+				.get('/api/v1/car?min_price=250000&max_price=9000000&state=sold&manufacturer=bmw&body_type=van')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '401');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '400');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Post with query params', (done) => {
 			request(app)
-				.get('/api/v1/car?status=available&manufacturer=benz')
-				.set('Authorization', 'Bearer ' + token)
+				.post('/api/v1/car?body_type=van')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '200');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '400');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Patch with query params', (done) => {
 			request(app)
-				.get('/api/v1/car?status=available&manufacturer=benz')
-				.set('Authorization', 'Bearer ' + token)
+				.patch('/api/v1/car?body_type=van')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '500');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '404');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Should return all cars in the database, by body type', (done) => {
 			request(app)
-				.get('/api/v1/car?status=available&manufacturer=benz')
-				.set('Authorization', 'Bearer ' + token)
+				.put('/api/v1/car?body_type=van')
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '401');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?status=availa777ble&state=used')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '404');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?status=available&state=used')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '200');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?status=available&state=used')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '500');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?status=available&state=used')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '401');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?status=available&state=new')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '200');
-					done();
-				});
-		});
-		it('Should return a 422 status code.', done => {
-			request(app)
-				.get('/api/v1/car?status=available&manufacturer=benz&bodyType=car')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '404');
-					done();
-				});
-		});
-		it('Should return a 200 status code.', done => {
-			request(app)
-				.get('/api/v1/car?state=used')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '200');
-					done();
-				});
-		});
-		it('Should return a 404 status code.', done => {
-			request(app)
-				.get('/api/v1/car?state=newyyyyy')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '404');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '404');
 					done();
 				});
 		});
 	});
-	describe('Tests all POST routes', () => {
-		const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1iYW5lbHNvbmlmZWFueWkxQGdtYWlsLmNvbSIsImlhdCI6MTU2MDUzMDgxOH0._8d_h8rsA4U-25ecAemdfkyOZMsiQuL9o4wtuzBdm4I';
-		it('Should return a 422 status code.', done => {
+	describe('# Patch Car', () => {
+		it('Should return a 202 status code because of correct params', (done) => {
 			request(app)
-				.post('/api/v1/car')
-				.set('Authorization', 'Bearer ' + token)
-				.send({
-					id: 10,
-					owner: 10,
-					email: 'minaproblemsolver@gmail.com',
-					createdOn: '18-05-2015',
-					price: '280000.00',
-					status: 'available',
-					state: 'available',
-					manufacturer: 'benz',
-					model: '8888888888888888',
-					bodyType: 'car',
-					carImage: 'car image'
-				})
+				.patch(`/api/v1/car/${ car_id }/status`)
+				.send({ status: 'sold' })
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '401');
+					assert.isDefined(response.body);
+					assert(response.statusCode, '202');
 					done();
 				});
 		});
-		it('Should return a 422 status code.', done => {
+		it('Should return a 422 status code because of missing params', (done) => {
 			request(app)
-				.post('/api/v1/car')
-				.set('Authorization', 'Bearer ' + token)
-				.send({
-					id: 10,
-					owner: 10,
-					email: 'minaproblemsolver@gmail.com',
-					createdOn: '18-05-2015',
-					price: '280000.00',
-					status: 'available',
-					state: 'available',
-					manufacturer: 'benz',
-					model: '8888888888888888',
-					bodyType: 'car',
-					carImage: 'car image'
-				})
+				.patch(`/api/v1/car/${ car_id }/status`)
+				.set({ Authorization: token })
+				// .send({ status: 'sold' })
 				.end((error, response) => {
-					assert(response.statusCode, '500');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '422');
 					done();
 				});
 		});
-		it('Should return a 501 status code.', done => {
+		it('Should return a 401 status code because of missing token', (done) => {
 			request(app)
-				.post('/api/v1/car')
-				.set('Authorization', 'Bearer ' + token)
-				.send({
-					owner: 'Mba Ifeanyi',
-					email: 'minaproblemsolver@gmail.com',
-					status: 'available',
-					manufacturer: 'benz',
-					model: '8888888888888888',
-					bodyType: 'car',
-					carImage: 'car image'
-				})
+				.patch(`/api/v1/car/${ car_id }/status`)
+				.send({ status: 'sold' })
+				.set({ Authorization: 'ytytytytytyytyytyty' })
 				.end((error, response) => {
-					assert(response.statusCode, '422');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '401');
 					done();
 				});
 		});
-	});
-	describe('Tests all DELETE routes', () => {
-		const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1iYW5lbHNvbmlmZWFueWkxQGdtYWlsLmNvbSIsImlhdCI6MTU2MDUzMDgxOH0._8d_h8rsA4U-25ecAemdfkyOZMsiQuL9o4wtuzBdm4I';
-		it('Should return a 301 status code.', done => {
+		it('Should modify the price of the specified car', (done) => {
 			request(app)
-				.delete('/api/v1/car/1')
-				.set('Authorization', 'Bearer ' + token)
+				.patch(`/api/v1/car/${ car_id }/price`)
+				.set({ Authorization: token })
+				.send({price: 3000000000})
 				.end((error, response) => {
-					assert(response.statusCode, '301');
+					assert.isDefined(response.body);
+					assert(response.statusCode, '202');
 					done();
 				});
 		});
-		it('Should return a 301 status code.', done => {
+		it('Should return a 422 status code because of missing params', (done) => {
 			request(app)
-				.delete('/api/v1/car/1')
-				.set('Authorization', 'Bearer ' + token)
+				.patch(`/api/v1/car/${ car_id }/price`)
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '500');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '422');
 					done();
 				});
 		});
-		it('Should return a 301 status code.', done => {
+		it('Should return a 400 because the path contains query params', (done) => {
 			request(app)
-				.delete('/api/v1/car/1')
-				.set('Authorization', 'Bearer ' + token)
+				.patch(`/api/v1/car/${ car_id }/price?body_type=van`)
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '401');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '400');
 					done();
 				});
 		});
-		it('Should return a 301 status code.', done => {
+		it('Should return a 401 status code because of missing token', (done) => {
 			request(app)
-				.delete('/api/v1/car/1')
-				.set('Authorization', 'Bearer ' + token)
+				.patch(`/api/v1/car/${ car_id }/price`)
+				.set({ Authorization: 'yryryryryyryryr' })
+				.send({price: 3000000000})
 				.end((error, response) => {
-					assert(response.statusCode, '422');
-					done();
-				});
-		});
-		it('Should return a 404 status code.', done => {
-			request(app)
-				.delete('/api/v1/car/20')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '401');
-					done();
-				});
-		});
-		it('Should return a 404 status code.', done => {
-			request(app)
-				.delete('/api/v1/car/2000')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '404');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '401');
 					done();
 				});
 		});
 	});
-	describe('Tests all PATCH routes', () => {
-		const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1iYW5lbHNvbmlmZWFueWkxQGdtYWlsLmNvbSIsImlhdCI6MTU2MDUzMDgxOH0._8d_h8rsA4U-25ecAemdfkyOZMsiQuL9o4wtuzBdm4I';
-		it('Should return a 422 status code.', done => {
+	describe('# Delete Car', () => {
+		it('Should return a 301 status code because car id is valid', (done) => {
 			request(app)
-				.patch('/api/v1/car/1/price')
-				.set('Authorization', 'Bearer ' + token)
+				.delete(`/api/v1/car/${ car_id }`)
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '401');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '301');
 					done();
 				});
 		});
-		it('Should return a 202 status code.', done => {
+		it('Should return a 401 status code because no token was provided', (done) => {
 			request(app)
-				.patch('/api/v1/car/1/price')
-				.set('Authorization', 'Bearer ' + token)
-				.send({
-					price: 7000000
-				})
+				.delete(`/api/v1/car/${ car_id }`)
+				// .set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '401');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '401');
 					done();
 				});
 		});
-		it('Should return a 404 status code.', done => {
+		it('Should return a 404 status code because car id is undefined', (done) => {
 			request(app)
-				.patch('/api/v1/car/1/sold')
-				.set('Authorization', 'Bearer ' + token)
+				.delete(`/api/v1/car/${ car_id }`)
+				.set({ Authorization: token })
 				.end((error, response) => {
-					assert(response.statusCode, '404');
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '404');
 					done();
 				});
-		});
-		it('Should return a 404 status code.', done => {
-			request(app)
-				.patch('/api/v1/car/1/yytyytytyyty7776777')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '404');
-					done();
-				});
-		});
-		it('Should return a 404 status code.', done => {
-			request(app)
-				.patch('/api/v1/car/1/yytyytytyyty7776777')
-				.set('Authorization', 'Bearer ' + token)
-				.end((error, response) => {
-					assert(response.statusCode, '404');
-					done();
-				});
-		});
-	});
-	describe('Cars Property', () => {
-		it('should contain', () => {
-			assert.property(Cars, 'getCarOrCars');
-			assert.property(Cars, 'deleteCarAd');
-			assert.property(Cars, 'changeCarAdPrice');
-			assert.property(Cars, 'changeCarAdStatus');
-			assert.property(Cars, 'postCarAd');
-			assert.property(Cars, 'specificCar');
 		});
 	});
 });

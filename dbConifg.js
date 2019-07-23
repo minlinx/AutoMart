@@ -28,14 +28,17 @@ export default pool;
 
 ////////////////////////////////////////
 // const getDatabase = () => {
-// 	if (process.env.NODE_ENV === 'production') {
+// 	if (process.env.NODE_ENV === 'test') {
 // 		return process.env.TESTDATABASE;
 // 	}
 // 	else if (process.env.NODE_ENV === 'development') {
-// 		return process.env.TESTDATABASE;
+// 		return process.env.DATABASE;
+// 	}
+// 	else if (process.env.NODE_ENV === 'production') {
+// 		return process.env.DATABASE;
 // 	}
 // 	else {
-// 		return process.env.DATABASE;
+// 		return process.env.TESTDATABASE;
 // 	}
 // };
 // import { Pool } from 'pg';

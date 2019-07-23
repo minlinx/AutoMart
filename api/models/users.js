@@ -15,18 +15,27 @@ class Users {
 
 	static async getUserData(email) {
 		const sql = 'SELECT * FROM users WHERE email = $1';
-		const params = [email];
+		const param = [email];
 		try {
-			return await pool.query(sql, params);
+			return await pool.query(sql, param);
 		} catch (error) {
 			throw error;
 		}
 	}
 	static async getUserEmail(email) {
 		const sql = 'SELECT email FROM users WHERE email = $1';
-		const params = [email];
+		const param = [email];
 		try {
-			return await pool.query(sql, params);
+			return await pool.query(sql, param);
+		} catch (error) {
+			throw error;
+		}
+	}
+	static async deleteUserData(email) {
+		const sql = 'DELETE FROM users WHERE email = $1 RETURNING *';
+		const param = [email];
+		try {
+			return await pool.query(sql, param);
 		} catch (error) {
 			throw error;
 		}

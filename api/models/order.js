@@ -19,6 +19,14 @@ class Users {
 			throw error;
 		}
 	}
+	static async getEverythingFromCarsTable() {
+		const sql = 'SELECT * FROM cars';
+		try {
+			return await pool.query(sql);
+		} catch (error) {
+			throw error;
+		}
+	}
 	static async getAmoutFromOrdersTable(parsedOrderId) {
 		const sql = 'SELECT amount FROM orders WHERE id=$1';
 		const param = [parsedOrderId];
@@ -33,6 +41,15 @@ class Users {
 		const params = [parsedPrice, parsedOrderId, parsedId];
 		try {
 			return await pool.query(sql, params);
+		} catch (error) {
+			throw error;
+		}
+	}
+	static async deleteOrder(parsedOrderId) {
+		const sql = 'DELETE FROM orders WHERE id=$1';
+		const param = [parsedOrderId];
+		try {
+			return await pool.query(sql, param);
 		} catch (error) {
 			throw error;
 		}
