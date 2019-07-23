@@ -1,165 +1,89 @@
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 import request from 'supertest';
 import { describe, it } from 'mocha';
 import app from '../app';
+import User from '../../api/models/users';
 
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pbmFwcm9ibGVtc29sdmVyQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6ImpvaG4xIiwiaWF0IjoxNTYwMjU3MzE2fQ.Q2fYbS10M2IV0pJVSIpgEN3VpNz_T5qw_FmTsuXFbEk';
-describe('#POST /User', () => {
-	it('Should return a 404 status code.', done => {
-		const data = {
-			email: 'minaproblemsolver123@gmail.com',
-			password: '123456'
-		};
-		request(app)
-			.post('/api/v1/auth/signup')
-			.send(data)
-			.end((error, response) => {
-				assert(response.statusCode, '201');
-				done();
-			});
-	});
-	it('Should return a 404 status code.', done => {
-		const data = {
-			email: 'minaproblemsolver122@gmail.com',
-			password: '123456'
-		};
-		request(app)
-			.post('/api/v1/auth/signup')
-			.send(data)
-			.end((error, response) => {
-				expect(response.statusCode, '201');
-				done();
-			});
-	});
-	it('Should return a 404 status code.', done => {
-		const data = {
-			email: 'minaproblemsolver@gmail.com',
-			password: '123456'
-		};
-		request(app)
-			.post('/api/v1/auth/signup')
-			.send(data)
-			.end((error, response) => {
-				expect(response.statusCode, '500');
-				done();
-			});
-	});
-	it('Should return a 422 status possibly2 code.', done => {
-		request(app)
-			.post('/api/v1/auth/signup')
-			.set({})
-			.end((error, response) => {
-				expect(response.statusCode, '422');
-				done();
-			});
-	});
-	it('Should return a 404 status code.', done => {
-		request(app)
-			.post('/api/v1/auth/signup/8999')
-			.send({
-				owner: 'Mba Ifeanyi',
-				email: 'minaproblemsolver@gmail.com',
-				createdOn: '18-05-2015',
-				price: '280000.00',
-				status: 'available',
-				manufacturer: 'benz',
-				model: '8888888888888888',
-				bodyType: 'car',
-				carImage: 'car image'
-			})
-			.end((error, response) => {
-				expect(response.statusCode, '422');
-				done();
-			});
-	});
-	it('Should return a 422 status possibly3 code.', done => {
-		request(app)
-			.post('/api/v1/auth/signin')
-			.send({
-				email: 'minaproblemsolver@gmail.com',
-				password: 123456
-			})
-			.end((error, response) => {
-				expect(response.statusCode, '422');
-				done();
-			});
-	});
-	it('Should return a 422 status possibly3 code.', done => {
-		request(app)
-			.post('/api/v1/auth/signin')
-			.send({
-				email: 'minaproblemsolver@gmail.com',
-				password: 123456
-			})
-			.end((error, response) => {
-				expect(response.statusCode, '400');
-				done();
-			});
-	});
-	it('Should return a 422 status possibly3 code.', done => {
-		request(app)
-			.post('/api/v1/auth/signin')
-			.send({
-				email: 'minaproblemsolver@gmail.com',
-				password: 123456
-			})
-			.end((error, response) => {
-				expect(response.statusCode, '500');
-				done();
-			});
-	});
-	it('Should return a 422 status possibly3 code.', done => {
-		request(app)
-			.post('/api/v1/auth/signin')
-			.send({
-				email: 'minaproblemsolver@gmail.com',
-				password: 123456
-			})
-			.end((error, response) => {
-				expect(response.statusCode, '200');
-				done();
-			});
-	});
-});
-describe('Test Route with Token', function () {
-	const data = {
-		email: 'minaproblemsolver@gmail.com',
-		password: '123456'
-	};
-	it('one Post to signup', (done) => {
-		request(app)
-			.post('/api/v1/auth/signup')
-			.set('Authorization', 'Bearer ' + token)
-			.send(data)
-			.end((error, response) => {
-				expect(response.statusCode, '400');
-				done();
-			});
-	});
-	it('should not be able to consume the route /api/v1/auth/signin since no token was sent', function (done) {
-		request(app)
-			.post('/api/v1/auth/signin')
-			.set('Authorization', 'Bearer ' + token)
-			.send('email=minaproblemsolver@gmail.com')
-			.send('password=123456')
-			.end((error, response) => {
-				expect(response.statusCode, '422');
-				done();
-			});
-	});
+const userEmail = 'minaproblemsolver0987654321@automart.com';
+const userPassword = '0708@Automart';
+const userData = {
+	email: 'minaproblemsolver0987654321@automart.com',
+	password: userPassword,
+	first_name: 'mba',
+	last_name: 'ifeanyi',
+	address: 'No. 8 george odugwu street, era, ijanikin, otto-awori, lagos.'
+};
 
-	it('should be able to consume the route /test since token valid was sent', function (done) {
-		const data = {
-			email: 'minaproblemsolvernew1111@gmail.com',
-			password: '123456@autoMart'
-		};
-		request(app)
-			.post('/api/v1/auth/signin')
-			.set('Authorization', 'Bearer ' + token)
-			.send(data)
-			.end((error, response) => {
-				expect(response.statusCode, '401');
-				done();
-			});
+describe('***Users Routes***', () => {
+	before(async () => {
+		const deletedUser = await User.deleteUserData(userEmail);
+	});
+	after(async () => {
+		const deletedUser = await User.deleteUserData(userEmail);
+	});
+	describe('# Signup Route', () => {
+		it('Should return the data of the new user', done => {
+			request(app)
+				.post('/api/v1/auth/signup')
+				.send(userData)
+				.end((error, response) => {
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '201');
+					done();
+				});
+		});
+		it('Should return a status code of 422 for an empty field', done => {
+			request(app)
+				.post('/api/v1/auth/signup')
+				.end((error, response) => {
+					assert.equal(response.statusCode, '422');
+					done();
+				});
+		});
+		it('Should return a status code of 400 for an existing user', done => {
+			request(app)
+				.post('/api/v1/auth/signup')
+				.send(userData)
+				.end((error, response) => {
+					assert.equal(response.statusCode, '400');
+					done();
+				});
+		});
+	});
+	describe('# Signin Route', () => {
+		it('Should Signin because user is registered', done => {
+			request(app)
+				.post('/api/v1/auth/signin')
+				.send({
+					email: userEmail,
+					password: userPassword,
+				})
+				.end((error, response) => {
+					assert.isDefined(response.body);
+					assert.equal(response.statusCode, '200');
+					done();
+				});
+		});
+		it('Should return a status code of 422 for not supplying required data', done => {
+			request(app)
+				.post('/api/v1/auth/signin')
+				.end((error, response) => {
+					assert.equal(response.statusCode, '422');
+					done();
+				});
+		});
+		it('Should return a status code of 422 for not supplying required data', done => {
+			request(app)
+				.post('/api/v1/auth/signin')
+				.send({
+					email: '',
+					password: 'tester',
+				})
+				.end( async (error, response) => {
+					console.log(error);
+					assert.equal( await response.statusCode, '422');
+					done();
+				});
+		});
 	});
 });

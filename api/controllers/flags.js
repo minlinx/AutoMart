@@ -10,8 +10,8 @@ class Flags {
 			const carDatabaseResult = await FlagsModel.postFlag(parsedCarId, reason, description);
 			if(carDatabaseResult.rowCount > 0) {
 				const data = [...carDatabaseResult.rows];
-				return await response.status(200).json({
-					status: 200,
+				return await response.status(201).json({
+					status: 201,
 					data
 				});
 			}

@@ -35,7 +35,8 @@ class Users {
 					});
 				}
 			} catch (error) {
-				return next(error);
+				console.log(error);
+				return next();
 			}
 		}
 	}
@@ -63,7 +64,8 @@ class Users {
 					});
 				}
 			} catch (error) {
-				return next(error);
+				console.log(error);
+				return next();
 			}
 		}
 	}
