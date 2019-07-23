@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import pg from 'pg';
-if (process.env.DATABASE_URL) {
+if (process.env.DATABASE_URL || process.env.TEST_DATABASE_URL) {
 	pg.defaults.ssl = true;
 }
 const productionConfig = {
