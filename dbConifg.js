@@ -26,7 +26,7 @@ const getConnectionString = () => {
 const pool = new Pool(getConnectionString());
 export default pool;
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 // const getDatabase = () => {
 // 	if (process.env.NODE_ENV === 'test') {
 // 		return process.env.TESTDATABASE;
