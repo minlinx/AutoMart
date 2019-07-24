@@ -3,6 +3,10 @@ os:
   - windows
 node_js:
   - '8.9.0'
+services:
+  - postgresql
+addons:
+  postgresql: "11.1"
 before_script:
   - npm install
 script:
