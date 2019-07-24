@@ -14,7 +14,7 @@ const testConfig = {
 };
 const getConnectionString = () => {
 	if (process.env.NODE_ENV === 'test') {
-		return testConfig;
+		return productionConfig;
 	}
 	else if (process.env.NODE_ENV === 'development') {
 		return productionConfig;
