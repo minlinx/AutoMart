@@ -6,7 +6,7 @@ import Orders from '../../api/models/order';
 import Flags from '../../api/models/flags';
 
 let token, parsedCarId, reason, description;
-const userEmail = 'minaproblemsolver@automart.com';
+const userEmail = 'minaproblemsolver0987654321@gmail.com';
 const userPassword = '0708@Automart';
 describe('***FLAGS***', () => {
 	before(async () => {
