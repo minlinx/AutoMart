@@ -5,7 +5,7 @@ import app from '../app';
 import Cars from '../../api/models/cars';
 
 let token, car_id;
-const userEmail = 'minaproblemsolver@automart.com';
+const userEmail = 'minaproblemsolver0987654321@gmail.com';
 const userPassword = '0708@Automart';
 describe('***Cars***', () => {
 	const parsedId = 1, state = 'new', status = 'available', parsedPrice = 32000000, manufacturer = 'benz', model = 'benx-123', body_type = 'van';

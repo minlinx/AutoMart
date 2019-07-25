@@ -4,10 +4,10 @@ import { describe, it } from 'mocha';
 import app from '../app';
 import User from '../../api/models/users';
 
-const userEmail = 'minaproblemsolver0987654321@automart.com';
+const userEmail = 'minaproblemsolver0987654321@gmail.com';
 const userPassword = '0708@Automart';
 const userData = {
-	email: 'minaproblemsolver0987654321@automart.com',
+	email: 'min@automart.com',
 	password: userPassword,
 	first_name: 'mba',
 	last_name: 'ifeanyi',
@@ -16,10 +16,12 @@ const userData = {
 
 describe('***Users Routes***', () => {
 	before(async () => {
-		const deletedUser = await User.deleteUserData(userEmail);
+		const deletedUser = await User.deleteUserData('min@automart.com');
+		console.log('anything');
 	});
 	after(async () => {
-		const deletedUser = await User.deleteUserData(userEmail);
+		const deletedUser = await User.deleteUserData('min@automart.com');
+		console.log('something');
 	});
 	describe('# Signup Route', () => {
 		it('Should return the data of the new user', done => {

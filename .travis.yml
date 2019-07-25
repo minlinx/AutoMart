@@ -1,6 +1,4 @@
 language: node_js
-os:
-  - windows
 node_js:
   - '8.9.0'
 services:
