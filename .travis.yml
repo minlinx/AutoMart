@@ -6,8 +6,8 @@ services:
 addons:
   postgresql: "11.1"
 before_script:
-  - npm install
+  - psql -c 'create database travis_ci_test;' -U postgres
 script:
-  - npm run test
+  - npm install && npm run test
 after_script:
   - npm run coverage
