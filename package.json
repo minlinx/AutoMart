@@ -5,8 +5,8 @@
   "main": "server/app.js",
   "scripts": {
     "pretest": "node -r @babel/register migrations/dropDatabase && node -r @babel/register migrations/createUsersTable  && node -r @babel/register migrations/createCarsTable  && node -r @babel/register migrations/createOrdersTable && node -r @babel/register migrations/createFlagsTable",
-    "runtest": "SET NODE_ENV=test && mocha -r @babel/register server/test/users --exit && mocha -r @babel/register server/test/car --exit && mocha -r @babel/register server/test/order --exit && mocha -r @babel/register server/test/flag  --exit",
-    "test": "SET NODE_ENV=test && mocha bin/test --exit",
+    "runtest": "NODE_ENV=test && mocha -r @babel/register server/test/users --exit && mocha -r @babel/register server/test/car --exit && mocha -r @babel/register server/test/order --exit && mocha -r @babel/register server/test/flag  --exit",
+    "test": "NODE_ENV=test && mocha bin/test --exit",
     "start": "cross-env NODE_ENV=development nodemon bin/dev",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
