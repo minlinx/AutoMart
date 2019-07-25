@@ -2,7 +2,7 @@ import Bcrypt from '../middlewares/bcryptHash';
 const img_url = 'https://res.cloudinary.com/min-automart/image/upload/v1563690211/min-automart-images/1563690206045g7.jpg.jpg';
 const car = [
 	1,
-	'24-06-2019',
+	'2019-06-25',
 	'new',
 	'available',
 	250000,
@@ -13,7 +13,7 @@ const car = [
 ];
 const car1 = [
 	1,
-	'24-06-2019',
+	'2019-06-25',
 	'used',
 	'available',
 	250000,
@@ -24,7 +24,7 @@ const car1 = [
 ];
 const car2 = [
 	1,
-	'24-06-2019',
+	'2019-06-25',
 	'new',
 	'available',
 	9000000,
@@ -35,7 +35,7 @@ const car2 = [
 ];
 const car3 = [
 	1,
-	'24-06-2019',
+	'2019-06-25',
 	'used',
 	'available',
 	250000,
@@ -50,12 +50,12 @@ const order = [
 	60,
 	45000000,
 	'pending',
-	'24-06-2019'
+	'2019-06-25'
 ];
 
 const flag = [
 	60,
-	'24-06-2019',
+	'2019-06-25',
 	'very expensive',
 	'compared and found price is very expensive'
 ];
