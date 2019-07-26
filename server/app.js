@@ -27,6 +27,7 @@ app.use(function (request, response, next) {
 });
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/auth', usersRoute);
+app.use('/api/v1/users', usersRoute);
 app.use('/api/v1/car', carsRoute);
 app.use('/api/v1/order', ordersRoute);
 app.use('/api/v1/flag', flagsRoute);
