@@ -27,8 +27,17 @@ class Users {
 			throw error;
 		}
 	}
-	static async getAmoutFromOrdersTable(parsedOrderId) {
-		const sql = 'SELECT amount FROM orders WHERE id=$1';
+	static async getAmoutFromOrdersTable(parsedOrderId, parsedId) {
+		const sql = 'SELECT amount FROM orders WHERE id=$1 AND buyer=$2';
+		const param = [parsedOrderId, parsedId];
+		try {
+			return await pool.query(sql, param);
+		} catch (error) {
+			throw error;
+		}
+	}
+	static async getSpecificOrder(parsedOrderId) {
+		const sql = 'SELECT * FROM orders WHERE id=$1;';
 		const param = [parsedOrderId];
 		try {
 			return await pool.query(sql, param);
