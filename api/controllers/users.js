@@ -35,38 +35,38 @@ class Users {
 					});
 				}
 			} catch (error) {
-				console.log(error);
-				return next();
+				return await next(error);
 			}
 		}
 	}
 	static async signInFunction(request, response, next) {
 		const { email, password } = request.body;
-		if (email && password) {
-			try {
-				const userDatabaseResult = await UsersModel.getUserData(email);
-				const hashedPassword = userDatabaseResult.rows[0].password;
-				if (bcryptHash.correctPassword(password, hashedPassword)) {
-					const { id } = userDatabaseResult.rows[0];
-					const token = jwt.sign(
-						{
-							id, email
-						},
-						privateKey, {
-							expiresIn: '24h'
-						}
-					);
-					const { first_name, last_name, address, is_admin } = { ...userDatabaseResult.rows[0] };
-					const data = { id, is_admin, token, first_name, last_name, email, address };
-					return response.status(200).json({
-						status: 200,
-						data
-					});
-				}
-			} catch (error) {
-				console.log(error);
-				return next();
+		try {
+			const userDatabaseResult = await UsersModel.getUserData(email);
+			const hashedPassword = userDatabaseResult.rows[0].password;
+			if (bcryptHash.correctPassword(password, hashedPassword)) {
+				const { id } = userDatabaseResult.rows[0];
+				const token = jwt.sign(
+					{
+						id, email
+					},
+					privateKey, {
+						expiresIn: '24h'
+					}
+				);
+				const { first_name, last_name, address, is_admin } = { ...userDatabaseResult.rows[0] };
+				const data = { id, is_admin, token, first_name, last_name, email, address };
+				return response.status(200).json({
+					status: 200,
+					data
+				});
 			}
+			return response.status(400).json({
+				status: 400,
+				error: 'Invalid Username or Password'
+			});
+		} catch (error) {
+			return await next(error);
 		}
 	}
 }

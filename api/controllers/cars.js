@@ -29,7 +29,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				next(error);
 			}
 		}
 		else if (priceRange && queryLength === 3) {
@@ -49,7 +49,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else if (stateIsDefined && queryLength === 1) {
@@ -69,7 +69,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else if (statusIsDefined && queryLength === 1) {
@@ -89,7 +89,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else if (statusAndStateAreDefined && queryLength === 2) {
@@ -109,7 +109,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else if (manufacturerIsDefined && queryLength === 2) {
@@ -129,7 +129,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else if (bodyTypeIsDefined && queryLength === 1) {
@@ -149,7 +149,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else {
@@ -177,7 +177,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 	}
@@ -215,7 +215,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else {
@@ -246,7 +246,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 	}
@@ -277,7 +277,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 	}
@@ -307,7 +307,7 @@ class Cars {
 					});
 				}
 			} catch (error) {
-				response.status(400).json({status: 400, error: 'Bad Request'});
+				return await next();
 			}
 		}
 		else {

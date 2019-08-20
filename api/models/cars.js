@@ -91,7 +91,7 @@ class Cars {
 		}
 	}
 	static async changeCarAdPrice(parsedPrice, parsedCarId, parsedId) {
-		const sql = 'UPDATE cars SET price=$1 WHERE id=$2 AND owner=$3 RETURNING *';
+		const sql = 'UPDATE cars SET price=$1 WHERE (id=$2 AND owner=$3) RETURNING *';
 		const params = [parsedPrice, parsedCarId, parsedId];
 		try {
 			return await pool.query(sql, params);
