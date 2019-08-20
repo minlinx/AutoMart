@@ -15,7 +15,7 @@ const resetPasswordFunction = async (request, response, next) => {
 		if (sent) {
 			return response.status(200).json({
 				status: 200,
-				data: 'A message has been sent to email address'
+				data: 'A message has been sent to your email address'
 			});
 		}
 	} catch (error) {
