@@ -18,6 +18,18 @@ import dummyData from './dummyData';
 	createDummyCarAd3();
 })();
 
+(async () => {
+	const client = await pool.connect();
+	try {
+		const sql = 'CREATE TABLE IF NOT EXISTS cars(id serial PRIMARY KEY, owner INT NOT NULL, created_on DATE NOT NULL, state VARCHAR (255) NOT NULL, status VARCHAR NOT NULL, price NUMERIC NOT NULL, manufacturer VARCHAR (255) NOT NULL, model VARCHAR (255) NOT NULL, body_type VARCHAR (255) NOT NULL, img_url VARCHAR (255) NOT NULL);';
+		const results = await client.query(sql);
+		console.log(results.rowCount);
+	} catch (error) {
+		console.log('From Create Cars Table Function', error.stack);
+	} finally {
+		client.release();
+	}
+})();
 
 const createDummyCarAd = async () => {
 	const client = await pool.connect();
